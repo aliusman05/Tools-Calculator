@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Card } from "@/components/ui/Card";
+import { ResultDisclaimer } from "./ResultDisclaimer";
 
 /**
  * Standard calculator layout: inputs on the left, results on the right (stacked on mobile).
@@ -33,6 +34,7 @@ export function CalculatorShell({
         <div className="flex flex-col gap-6">
           <section aria-label={`${title} results`} className="flex flex-col gap-6">
             {results}
+            <ResultDisclaimer />
           </section>
           {sidebar && <div className="hidden lg:block">{sidebar}</div>}
         </div>

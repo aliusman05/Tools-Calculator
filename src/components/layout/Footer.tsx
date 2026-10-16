@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ConsentSettingsButton } from "@/components/consent/ConsentSettingsButton";
 import { categories } from "@/lib/registry";
 import { siteConfig } from "@/lib/site-config";
 
@@ -45,6 +46,9 @@ export function Footer() {
                 </Link>
               </li>
             ))}
+            <li>
+              <ConsentSettingsButton className={linkClass} />
+            </li>
           </ul>
         </nav>
       </div>

@@ -1,8 +1,8 @@
 import { expect, test, type APIRequestContext } from "@playwright/test";
 import { open } from "./support/open";
 
-/** Footer links to pages that Phase 5 creates. Remove entries as the pages are added. */
-const PENDING_PAGES = ["/about", "/contact", "/privacy-policy", "/terms", "/disclaimer"];
+/** Internal links allowed to return a non-200 status. Empty now that every footer page exists. */
+const PENDING_PAGES: string[] = [];
 
 async function sitemapPaths(request: APIRequestContext): Promise<string[]> {
   const res = await request.get("/sitemap.xml");
@@ -23,7 +23,7 @@ test.describe("sitemap and robots", () => {
     expect(paths).toContain("/mortgage-calculator");
     expect(paths).toContain("/category/loans");
     expect(paths.some((p) => p.startsWith("/search"))).toBe(false);
-    expect(paths.length).toBe(19); // home + 6 categories + 12 calculators
+    expect(paths.length).toBe(24); // home + 5 info pages + 6 categories + 12 calculators
     expect(new Set(paths).size).toBe(paths.length);
   });
 
@@ -250,10 +250,7 @@ test.describe("search", () => {
 });
 
 test.describe("internal links", () => {
-  test("every internal link on every page resolves (Phase 5 pages excepted)", async ({
-    page,
-    request,
-  }) => {
+  test("every internal link on every page resolves ", async ({ page, request }) => {
     test.setTimeout(180_000);
     const paths = await sitemapPaths(request);
     const hrefs = new Set<string>();

@@ -1,4 +1,16 @@
+import Link from "next/link";
 import type { MDXComponents } from "mdx/types";
+import { siteConfig } from "@/lib/site-config";
+
+/** Renders the configured contact address as a mailto link (see siteConfig.legal). */
+function ContactEmail() {
+  const { contactEmail } = siteConfig.legal;
+  return (
+    <a href={`mailto:${contactEmail}`} className="text-accent underline underline-offset-2">
+      {contactEmail}
+    </a>
+  );
+}
 
 /** Global styling for MDX content. Calculator pages pass their calculator in through `components`. */
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -10,7 +22,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ol: (props) => (
       <ol className="my-4 max-w-3xl list-decimal space-y-2 pl-6 leading-7" {...props} />
     ),
-    a: (props) => <a className="text-accent underline underline-offset-2" {...props} />,
+    a: ({ href = "", children, ...props }) =>
+      href.startsWith("/") ? (
+        <Link href={href} className="text-accent underline underline-offset-2">
+          {children}
+        </Link>
+      ) : (
+        <a
+          href={href}
+          className="text-accent underline underline-offset-2"
+          {...(href.startsWith("http") ? { rel: "noopener noreferrer", target: "_blank" } : {})}
+          {...props}
+        >
+          {children}
+        </a>
+      ),
     strong: (props) => <strong className="font-semibold" {...props} />,
     code: (props) => (
       <code className="bg-surface-muted rounded px-1.5 py-0.5 font-mono text-[0.9em]" {...props} />
@@ -22,6 +48,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {...props}
       />
     ),
+    ContactEmail,
     ...components,
   };
 }

@@ -1,0 +1,36 @@
+import { siteConfig } from "@/lib/site-config";
+
+{siteConfig.name} is a collection of free personal finance calculators that explain themselves. Every tool shows its formula, a worked example with real numbers, and the assumptions behind the answer, so that you can check the math and understand the result, not just see a number.
+
+## Who runs this site
+
+{siteConfig.name} is operated by {siteConfig.legal.operatorName}. [Add a short, honest description of who you are and why you built the site, for example your background and what you want readers to get from it.]
+
+We are not financial advisers. We build tools and write explanations, and we leave advice to qualified professionals. Please read our [disclaimer](/disclaimer).
+
+## Our approach
+
+- **Accuracy.** Each calculator's math lives in plain, separately tested code. We compare the results with independently calculated reference values, such as published payment tables and closed-form formulas, and we test edge cases like zero interest, very short and very long terms, large amounts and invalid input.
+- **Transparency.** Formulas, assumptions and "last updated" dates are shown on every page. Where a calculator relies on official figures, such as US federal tax brackets, they are kept in one dated data file with a link to the source.
+- **Privacy.** Calculations run in your browser. The numbers you type are not sent to our servers. Read the [privacy policy](/privacy-policy) for the details.
+- **Original explanations.** We write our own explanations and examples. We do not copy text from other sites.
+- **Independence.** The site is supported by advertising and, in places, affiliate links, which are always labeled. They do not change how a calculator works or what it tells you.
+
+## How we check the formulas
+
+1. We write the formula down in plain terms and note the source or derivation.
+2. We implement it as a pure function with no interface code, so it can be tested on its own.
+3. We test it against hand-calculated or independently derived values, and with properties that must always hold. For example, a higher interest rate should never lower a loan payment, and a loan schedule must finish at exactly zero with the principal repaid equal to the amount borrowed.
+4. We write the page content around a worked example that is checked against the live calculator.
+
+## Keeping things up to date
+
+Tax figures and similar data are reviewed when official numbers are published each year. Each calculator shows the date it was last reviewed. If you find something that looks wrong or out of date, please let us know.
+
+## Corrections and feedback
+
+Errors are possible, and we want to fix them. If you find a mistake, have a question or would like to suggest a calculator, use the [contact form](/contact) or email <ContactEmail />. When you report a problem, the inputs you used and the result you expected help us find it quickly.
+
+## Explore
+
+Browse the [calculator categories](/category/loans) or go to the [home page](/) to find the tool you need.

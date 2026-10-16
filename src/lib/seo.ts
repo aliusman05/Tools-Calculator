@@ -30,10 +30,19 @@ type PageSeo = {
   path: string;
   keywords?: readonly string[];
   noindex?: boolean;
+  /** Path of a shared social image, for pages without their own opengraph-image file. */
+  image?: string;
 };
 
 /** Metadata shared by every indexable page: canonical URL, Open Graph and Twitter card. */
-export function pageMetadata({ title, description, path, keywords, noindex }: PageSeo): Metadata {
+export function pageMetadata({
+  title,
+  description,
+  path,
+  keywords,
+  noindex,
+  image,
+}: PageSeo): Metadata {
   const url = absoluteUrl(path);
   const shown = fullTitle(title);
   return {
@@ -49,8 +58,14 @@ export function pageMetadata({ title, description, path, keywords, noindex }: Pa
       description,
       siteName: siteConfig.name,
       locale: "en_US",
+      ...(image ? { images: [{ url: image, width: 1200, height: 630, alt: shown }] } : {}),
     },
-    twitter: { card: "summary_large_image", title: shown, description },
+    twitter: {
+      card: "summary_large_image",
+      title: shown,
+      description,
+      ...(image ? { images: [image] } : {}),
+    },
   };
 }
 
