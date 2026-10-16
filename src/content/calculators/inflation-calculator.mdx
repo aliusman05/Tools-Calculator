@@ -1,0 +1,73 @@
+export const faqs = [
+  {
+    question: "What is inflation?",
+    answer:
+      "Inflation is the general rise in prices over time. When prices rise, each dollar buys less than it did before, so the same amount of money has less purchasing power. Moderate inflation is normal in most economies, but over decades it adds up to a large effect.",
+  },
+  {
+    question: "How do I calculate the future cost of something?",
+    answer:
+      "Multiply today's price by one plus the inflation rate, raised to the number of years. At 3% a year, something costing $100 today would cost about $134.39 in ten years. The calculator does this and shows the cost for every year in a table.",
+  },
+  {
+    question: "What does 'purchasing power' mean?",
+    answer:
+      "Purchasing power is how much a sum of money can buy. If prices double, a dollar buys half as much. The calculator's purchasing-power result tells you what a future amount of money would be worth in today's prices.",
+  },
+  {
+    question: "What inflation rate should I use?",
+    answer:
+      "Long-run inflation in the United States has varied widely from year to year. Many planners use a figure between 2% and 3% for long projections and test a higher number for safety. For a specific past period, use the rate-finder mode with the actual prices at the start and the end.",
+  },
+  {
+    question: "How can I find the average inflation rate between two prices?",
+    answer:
+      "Choose the third option, enter the price at the start and at the end, and the number of years between them. The calculator solves for the steady yearly rate that connects them, which is the compound annual rate rather than a simple average.",
+  },
+  {
+    question: "Does this use official CPI data?",
+    answer:
+      "No. It applies a constant rate that you choose rather than historical price index data, so it is a projection tool and not a record of past prices. To compare real historical values, use the Consumer Price Index figures published by the Bureau of Labor Statistics.",
+  },
+];
+
+Inflation quietly shrinks what your money can buy. This calculator shows the effect in three ways: what something that costs a certain amount today will cost in the future, what a sum of money will really be worth in today's prices, and the average inflation rate that connects two prices. It is useful for retirement planning, setting savings goals, and understanding why a high balance in the future may not feel as large as it looks.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Choose what you want to find: the **future cost**, the **purchasing power**, or the **average inflation rate**.
+2. Enter the **amount** in today's dollars (or the starting price in rate mode).
+3. Enter the **annual inflation rate**, or the **ending price** if you are solving for the rate.
+4. Enter the **number of years**.
+5. Read the result, then use the chart and table to see how it changes year by year.
+
+## How it works
+
+Prices grow by compound interest, just like savings:
+
+```
+Future cost = Today's price × (1 + i)^t
+Purchasing power = Amount ÷ (1 + i)^t
+Average rate = (End price ÷ Start price)^(1 / t) − 1
+```
+
+Here **i** is the yearly inflation rate as a decimal and **t** is the number of years. The same growth factor is used for all three, so the future cost and the purchasing power are exact opposites of one another. The number of years for prices to double comes from ln(2) ÷ ln(1 + i), which is close to the familiar "rule of 72" (72 divided by the rate).
+
+## Worked example
+
+Take **$1,000** and assume **3%** annual inflation over **20 years**.
+
+- Something that costs $1,000 today would cost about **$1,806.11** in 20 years.
+- $1,000 in 20 years would only buy what about **$553.68** buys today, a loss of roughly **44.6%** of its purchasing power.
+- Prices would double in about **23.4 years**.
+
+Or work backward: if a basket of goods rose from **$100** to **$200** over **20 years**, the average inflation rate was about **3.53%** a year.
+
+## Tips and common mistakes
+
+- **Use real returns when planning.** A savings account earning 4% when inflation is 3% is growing your buying power by only about 1%.
+- **Test a higher rate.** Inflation is uneven. Checking 4% or 5% shows how exposed your plan is.
+- **Keep goals in today's dollars.** When you set a target for the future, adjust it upward for expected inflation.
+- **Be careful with long horizons.** Small changes in the rate compound into very different results over 30 years.

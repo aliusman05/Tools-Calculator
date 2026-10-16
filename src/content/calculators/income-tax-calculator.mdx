@@ -1,0 +1,76 @@
+export const faqs = [
+  {
+    question: "How are federal income taxes calculated?",
+    answer:
+      "Your income is reduced by adjustments and then by the standard or itemized deduction to get taxable income. That amount is taxed in layers: the first slice at 10%, the next slice at 12%, and so on up to 37%. Only the portion of income inside each bracket is taxed at that bracket's rate.",
+  },
+  {
+    question: "What is the difference between marginal and effective tax rate?",
+    answer:
+      "Your marginal rate is the rate on your last dollar of taxable income, the top bracket you reach. Your effective rate is your total tax divided by your total income, which is always lower because the lower brackets apply to the first part of your income.",
+  },
+  {
+    question: "Does moving into a higher bracket mean all my income is taxed more?",
+    answer:
+      "No. Only the income above the bracket threshold is taxed at the higher rate. A raise can never reduce your take-home pay through the brackets alone, because each extra dollar is taxed at your marginal rate, which is below 100%.",
+  },
+  {
+    question: "Should I take the standard deduction or itemize?",
+    answer:
+      "Choose whichever is larger. If your mortgage interest, state and local taxes, charitable gifts and other itemized expenses add up to more than the standard deduction for your filing status, itemizing lowers your tax. Otherwise the standard deduction is simpler and worth more.",
+  },
+  {
+    question: "What does this estimator leave out?",
+    answer:
+      "It covers ordinary income only. It does not include Social Security and Medicare taxes, state and local income tax, self-employment tax, capital gains and qualified dividend rates, the qualified business income deduction, the alternative minimum tax, income-based phase-outs, or newer special deductions. Use it for a ballpark figure, not to file a return.",
+  },
+  {
+    question: "How accurate are the tax brackets used here?",
+    answer:
+      "The brackets and standard deductions come from the IRS inflation adjustments for 2026, published in Revenue Procedure 2025-32. Tax law can change, and the figures are reviewed periodically, so check the IRS website or a tax professional before relying on a number for a filing decision.",
+  },
+];
+
+Federal income tax is progressive, so working out your bill means walking through several brackets. This estimator does that for you. Choose your filing status, enter your income and deductions, and see your estimated federal income tax, your marginal and effective rates, and exactly how much tax each bracket contributes.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Pick your **filing status**: single, married filing jointly, head of household, or married filing separately.
+2. Enter your **total income** and any **pre-tax contributions** such as a traditional 401(k), IRA or HSA.
+3. Keep the **standard deduction**, or choose **itemized** and enter the total. If you are 65 or older or blind, add that under the standard deduction.
+4. Enter any **tax credits** and the **tax already withheld** if you want to see an estimated refund or balance due.
+5. Read your estimated tax and the bracket table below the result.
+
+## How it works
+
+Taxable income is calculated first:
+
+```
+Taxable income = Income − Pre-tax adjustments − Deduction
+```
+
+The tax is then the sum of each bracket's slice of taxable income multiplied by that bracket's rate. For a single filer in 2026 the first $12,400 is taxed at 10%, the amount from $12,400 to $50,400 at 12%, from $50,400 to $105,700 at 22%, and so on through 24%, 32%, 35% and 37%. Credits are then subtracted from the tax, but not below zero.
+
+The effective rate is total tax divided by total income, and the marginal rate is the rate of the highest bracket your taxable income reaches. All the figures, the brackets, the standard deductions and the extra amounts for age or blindness, live in one data file with a source reference and a date.
+
+## Worked example
+
+A single filer earns **$85,000**, takes the **2026 standard deduction of $16,100**, and has no other adjustments.
+
+- Taxable income: $85,000 − $16,100 = **$68,900**.
+- 10% on the first $12,400 = **$1,240**.
+- 12% on the next $38,000 (to $50,400) = **$4,560**.
+- 22% on the remaining $18,500 = **$4,070**.
+- Total federal income tax: **$9,870**, an effective rate of about **11.6%** and a marginal rate of **22%**.
+
+For comparison, a married couple filing jointly with **$150,000** of income has taxable income of $117,800 after the $32,200 standard deduction and owes about **$15,340**.
+
+## Tips and common mistakes
+
+- **Do not confuse marginal and effective rates.** A raise into a higher bracket does not tax your whole income at the higher rate.
+- **Use pre-tax contributions.** Money into a traditional 401(k) or HSA lowers taxable income, which is why they are popular.
+- **Compare deductions.** Check whether itemizing beats the standard deduction for your situation.
+- **Remember withholding.** A big refund usually just means you overpaid during the year.
+- **Check your state.** State and local income taxes are separate and not included here.

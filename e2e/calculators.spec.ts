@@ -11,6 +11,9 @@ const SLUGS = [
   "car-loan-calculator",
   "credit-card-payoff-calculator",
   "debt-payoff-planner",
+  "income-tax-calculator",
+  "inflation-calculator",
+  "roi-calculator",
 ];
 
 for (const slug of SLUGS) {
@@ -246,6 +249,113 @@ test.describe("debt payoff planner", () => {
     await page.locator("#dp-min-0").fill("50");
     await page.locator("#dp-extra").fill("0");
     await expect(page.getByText("never be paid off")).toBeVisible();
+  });
+});
+
+test.describe("income tax estimator", () => {
+  test("estimates tax for the default single filer", async ({ page }) => {
+    await open(page, "/income-tax-calculator");
+    const results = page.getByRole("region", { name: "Income tax estimator results" });
+    await expect(results.getByText("$9,870.00").first()).toBeVisible();
+    await expect(results.getByText("$68,900")).toBeVisible();
+    await expect(results.getByRole("definition").filter({ hasText: /^22%$/ })).toBeVisible();
+    await expect(results.getByText("11.61%")).toBeVisible();
+    await expect(results.getByText("This is an estimate, not tax advice")).toBeVisible();
+  });
+
+  test("married filing jointly uses the joint brackets and deduction", async ({ page }) => {
+    await open(page, "/income-tax-calculator");
+    await page.locator("#tax-status").selectOption("mfj");
+    await page.locator("#tax-income").fill("150000");
+    await expect(page.getByText("$15,340.00").first()).toBeVisible();
+    await expect(page.getByText("$117,800").first()).toBeVisible();
+  });
+
+  test("itemized deductions replace the standard deduction", async ({ page }) => {
+    await open(page, "/income-tax-calculator");
+    await page.locator("#tax-income").fill("75000");
+    await page.locator("#tax-adjustments").fill("10000");
+    await page.locator("#tax-deduction-type").selectOption("itemized");
+    await page.locator("#tax-itemized").fill("20000");
+    await expect(page.getByText("$5,152.00").first()).toBeVisible();
+  });
+
+  test("shows a refund when more was withheld than owed", async ({ page }) => {
+    await open(page, "/income-tax-calculator");
+    await page.locator("#tax-withheld").fill("11000");
+    await expect(page.getByText("Estimated refund", { exact: true })).toBeVisible();
+    await expect(page.getByText("$1,130.00").first()).toBeVisible();
+  });
+
+  test("income under the standard deduction owes nothing", async ({ page }) => {
+    await open(page, "/income-tax-calculator");
+    await page.locator("#tax-income").fill("12000");
+    await expect(
+      page.getByRole("region", { name: "Income tax estimator results" }).getByText("$0.00").first(),
+    ).toBeVisible();
+  });
+});
+
+test.describe("inflation calculator", () => {
+  test("shows the future cost for the defaults", async ({ page }) => {
+    await open(page, "/inflation-calculator");
+    const results = page.getByRole("region", { name: "Inflation calculator results" });
+    await expect(results.getByText("$1,806.11").first()).toBeVisible();
+    await expect(results.getByText("23.4", { exact: true })).toBeVisible();
+  });
+
+  test("shows purchasing power in today's dollars", async ({ page }) => {
+    await open(page, "/inflation-calculator");
+    await page.locator("#inf-mode").selectOption("power");
+    await expect(page.getByText("$553.68").first()).toBeVisible();
+  });
+
+  test("solves for the average inflation rate", async ({ page }) => {
+    await open(page, "/inflation-calculator");
+    await page.locator("#inf-mode").selectOption("rate");
+    await page.locator("#inf-amount").fill("100");
+    await page.locator("#inf-end").fill("200");
+    await expect(page.getByText("3.53%").first()).toBeVisible();
+  });
+
+  test("rejects a zero period", async ({ page }) => {
+    await open(page, "/inflation-calculator");
+    await page.locator("#inf-years").fill("0");
+    await expect(page.getByText("Enter a period above 0")).toBeVisible();
+  });
+});
+
+test.describe("ROI and CAGR calculator", () => {
+  test("shows ROI and CAGR for the defaults", async ({ page }) => {
+    await open(page, "/roi-calculator");
+    const results = page.getByRole("region", { name: "ROI and CAGR calculator results" });
+    await expect(results.getByText("50.00%").first()).toBeVisible();
+    await expect(results.getByText("8.45%").first()).toBeVisible();
+    await expect(results.getByText("10.00%")).toBeVisible();
+  });
+
+  test("shows only ROI when no period is given", async ({ page }) => {
+    await open(page, "/roi-calculator");
+    await page.locator("#roi-time").fill("");
+    await expect(page.getByText("Add a holding period")).toBeVisible();
+    await expect(page.getByText("50.00%").first()).toBeVisible();
+  });
+
+  test("reports a loss as negative", async ({ page }) => {
+    await open(page, "/roi-calculator");
+    await page.locator("#roi-final").fill("6000");
+    await page.locator("#roi-time").fill("3");
+    await expect(page.getByText("-40.00%").first()).toBeVisible();
+    await expect(page.getByText("-15.66%").first()).toBeVisible();
+  });
+
+  test("accepts months", async ({ page }) => {
+    await open(page, "/roi-calculator");
+    await page.locator("#roi-initial").fill("1000");
+    await page.locator("#roi-final").fill("1100");
+    await page.locator("#roi-unit").selectOption("months");
+    await page.locator("#roi-time").fill("6");
+    await expect(page.getByText("21.00%").first()).toBeVisible();
   });
 });
 

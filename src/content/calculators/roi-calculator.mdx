@@ -1,0 +1,71 @@
+export const faqs = [
+  {
+    question: "What is ROI?",
+    answer:
+      "Return on investment compares what you gained or lost with what you put in. It is the gain divided by the initial investment, shown as a percentage. If you invest $10,000 and it grows to $15,000, your ROI is 50%.",
+  },
+  {
+    question: "What is CAGR?",
+    answer:
+      "Compound annual growth rate is the steady yearly rate at which an investment would have to grow to get from its starting value to its ending value over a period. It smooths out the ups and downs, which makes investments of different lengths easier to compare.",
+  },
+  {
+    question: "What is the difference between ROI and CAGR?",
+    answer:
+      "ROI is the total return over the whole period and ignores how long it took. CAGR converts that total into a yearly rate. A 50% ROI over 2 years is a much stronger result than 50% over 10 years, and CAGR shows that difference.",
+  },
+  {
+    question: "How do I calculate CAGR?",
+    answer:
+      "Divide the ending value by the starting value, raise the result to the power of one divided by the number of years, and subtract one. For $10,000 growing to $15,000 over five years, that is 1.5 raised to the power 0.2, minus one, or about 8.45% a year.",
+  },
+  {
+    question: "Does this account for deposits, dividends or taxes?",
+    answer:
+      "No. CAGR here assumes a single starting amount and a single ending value. If you added or withdrew money during the period, or want to include dividends, fees and taxes, the result will differ. A money-weighted measure such as IRR is better for investments with several cash flows.",
+  },
+  {
+    question: "Can ROI or CAGR be negative?",
+    answer:
+      "Yes. If the final value is below the initial investment, both are negative. Losing the entire investment gives an ROI of -100%. Note that after a loss you need a larger percentage gain to get back to even: a 50% loss requires a 100% gain.",
+  },
+];
+
+Whether you are comparing stocks, a rental property or a small business, two numbers answer the question "how well did that investment do?" Return on investment (ROI) tells you the total gain or loss as a percentage of what you put in, and compound annual growth rate (CAGR) tells you the steady yearly rate that would produce the same result. This calculator shows both, along with the doubling time and a growth chart.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter your **initial investment** and the **final value**.
+2. Optionally enter how long you held it and choose **years, months or days**. This is needed for CAGR.
+3. Read the ROI first, then the CAGR to compare it with other investments or a savings rate.
+4. Check the chart to see how steady growth at the CAGR would look compared with a straight line.
+
+## How it works
+
+```
+ROI = (Final value − Initial investment) ÷ Initial investment
+CAGR = (Final value ÷ Initial investment)^(1 / years) − 1
+```
+
+ROI is a simple ratio that ignores time. CAGR spreads the growth evenly across the years using compounding, so it answers "what constant annual return gets me from start to finish?" For comparison the calculator also shows the **simple annual return**, which is just ROI divided by the number of years. For gains the CAGR is always a little lower, because compounding means each year's growth builds on the last. The time to double is ln(2) ÷ ln(1 + CAGR).
+
+## Worked example
+
+You invest **$10,000** and it grows to **$15,000** after **5 years**.
+
+- Gain: **$5,000**, an ROI of **50%**.
+- CAGR: 1.5 raised to the power of 1/5, minus 1, which is about **8.45%** a year.
+- The simple annual return is **10%** (50% ÷ 5), which overstates the true compounded rate.
+- At that CAGR the investment doubles in roughly **8.5 years**.
+
+A loss works the same way: **$10,000** falling to **$6,000** over **3 years** is an ROI of **-40%** and a CAGR of about **-15.7%** a year.
+
+## Tips and common mistakes
+
+- **Always compare over the same period.** A good ROI means little without knowing how long it took.
+- **Use CAGR for comparisons.** It puts investments of different lengths on the same footing.
+- **Account for costs.** Fees, taxes and trading costs reduce your real return, so use after-cost values where you can.
+- **Do not treat CAGR as a promise.** Real returns bounce around from year to year, even if the average looks steady.
+- **Watch the starting point.** Very short periods can produce huge or tiny annualized figures that mean little.
