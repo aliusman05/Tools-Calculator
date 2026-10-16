@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { AmortizationTable } from "@/components/calculators/shared/AmortizationTable";
+import { PaymentStartFields } from "@/components/calculators/shared/PaymentStartFields";
 import { CalculatorShell } from "@/components/calculators/shared/CalculatorShell";
 import { ChartSection } from "@/components/calculators/shared/ChartSection";
 import { ResultCard, type SecondaryResult } from "@/components/calculators/shared/ResultCard";
@@ -41,21 +42,6 @@ const DEFAULTS = {
 };
 
 type State = typeof DEFAULTS;
-
-const MONTH_OPTIONS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-].map((label, i) => ({ value: String(i + 1), label }));
 
 const nan = (v: number | null) => (v === null ? Number.NaN : v);
 const zero = (v: number | null) => v ?? 0;
@@ -176,22 +162,13 @@ export default function MortgageCalculator() {
             error={errors.termYears}
           />
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Select
-            id="mortgage-start-month"
-            label="First payment month"
-            value={String(firstMonth)}
-            onChange={(e) => setValue("startMonth", Number(e.target.value))}
-            options={MONTH_OPTIONS}
-          />
-          <NumericInput
-            id="mortgage-start-year"
-            label="First payment year"
-            grouping={false}
-            value={values.startYear}
-            onChange={(v) => setValue("startYear", v)}
-          />
-        </div>
+        <PaymentStartFields
+          idPrefix="mortgage"
+          month={firstMonth}
+          year={values.startYear}
+          onMonthChange={(m) => setValue("startMonth", m)}
+          onYearChange={(y) => setValue("startYear", y)}
+        />
       </fieldset>
 
       <fieldset className="flex flex-col gap-4">

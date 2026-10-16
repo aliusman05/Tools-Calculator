@@ -1,0 +1,76 @@
+export const faqs = [
+  {
+    question: "How is a monthly loan payment calculated?",
+    answer:
+      "Fixed-rate loans use a level payment: the amount borrowed multiplied by the monthly rate and a growth factor, divided by that factor minus one. The growth factor is one plus the monthly rate, raised to the number of payments. The same amount is due every month, but its mix of interest and principal changes over time.",
+  },
+  {
+    question: "What is the difference between interest rate and APR?",
+    answer:
+      "The interest rate is the cost of borrowing the money. APR also folds in certain lender fees, so it is usually a little higher and is better for comparing offers. This calculator uses the rate you type in, so enter the rate that your lender applies to the balance.",
+  },
+  {
+    question: "Why is most of my early payment interest?",
+    answer:
+      "Interest is charged on the remaining balance, and the balance is largest at the start. As each payment shrinks the balance, the interest portion falls and more of the fixed payment goes to principal. The amortization schedule below the results shows this shift month by month.",
+  },
+  {
+    question: "Do extra payments really shorten a loan?",
+    answer:
+      "Yes, as long as your lender applies the extra money to principal. Each extra dollar reduces the balance that future interest is charged on, so the loan ends sooner and costs less. Enter an amount in the extra payments box to see interest saved and months removed.",
+  },
+  {
+    question: "Is a shorter loan term always better?",
+    answer:
+      "A shorter term costs less interest overall but has a higher monthly payment. If the higher payment strains your budget, a longer term with occasional extra payments can give you the same savings with more flexibility. Compare terms side by side using the same amount and rate.",
+  },
+  {
+    question: "Can I use this for car loans, personal loans and student loans?",
+    answer:
+      "Yes, for any loan with a fixed rate and equal monthly payments. It does not model variable rates, interest-only periods, deferred interest or origination fees that are added to the balance. For a home loan with taxes and insurance, use the mortgage calculator instead.",
+  },
+];
+
+Use this loan calculator to see what a fixed-rate loan really costs. Enter the amount, the interest rate and the term, and you will get the monthly payment, the total interest over the life of the loan, and the date you will be debt-free. It works for personal loans, car loans, student loans and any other installment loan.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Type the **loan amount** you plan to borrow.
+2. Enter the **interest rate** from your offer or a rate you want to test.
+3. Choose the **term** in years or months. A 60-month loan and a 5-year loan give identical results.
+4. Set the **first payment** month so the schedule shows real dates and your payoff month.
+5. Add an **extra monthly payment** if you want to see how paying a little more speeds things up.
+
+## How it works
+
+The monthly payment for a loan with equal payments is:
+
+```
+M = P × r × (1 + r)^n / ((1 + r)^n − 1)
+```
+
+- **P** is the loan amount.
+- **r** is the monthly rate: the annual rate divided by 12 and by 100.
+- **n** is the number of monthly payments.
+
+At a rate of zero the formula reduces to P ÷ n. Each month, interest is the current balance times r, and whatever remains of the payment reduces the balance. The last payment is adjusted so the balance finishes at exactly zero. Extra payments are applied to principal in full, so they cut the number of months needed.
+
+## Worked example
+
+You borrow **$25,000** at **6.9%** for **5 years** (60 payments).
+
+- Monthly payment: **$493.85**.
+- In the first month, **$143.75** is interest and **$350.10** reduces the balance.
+- Total interest over the loan: **$4,631.08**, for **$29,631.08** paid in total.
+
+Add **$100 extra each month** and the loan ends after **49 payments** instead of 60. Interest falls to **$3,706.88**, which saves **$924.20** and **11 months**.
+
+## Tips and common mistakes
+
+- **Compare total cost, not just the payment.** A lower payment from a longer term often costs more in interest.
+- **Check for fees.** Origination fees and late fees are not included here, so add them to your own comparison.
+- **Confirm how extra payments are applied.** Ask your lender to apply them to principal, not to the next due date.
+- **Use the APR your lender quotes for the loan itself.** Avoid mixing a promotional teaser rate with a long term.
+- **Test a rate change.** If your rate is variable, try a point or two higher to see whether you are still comfortable.

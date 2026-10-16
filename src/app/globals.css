@@ -16,6 +16,7 @@
   --danger: #b91c1c;
   --ring: #1d4ed8;
   --chart-2: #b45309;
+  --chart-3: #047857;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,6 +35,7 @@
     --danger: #f87171;
     --ring: #93c5fd;
     --chart-2: #fbbf24;
+    --chart-3: #34d399;
   }
 }
 

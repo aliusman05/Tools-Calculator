@@ -76,6 +76,8 @@ const MONTH_NAMES = [
   "December",
 ];
 
+export const MONTH_OPTIONS = MONTH_NAMES.map((label, i) => ({ value: String(i + 1), label }));
+
 /** month is 1-12. Avoids Date so output is identical on server and client. */
 export function formatMonthYear(month: number, year: number, short = false): string {
   const name = MONTH_NAMES[month - 1] ?? "";

@@ -1,0 +1,74 @@
+export const faqs = [
+  {
+    question: "What is the simple interest formula?",
+    answer:
+      "Simple interest is the principal multiplied by the annual rate and the time in years: I = P × R × T. The rate is used as a decimal, so 6% becomes 0.06. The total you owe or receive is the principal plus the interest.",
+  },
+  {
+    question: "What is the difference between simple and compound interest?",
+    answer:
+      "Simple interest is always calculated on the original principal. Compound interest is calculated on the principal plus any interest already earned, so it grows faster the longer the money stays invested. Over a single year with annual compounding they are the same.",
+  },
+  {
+    question: "How do I calculate simple interest for months or days?",
+    answer:
+      "Convert the time to years first. Months are divided by 12 and days by 365. For example, 18 months is 1.5 years and 90 days is about 0.2466 years. This calculator makes that conversion for you when you pick the unit.",
+  },
+  {
+    question: "Where is simple interest used?",
+    answer:
+      "It is common for short-term personal loans, some auto loans, certain bonds and treasury bills, and basic textbook problems. Most savings accounts, credit cards and mortgages use compound interest or a similar schedule instead.",
+  },
+  {
+    question: "Which is better for a borrower: simple or compound interest?",
+    answer:
+      "Simple interest is cheaper for the borrower over the same rate and time, because there is no interest on interest. For a saver or investor it is the opposite: compounding earns more.",
+  },
+  {
+    question: "Does this calculator handle loans with monthly payments?",
+    answer:
+      "No. It computes interest on a single amount over a single period. For a loan that you repay in installments, use the loan calculator, which tracks the balance as you pay it down.",
+  },
+];
+
+Simple interest is the easiest way to price borrowed or saved money: you earn or pay a fixed percentage of the original amount for each year. This calculator finds the interest and total for any amount, rate and time, and compares the result with what compound interest would have produced on the same money.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter the **principal**, the amount that earns or owes interest.
+2. Enter the **annual interest rate**.
+3. Enter the **time** and pick whether it is in years, months or days.
+4. Choose a **compounding** option to compare with. Annual is the closest comparison to simple interest.
+5. Read the interest and total, then check the chart to see how the two methods drift apart.
+
+## How it works
+
+The simple interest formula is:
+
+```
+I = P × R × T
+```
+
+- **P** is the principal.
+- **R** is the annual rate as a decimal (6% = 0.06).
+- **T** is the time in years. Months are divided by 12 and days by 365.
+
+The total amount is **P + I**. For the comparison, compound interest uses A = P × (1 + r/m)^(m×t), where m is the number of compounding periods per year. Because simple interest grows in a straight line and compound interest curves upward, the gap widens as time passes.
+
+## Worked example
+
+You put **$5,000** in an account paying **6% simple interest** for **3 years**.
+
+- Interest: 5,000 × 0.06 × 3 = **$900.00**.
+- Total: **$5,900.00**.
+
+With **annual compounding** at the same rate, the balance would be 5,000 × 1.06³ = **$5,955.08**, so compounding earns **$55.08** more over three years. The difference over a very short period is tiny, but it grows quickly over decades.
+
+## Tips and common mistakes
+
+- **Use the right time unit.** Entering 18 as years instead of months is a common slip that makes the answer twelve times too big.
+- **Check the day count.** Some lenders use 360 days a year, which makes daily results slightly higher than this calculator's 365-day basis.
+- **Do not assume simple interest.** Many accounts and loans compound, so confirm in the terms before relying on this result.
+- **Compare like with like.** When weighing two offers, convert both to the same time period.

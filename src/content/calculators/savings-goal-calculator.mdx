@@ -1,0 +1,74 @@
+export const faqs = [
+  {
+    question: "How much should I save each month to reach my goal?",
+    answer:
+      "It depends on the goal, how much you already have, how long you have, and the interest you can earn. Choose the monthly-saving option, enter those four numbers, and the calculator solves for the deposit that lands exactly on your target at the end of the period.",
+  },
+  {
+    question: "How long will it take to reach my savings goal?",
+    answer:
+      "Switch to the time option and enter what you can save each month. The calculator finds the first month in which your balance reaches the goal. It rounds up to a whole month, because you only reach the goal when a deposit is made.",
+  },
+  {
+    question: "Does interest make a big difference for short goals?",
+    answer:
+      "For goals under a couple of years the effect is small, and your deposits do most of the work. For goals of ten years or more, interest can account for a substantial share of the final amount. Use a rate of 0% to see the plain deposits-only answer.",
+  },
+  {
+    question: "What interest rate should I use?",
+    answer:
+      "Use the rate your savings account or investment actually pays, and err on the low side. High-yield savings accounts pay far less than long-run stock returns, which also carry the risk of losses. A conservative number gives a safer plan.",
+  },
+  {
+    question: "Why does the calculator say my goal is out of reach?",
+    answer:
+      "If you enter zero for your monthly saving and the interest on what you have will not reach the goal within 100 years, the target is not reachable at that pace. Increase the monthly amount, lower the goal or add to your current savings.",
+  },
+  {
+    question: "Does this include inflation or taxes?",
+    answer:
+      "No. The result is in nominal dollars, before taxes and inflation. If your goal is far in the future, prices will likely be higher then, so consider setting a larger target. The inflation calculator can help you estimate by how much.",
+  },
+];
+
+Having a number in mind makes saving easier. This calculator works in two directions: it tells you how much to set aside each month to reach a goal by a certain time, or how long it will take at the monthly amount you can afford. Both versions include the interest your money earns along the way.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Pick what you want to find: the **monthly saving needed**, or the **time it will take**.
+2. Enter your **savings goal** and how much you have **already saved**.
+3. Enter the **annual interest rate** your savings earns. Use 0% if you are keeping the money in cash.
+4. For the monthly-saving option, enter the **number of years** you have. For the time option, enter the **monthly amount** you plan to save.
+5. Review the chart and table to see your progress year by year.
+
+## How it works
+
+Savings are assumed to earn the annual rate compounded monthly, with deposits made at the end of each month. With a monthly rate **i** and **n** months:
+
+```
+Required deposit = (Goal − Current × (1 + i)^n) × i / ((1 + i)^n − 1)
+```
+
+Your existing savings grow by (1 + i)^n on their own. The deposit has to cover whatever is left, and the second part of the formula spreads that shortfall across the months, allowing for the interest each deposit earns. At zero interest it simplifies to the shortfall divided by n.
+
+To find the time instead, the calculator solves the same relationship for n and rounds up to the next whole month.
+
+## Worked example
+
+You want **$50,000** in **10 years**, you have **$5,000** now, and your savings earn **4%**.
+
+- Your existing $5,000 grows to about $7,454 by itself.
+- You need to save **$288.94 a month**.
+- You will deposit **$39,672.37** in total (including the $5,000 you already have), and interest adds **$10,327.63**.
+
+Now flip it around. You want **$20,000**, you have **$1,000**, and you save **$300 a month** at 4%. You reach the goal after **57 months** (4 years 9 months), having deposited **$18,100** with **$1,906.95** of interest.
+
+## Tips and common mistakes
+
+- **Automate the deposit.** A transfer set up on payday is the most reliable way to hit a monthly target.
+- **Keep the goal in today's money.** If you will need the money in many years, increase the target to allow for rising prices.
+- **Do not count on high returns.** Using an optimistic rate makes the required deposit look smaller than it should be.
+- **Revisit your plan.** If you fall behind, enter your current balance again and see the new monthly amount needed.
+- **Separate goals.** An emergency fund and a house deposit have different timelines, so run each one on its own.

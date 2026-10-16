@@ -1,0 +1,78 @@
+export const faqs = [
+  {
+    question: "What is compound interest?",
+    answer:
+      "Compound interest is interest earned on both your original money and on the interest already added. Because each period's interest becomes part of the balance that earns the next period's interest, growth speeds up over time. Simple interest, by contrast, is only ever calculated on the original amount.",
+  },
+  {
+    question: "How is compound interest calculated?",
+    answer:
+      "For a single deposit, the future value is the starting amount multiplied by one plus the rate per period, raised to the number of periods. When you add regular deposits, each one grows for the time it stays invested, and the calculator adds up all of those amounts month by month.",
+  },
+  {
+    question: "Does compounding frequency matter?",
+    answer:
+      "It matters a little. The more often interest is added, the more you earn, but the gains shrink quickly: daily compounding earns only slightly more than monthly. The interest rate and the length of time have a far larger effect than the compounding schedule.",
+  },
+  {
+    question: "Should I deposit at the start or the end of the month?",
+    answer:
+      "Money deposited at the start of the month earns interest for that month, so it ends up slightly higher than the same deposits made at the end. Pick the option that matches when your money actually goes in.",
+  },
+  {
+    question: "Why does my balance grow faster in later years?",
+    answer:
+      "Early on, most of the balance is money you put in. Later, the balance is large enough that each year's interest can rival or exceed your deposits. The chart splits the balance into your starting amount, deposits and interest so you can see this shift.",
+  },
+  {
+    question: "Does this account for taxes or inflation?",
+    answer:
+      "No. Results are before taxes, fees and inflation, and they assume a constant rate. Real returns vary from year to year, so use the numbers as an illustration. To see what the future amount might buy, try the inflation calculator.",
+  },
+];
+
+Compound interest is what makes steady saving powerful: your interest earns interest of its own. This calculator shows how a starting balance and regular monthly deposits can grow over time, how much of the final balance is your own money, and how much is interest. Try different rates, time periods and compounding schedules to see what matters most.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter your **starting amount** and the **monthly deposit** you plan to add. Either can be zero, but not both.
+2. Set the **annual interest rate** and the **time** in years.
+3. Choose how often interest **compounds**: daily, monthly, quarterly or annually.
+4. Choose whether deposits are made at the **start** or **end** of each month.
+5. Read the future value, then explore the chart and the year-by-year table.
+
+## How it works
+
+For one lump sum, the textbook formula is:
+
+```
+A = P × (1 + r / m)^(m × t)
+```
+
+- **P** is the starting amount.
+- **r** is the annual rate as a decimal.
+- **m** is how many times a year interest compounds (365, 12, 4 or 1).
+- **t** is the time in years.
+
+With monthly deposits, the calculator steps through each month using the equivalent monthly growth rate, adds the deposit at the start or end of the month, and keeps a running total. That produces the same answer as the lump-sum formula plus the future value of the deposits, and it lets the table show every year.
+
+## Worked example
+
+You start with **$10,000**, add **$200 at the end of each month**, and earn **5%** compounded monthly for **10 years**.
+
+- Your deposits total **$24,000** over the decade.
+- The starting amount alone would grow to **$16,470.09**.
+- The deposits alone would grow to **$31,056.46**.
+- The final balance is **$47,526.55**, of which **$13,526.55** is interest.
+
+Compounding schedule matters less than you might expect: $10,000 at 5% for 10 years becomes **$16,288.95** with annual compounding and **$16,486.65** with daily compounding, a gap of under $200.
+
+## Tips and common mistakes
+
+- **Start early.** Time is the biggest driver. Ten more years can matter more than a higher rate.
+- **Be realistic about the rate.** A savings account and a stock fund earn very different long-run rates and carry different risk.
+- **Remember what is not included.** Taxes, fees and inflation will reduce what your money can buy.
+- **Match the compounding to your account.** Check whether your bank compounds daily or monthly and use the same setting here.
+- **Increase deposits when you can.** Raising your deposit by even a small amount every year adds up.
