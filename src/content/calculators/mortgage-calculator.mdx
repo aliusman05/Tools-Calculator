@@ -1,0 +1,86 @@
+export const faqs = [
+  {
+    question: "How is a monthly mortgage payment calculated?",
+    answer:
+      "The principal-and-interest part comes from a fixed formula: the loan amount multiplied by the monthly rate and a growth factor, divided by that factor minus one. The calculator then adds one-twelfth of your yearly property tax and insurance, any HOA dues, and PMI if it applies. The result is the amount that leaves your account each month.",
+  },
+  {
+    question: "What is included in this estimate?",
+    answer:
+      "Principal, interest, property tax, homeowners insurance, HOA dues and private mortgage insurance (PMI). It does not include utilities, maintenance, closing costs, or the fact that some lenders change the escrow amount every year.",
+  },
+  {
+    question: "When does PMI stop?",
+    answer:
+      "In this calculator PMI is charged while your remaining balance is above 80% of the home price, and it disappears after that. Real rules vary by lender and loan type. Conventional loans usually let you request cancellation at 80% and remove PMI automatically at 78% of the original value, but check your own loan terms.",
+  },
+  {
+    question: "How much do extra payments really save?",
+    answer:
+      "Extra money goes straight to principal, so every later month charges interest on a smaller balance. Early in the loan this effect is strongest because most of each regular payment is interest. Turn on the extra payment fields to see the interest saved and the months removed from the loan.",
+  },
+  {
+    question: "Is a 15-year or 30-year mortgage better?",
+    answer:
+      "A 15-year loan has a higher monthly payment but a lower rate and far less total interest. A 30-year loan keeps the payment lower and gives you flexibility. Try both terms with the same price and down payment and compare the total interest and the monthly amount against your budget.",
+  },
+  {
+    question: "Why is my lender's quote different from this calculator?",
+    answer:
+      "Lenders quote with your exact rate, fees, taxes and insurance. They may also round the payment to the cent each month and use a slightly different day count. Small differences are normal, and the lender's Loan Estimate is the figure to rely on.",
+  },
+  {
+    question: "Does a bigger down payment lower my rate?",
+    answer:
+      "Often, yes. A larger down payment reduces the amount borrowed, can remove PMI, and may qualify you for a better rate. Use the down payment toggle to switch between dollars and percent and watch the monthly payment change.",
+  },
+];
+
+A mortgage payment is more than the loan repayment. This calculator turns a home price, down payment, interest rate and term into the monthly amount you would actually pay, then shows how that money is split between interest and principal over the years. It is built for anyone comparing homes, testing a budget, or deciding whether extra payments are worth it.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter the **home price** and your **down payment**. Use the dollar/percent switch to enter whichever is easier.
+2. Add the **interest rate** and **loan term** from a lender quote, or try a few rates to see how sensitive the payment is.
+3. Fill in **property tax**, **insurance**, **HOA** and **PMI** to get a payment closer to what you will really pay. Leave them at zero to see principal and interest only.
+4. Optionally add **extra payments**: a regular monthly amount, a yearly lump sum, or a single one-time payment.
+5. Open the **amortization schedule** to see every payment, by year or by month. The page address updates as you type, so you can copy it to share your scenario.
+
+## How it works
+
+The principal-and-interest payment on a fixed-rate loan is the same every month. It is the amount that pays off the loan exactly after the last payment:
+
+```
+M = P × r × (1 + r)^n / ((1 + r)^n − 1)
+```
+
+- **P** is the amount borrowed (home price minus down payment).
+- **r** is the monthly rate: the yearly rate divided by 12 and by 100.
+- **n** is the number of monthly payments: years × 12.
+
+If the rate is exactly zero, the formula simplifies to P ÷ n.
+
+Each month the interest is the current balance times r. Whatever is left of the payment reduces the balance. Because the balance starts high, early payments are mostly interest, and the share going to principal grows over time. Extra payments are applied entirely to principal, which is why they shorten the loan. The final payment is adjusted so the balance ends at exactly zero.
+
+Property tax is the home price times your tax rate, divided by 12. Insurance is the yearly premium divided by 12. PMI is charged on the original loan amount at your PMI rate while the balance is above 80% of the home price.
+
+## Worked example
+
+Suppose you buy a **$400,000** home with **20% down** ($80,000), borrow **$320,000** at **6.5%** for **30 years**.
+
+- Monthly rate: 6.5% ÷ 12 = 0.5417%, and there are 360 payments.
+- Principal and interest: **$2,022.62** per month.
+- First payment: **$1,733.33** goes to interest and only **$289.28** to principal.
+- Over 30 years you pay **$408,142** in interest, for **$728,142** in total.
+
+Now add **$200 extra each month**. The loan is repaid in **281 months** (23 years 5 months) instead of 360, interest falls to **$302,714**, and you save about **$105,429** in interest and **6 years 7 months** of payments.
+
+## Tips and common mistakes
+
+- **Compare total interest, not just the payment.** A longer term lowers the monthly amount but can add tens of thousands of dollars in interest.
+- **Do not forget the extras.** Taxes, insurance and HOA dues can add hundreds of dollars a month to the loan payment.
+- **Check for prepayment rules.** Most home loans allow extra payments, but confirm that extra money is applied to principal and not held for the next due date.
+- **Test a higher rate.** Rates can move before you lock one in. Add a point or two to see whether the payment still fits.
+- **Keep a cushion.** Lenders may approve you for more than is comfortable. Budget for repairs and rising insurance costs too.

@@ -44,7 +44,29 @@ export const categories: readonly Category[] = [
 ];
 
 // One entry per calculator. Populated from Phase 2 onward.
-export const calculators: readonly CalculatorMeta[] = [];
+export const calculators: readonly CalculatorMeta[] = [
+  {
+    slug: "mortgage-calculator",
+    title: "Mortgage Calculator with Extra Payments",
+    shortTitle: "Mortgage Calculator",
+    description:
+      "Estimate your monthly mortgage payment with taxes, insurance, HOA and PMI. See total interest, your payoff date, and how extra payments shorten the loan.",
+    category: "loans",
+    keywords: [
+      "mortgage calculator",
+      "monthly mortgage payment",
+      "home loan",
+      "amortization",
+      "PMI",
+      "extra payments",
+    ],
+    related: [],
+    component: () => import("@/components/calculators/mortgage/MortgageCalculator"),
+    contentPath: "mortgage-calculator.mdx",
+    popular: true,
+    lastUpdated: "2026-10-16",
+  },
+];
 
 export function getCategory(id: string): Category | undefined {
   return categories.find((c) => c.id === id);

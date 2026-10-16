@@ -4,6 +4,9 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { categories, getCalculatorsByCategory, getCategory } from "@/lib/registry";
 
+// Only prerendered paths exist; anything else is a real 404.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return categories.map((c) => ({ category: c.id }));
 }
