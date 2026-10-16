@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AdSlot } from "@/components/ads/AdSlot";
+import { CalculatorLoader } from "@/components/calculators/CalculatorLoader";
 import { AffiliateSlot } from "@/components/ads/AffiliateCard";
 import { ContentAd } from "@/components/ads/ContentAd";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
@@ -35,14 +36,12 @@ export default async function CalculatorPage({ params }: PageProps<"/[slug]">) {
 
   const category = getCategory(calc.category);
   const contentName = calc.contentPath.replace(/\.mdx$/, "");
-  const [{ default: Calculator }, content] = await Promise.all([
-    calc.component(),
-    import(`@/content/calculators/${contentName}.mdx`) as Promise<{
-      default: React.ComponentType<{ components?: Record<string, unknown> }>;
-      faqs?: Faq[];
-    }>,
-  ]);
+  const content = await (import(`@/content/calculators/${contentName}.mdx`) as Promise<{
+    default: React.ComponentType<{ components?: Record<string, unknown> }>;
+    faqs?: Faq[];
+  }>);
   const Content = content.default;
+  const Calculator = () => <CalculatorLoader slug={calc.slug} />;
   const faqs = content.faqs ?? [];
 
   return (

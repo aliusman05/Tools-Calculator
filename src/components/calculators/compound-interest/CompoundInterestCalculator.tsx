@@ -167,7 +167,7 @@ export default function CompoundInterestCalculator() {
           ]}
         />
         <Card className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold">Year-by-year breakdown</h3>
+          <h2 className="text-lg font-semibold">Year-by-year breakdown</h2>
           <Table caption="Compound interest year-by-year breakdown">
             <thead>
               <tr>

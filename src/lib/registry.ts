@@ -1,4 +1,3 @@
-import type { ComponentType } from "react";
 import type { AffiliateContext } from "@/lib/data/affiliates";
 
 export type CategoryId = "loans" | "savings" | "investing" | "tax" | "debt" | "other";
@@ -11,7 +10,6 @@ export type CalculatorMeta = {
   category: CategoryId;
   keywords: string[];
   related: string[]; // slugs
-  component: () => Promise<{ default: ComponentType }>; // dynamic import
   contentPath: string; // MDX file
   popular?: boolean;
   /** Which affiliate offers may appear on this page (see src/lib/data/affiliates.ts). */
@@ -64,7 +62,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "extra payments",
     ],
     related: ["loan-calculator", "savings-goal-calculator"],
-    component: () => import("@/components/calculators/mortgage/MortgageCalculator"),
     contentPath: "mortgage-calculator.mdx",
     affiliateContext: "mortgage",
     popular: true,
@@ -86,7 +83,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "loan amortization",
     ],
     related: ["mortgage-calculator", "car-loan-calculator", "savings-goal-calculator"],
-    component: () => import("@/components/calculators/loan/LoanCalculator"),
     contentPath: "loan-calculator.mdx",
     affiliateContext: "personal-loan",
     popular: true,
@@ -112,8 +108,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "inflation-calculator",
       "roi-calculator",
     ],
-    component: () =>
-      import("@/components/calculators/compound-interest/CompoundInterestCalculator"),
     contentPath: "compound-interest-calculator.mdx",
     affiliateContext: "savings-account",
     popular: true,
@@ -133,7 +127,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "I = PRT",
     ],
     related: ["compound-interest-calculator", "loan-calculator"],
-    component: () => import("@/components/calculators/simple-interest/SimpleInterestCalculator"),
     contentPath: "simple-interest-calculator.mdx",
     lastUpdated: "2026-10-16",
   },
@@ -151,7 +144,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "savings plan",
     ],
     related: ["compound-interest-calculator", "retirement-calculator", "inflation-calculator"],
-    component: () => import("@/components/calculators/savings-goal/SavingsGoalCalculator"),
     contentPath: "savings-goal-calculator.mdx",
     affiliateContext: "savings-account",
     popular: true,
@@ -172,7 +164,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "4% rule",
     ],
     related: ["compound-interest-calculator", "savings-goal-calculator", "income-tax-calculator"],
-    component: () => import("@/components/calculators/retirement/RetirementCalculator"),
     contentPath: "retirement-calculator.mdx",
     affiliateContext: "investing",
     popular: true,
@@ -193,7 +184,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "sales tax car",
     ],
     related: ["loan-calculator", "credit-card-payoff-calculator"],
-    component: () => import("@/components/calculators/car-loan/CarLoanCalculator"),
     contentPath: "car-loan-calculator.mdx",
     affiliateContext: "auto-loan",
     popular: true,
@@ -214,7 +204,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "minimum payment",
     ],
     related: ["debt-payoff-planner", "loan-calculator"],
-    component: () => import("@/components/calculators/credit-card/CreditCardCalculator"),
     contentPath: "credit-card-payoff-calculator.mdx",
     affiliateContext: "credit-card",
     popular: true,
@@ -235,7 +224,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "debt free",
     ],
     related: ["credit-card-payoff-calculator", "loan-calculator"],
-    component: () => import("@/components/calculators/debt-payoff/DebtPayoffPlanner"),
     contentPath: "debt-payoff-planner.mdx",
     affiliateContext: "debt-consolidation",
     lastUpdated: "2026-10-16",
@@ -256,7 +244,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "standard deduction",
     ],
     related: ["retirement-calculator", "inflation-calculator"],
-    component: () => import("@/components/calculators/income-tax/IncomeTaxCalculator"),
     contentPath: "income-tax-calculator.mdx",
     affiliateContext: "tax-software",
     popular: true,
@@ -277,7 +264,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "inflation rate",
     ],
     related: ["compound-interest-calculator", "retirement-calculator", "savings-goal-calculator"],
-    component: () => import("@/components/calculators/inflation/InflationCalculator"),
     contentPath: "inflation-calculator.mdx",
     popular: true,
     lastUpdated: "2026-10-16",
@@ -297,7 +283,6 @@ export const calculators: readonly CalculatorMeta[] = [
       "investment return",
     ],
     related: ["compound-interest-calculator", "inflation-calculator"],
-    component: () => import("@/components/calculators/roi/RoiCalculator"),
     contentPath: "roi-calculator.mdx",
     affiliateContext: "investing",
     lastUpdated: "2026-10-16",

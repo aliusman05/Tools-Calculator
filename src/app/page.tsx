@@ -46,7 +46,12 @@ export default function Home() {
           Free finance calculators you can trust
         </h1>
         <p className="text-muted max-w-xl text-lg text-balance">{siteConfig.description}</p>
-        <SearchBox items={getSummaries()} size="lg" className="mt-2 w-full max-w-xl" />
+        <SearchBox
+          items={getSummaries()}
+          landmarkLabel="Find a calculator"
+          size="lg"
+          className="mt-2 w-full max-w-xl"
+        />
       </section>
 
       <section aria-labelledby="categories-heading">

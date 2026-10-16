@@ -68,7 +68,7 @@ function StrategyCard({
   return (
     <Card className={best ? "border-accent flex flex-col gap-3 border-2" : "flex flex-col gap-3"}>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-lg font-semibold">{title}</h3>
+        <h2 className="text-lg font-semibold">{title}</h2>
         {best && (
           <span className="rounded-control bg-accent-soft text-foreground px-2 py-0.5 text-xs font-semibold">
             Lowest interest
@@ -252,7 +252,7 @@ export default function DebtPayoffPlanner() {
         </div>
 
         <Card className="flex flex-col gap-1">
-          <h3 className="font-semibold">If you only paid the minimums</h3>
+          <h2 className="font-semibold">If you only paid the minimums</h2>
           {r.minimumOnly.months === null ? (
             <p className="text-danger">
               At least one minimum payment is too low to cover its interest, so that debt would

@@ -222,7 +222,7 @@ export default function RetirementCalculator() {
           ]}
         />
         <Card className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold">Year-by-year projection</h3>
+          <h2 className="text-lg font-semibold">Year-by-year projection</h2>
           <Table caption="Retirement savings year-by-year projection">
             <thead>
               <tr>

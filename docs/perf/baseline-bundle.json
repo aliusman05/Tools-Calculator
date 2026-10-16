@@ -1,0 +1,240 @@
+{
+  "date": "2026-10-16T19:33:05.995Z",
+  "summary": {
+    "calculatorAvgJsKb": 205.1,
+    "maxJsKb": 206.6,
+    "homeJsKb": 205.1
+  },
+  "rows": [
+    {
+      "path": "/",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 9.1
+    },
+    {
+      "path": "/about",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 9.6
+    },
+    {
+      "path": "/contact",
+      "scripts": 10,
+      "jsKb": 206.6,
+      "cssKb": 6.1,
+      "htmlKb": 8.3
+    },
+    {
+      "path": "/privacy-policy",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 13.7
+    },
+    {
+      "path": "/terms",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 10.9
+    },
+    {
+      "path": "/disclaimer",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 9.4
+    },
+    {
+      "path": "/category/loans",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 8.8
+    },
+    {
+      "path": "/category/savings",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 8.8
+    },
+    {
+      "path": "/category/investing",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 8.7
+    },
+    {
+      "path": "/category/tax",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 8.7
+    },
+    {
+      "path": "/category/debt",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 8.7
+    },
+    {
+      "path": "/category/other",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 8.6
+    },
+    {
+      "path": "/mortgage-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 15.9
+    },
+    {
+      "path": "/loan-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 14
+    },
+    {
+      "path": "/compound-interest-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 14.7
+    },
+    {
+      "path": "/simple-interest-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 13.2
+    },
+    {
+      "path": "/savings-goal-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 14.8
+    },
+    {
+      "path": "/retirement-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 17.5
+    },
+    {
+      "path": "/car-loan-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 14.6
+    },
+    {
+      "path": "/credit-card-payoff-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 13.8
+    },
+    {
+      "path": "/debt-payoff-planner",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 14.8
+    },
+    {
+      "path": "/income-tax-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 15
+    },
+    {
+      "path": "/inflation-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 14.6
+    },
+    {
+      "path": "/roi-calculator",
+      "scripts": 9,
+      "jsKb": 205.1,
+      "cssKb": 6.1,
+      "htmlKb": 13.6
+    }
+  ],
+  "chunks": [
+    {
+      "url": "/_next/static/chunks/12_58crb5ldau.js",
+      "pages": 24,
+      "gzipKb": 69.9,
+      "rawKb": 223.3
+    },
+    {
+      "url": "/_next/static/chunks/0po1xmgzy_nb-.js",
+      "pages": 24,
+      "gzipKb": 44.4,
+      "rawKb": 160.6
+    },
+    {
+      "url": "/_next/static/chunks/0cz1d0mv5g_q7.js",
+      "pages": 24,
+      "gzipKb": 38.7,
+      "rawKb": 110
+    },
+    {
+      "url": "/_next/static/chunks/3ne5641c47dlt.js",
+      "pages": 24,
+      "gzipKb": 24,
+      "rawKb": 93.3
+    },
+    {
+      "url": "/_next/static/chunks/0wseja9-mjcps.js",
+      "pages": 24,
+      "gzipKb": 9.6,
+      "rawKb": 27.3
+    },
+    {
+      "url": "/_next/static/chunks/264xklzux855c.js",
+      "pages": 24,
+      "gzipKb": 8.5,
+      "rawKb": 31.9
+    },
+    {
+      "url": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+      "pages": 24,
+      "gzipKb": 4.3,
+      "rawKb": 11
+    },
+    {
+      "url": "/_next/static/chunks/0bf0yvxdluogm.js",
+      "pages": 24,
+      "gzipKb": 3.4,
+      "rawKb": 13.5
+    },
+    {
+      "url": "/_next/static/chunks/1yaze1hpmfw28.js",
+      "pages": 24,
+      "gzipKb": 2.3,
+      "rawKb": 6.4
+    },
+    {
+      "url": "/_next/static/chunks/1tq2xvkzo2b1b.js",
+      "pages": 1,
+      "gzipKb": 1.5,
+      "rawKb": 3.1
+    }
+  ]
+}

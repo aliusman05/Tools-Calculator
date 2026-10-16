@@ -15,7 +15,7 @@
 
 # next.js
 /.next/
-/.next-ads/
+/.next-*/
 /out/
 
 # production
@@ -45,3 +45,6 @@ next-env.d.ts
 # playwright
 /test-results/
 /playwright-report/
+
+# performance reports written by scripts (docs/perf holds the ones we keep)
+/perf-reports/

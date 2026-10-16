@@ -191,7 +191,7 @@ export default function IncomeTaxCalculator() {
           secondary={secondary}
         />
         <Card className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold">How your tax is built up</h3>
+          <h2 className="text-lg font-semibold">How your tax is built up</h2>
           <Table caption="Federal income tax by bracket">
             <thead>
               <tr>

@@ -9,10 +9,13 @@ import { searchCalculators } from "@/lib/search";
 
 export function SearchBox({
   items,
+  landmarkLabel,
   className,
   size = "md",
 }: {
   items: CalculatorSummary[];
+  /** Names this search landmark. Pages can hold several, and each landmark needs a unique name. */
+  landmarkLabel: string;
   className?: string;
   size?: "md" | "lg";
 }) {
@@ -33,7 +36,12 @@ export function SearchBox({
   }
 
   return (
-    <form role="search" onSubmit={onSubmit} className={cn("relative", className)}>
+    <form
+      role="search"
+      aria-label={landmarkLabel}
+      onSubmit={onSubmit}
+      className={cn("relative", className)}
+    >
       <label htmlFor={id} className="sr-only">
         Search calculators
       </label>

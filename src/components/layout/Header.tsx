@@ -30,7 +30,11 @@ export function Header() {
           </ul>
         </nav>
 
-        <SearchBox items={items} className="ml-auto hidden w-64 md:block" />
+        <SearchBox
+          items={items}
+          landmarkLabel="Site search"
+          className="ml-auto hidden w-64 md:block"
+        />
         <div className="ml-auto md:hidden">
           <MobileMenu categories={navCategories} items={items} />
         </div>

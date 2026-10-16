@@ -1,5 +1,18 @@
 import { siteConfig } from "./site-config";
 
+const formatters = new Map<string, Intl.NumberFormat>();
+
+/** Intl.NumberFormat construction is slow (tens of microseconds to milliseconds), so reuse instances. */
+function numberFormat(locale: string, options: Intl.NumberFormatOptions): Intl.NumberFormat {
+  const key = `${locale}|${JSON.stringify(options)}`;
+  let f = formatters.get(key);
+  if (!f) {
+    f = new Intl.NumberFormat(locale, options);
+    formatters.set(key, f);
+  }
+  return f;
+}
+
 export type FormatOptions = {
   locale?: string;
   currency?: string;
@@ -17,7 +30,7 @@ export function formatCurrency(
   } = {},
 ): string {
   if (!Number.isFinite(value)) return "—";
-  return new Intl.NumberFormat(locale, {
+  return numberFormat(locale, {
     style: "currency",
     currency,
     minimumFractionDigits: decimals,
@@ -31,7 +44,7 @@ export function formatPercent(
   { locale = siteConfig.defaultLocale, decimals = 2 }: { locale?: string; decimals?: number } = {},
 ): string {
   if (!Number.isFinite(fraction)) return "—";
-  return new Intl.NumberFormat(locale, {
+  return numberFormat(locale, {
     style: "percent",
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
@@ -43,7 +56,7 @@ export function formatNumber(
   { locale = siteConfig.defaultLocale, decimals = 0 }: { locale?: string; decimals?: number } = {},
 ): string {
   if (!Number.isFinite(value)) return "—";
-  return new Intl.NumberFormat(locale, {
+  return numberFormat(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(value);

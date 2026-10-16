@@ -166,7 +166,7 @@ export default function InflationCalculator() {
           ]}
         />
         <Card className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold">Year by year</h3>
+          <h2 className="text-lg font-semibold">Year by year</h2>
           <Table caption="Inflation year-by-year table">
             <thead>
               <tr>

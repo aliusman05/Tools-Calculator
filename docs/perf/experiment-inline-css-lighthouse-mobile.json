@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-16T19:56:17.852Z",
+  "base": "http://localhost:3300",
+  "runs": 3,
+  "report": [
+    {
+      "form": "mobile",
+      "path": "/mortgage-calculator",
+      "performance": 84,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "lcpMs": 2250,
+      "cls": 0,
+      "tbtMs": 552,
+      "fcpMs": 1220,
+      "speedIndexMs": 1220,
+      "transferKb": 259,
+      "failedA11y": [],
+      "lcpElement": "",
+      "allPerformanceScores": [86, 84, 81]
+    },
+    {
+      "form": "mobile",
+      "path": "/debt-payoff-planner",
+      "performance": 75,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "lcpMs": 2996,
+      "cls": 0,
+      "tbtMs": 799,
+      "fcpMs": 1369,
+      "speedIndexMs": 1369,
+      "transferKb": 256,
+      "failedA11y": [],
+      "lcpElement": "",
+      "allPerformanceScores": [70, 75, 77]
+    },
+    {
+      "form": "mobile",
+      "path": "/about",
+      "performance": 73,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "lcpMs": 2827,
+      "cls": 0.174,
+      "tbtMs": 593,
+      "fcpMs": 1319,
+      "speedIndexMs": 1319,
+      "transferKb": 242,
+      "failedA11y": [],
+      "lcpElement": "",
+      "allPerformanceScores": [71, 73, 81]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-16T19:42:53.113Z",
+  "base": "http://localhost:3300",
+  "runs": 3,
+  "report": [
+    {
+      "form": "mobile",
+      "path": "/mortgage-calculator",
+      "performance": 90,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "lcpMs": 2895,
+      "cls": 0,
+      "tbtMs": 233,
+      "fcpMs": 1012,
+      "speedIndexMs": 3301,
+      "transferKb": 241,
+      "failedA11y": [],
+      "lcpElement": "",
+      "allPerformanceScores": [82, 90, 94]
+    },
+    {
+      "form": "mobile",
+      "path": "/debt-payoff-planner",
+      "performance": 87,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "lcpMs": 2928,
+      "cls": 0,
+      "tbtMs": 314,
+      "fcpMs": 989,
+      "speedIndexMs": 3333,
+      "transferKb": 239,
+      "failedA11y": [],
+      "lcpElement": "",
+      "allPerformanceScores": [87, 81, 90]
+    },
+    {
+      "form": "mobile",
+      "path": "/compound-interest-calculator",
+      "performance": 87,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "lcpMs": 2943,
+      "cls": 0,
+      "tbtMs": 311,
+      "fcpMs": 1026,
+      "speedIndexMs": 3301,
+      "transferKb": 238,
+      "failedA11y": [],
+      "lcpElement": "",
+      "allPerformanceScores": [85, 90, 87]
+    }
+  ]
+}

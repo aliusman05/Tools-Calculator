@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { AdSenseScript } from "@/components/ads/AdSenseScript";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { ConsentDefaults } from "@/components/consent/ConsentDefaults";
@@ -7,16 +6,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -37,7 +26,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`h-full antialiased`}>
       <head>
         <ConsentDefaults />
       </head>

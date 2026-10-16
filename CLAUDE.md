@@ -12,7 +12,7 @@
 - All calculator math lives in `src/lib/calculators/*.ts` as pure functions with no React or DOM code.
 - Every calculator function must have a matching test file in `src/lib/calculators/__tests__/`.
 - Never ship a calculator without tests that compare against known correct values.
-- Use a registry (`src/lib/registry.ts`) so adding a calculator requires one config entry + one component + one MDX file.
+- Use a registry (`src/lib/registry.ts`) so adding a calculator requires one config entry + one component + one MDX file, plus one line in `src/components/calculators/CalculatorLoader.tsx`. Never import calculator components from the registry or any server module: that pulls every calculator into the root layout bundle (a unit test enforces this).
 - No `any` types. No unused dependencies. Keep client JS small; use Server Components by default and `"use client"` only for interactive calculators.
 - Money math: use integer cents or round only at display time. Never round intermediate values.
 - All pages must be statically generated.

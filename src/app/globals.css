@@ -53,8 +53,10 @@
   --color-success: var(--success);
   --color-danger: var(--danger);
   --color-ring: var(--ring);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --radius-card: 0.75rem;
   --radius-control: 0.5rem;
 }

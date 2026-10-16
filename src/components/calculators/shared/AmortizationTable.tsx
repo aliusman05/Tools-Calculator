@@ -38,7 +38,7 @@ export function AmortizationTable({
 
   return (
     <section className="rounded-card border-border bg-surface border p-4">
-      <h3 className="sr-only">Amortization schedule</h3>
+      <h2 className="sr-only">Amortization schedule</h2>
       <button
         type="button"
         aria-expanded={open}

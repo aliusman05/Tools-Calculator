@@ -50,8 +50,8 @@ export function MobileMenu({
         hidden={!open}
         className="border-border bg-surface absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-b p-4 shadow-lg"
       >
-        <SearchBox items={items} className="mb-4" />
-        <nav aria-label="Calculator categories">
+        <SearchBox items={items} landmarkLabel="Menu search" className="mb-4" />
+        <nav aria-label="Menu">
           <ul className="flex flex-col">
             {categories.map((c) => (
               <li key={c.id}>

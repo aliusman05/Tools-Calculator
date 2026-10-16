@@ -187,7 +187,7 @@ export default function SavingsGoalCalculator() {
                 ]}
               />
               <Card className="flex flex-col gap-3">
-                <h3 className="text-lg font-semibold">Year-by-year progress</h3>
+                <h2 className="text-lg font-semibold">Year-by-year progress</h2>
                 <Table caption="Savings goal year-by-year progress">
                   <thead>
                     <tr>
