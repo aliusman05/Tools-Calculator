@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationSchema, pageMetadata, websiteSchema } from "@/lib/seo";
 import { SearchBox } from "@/components/layout/SearchBox";
 import { Card } from "@/components/ui/Card";
 import {
@@ -24,11 +27,20 @@ const trustPoints = [
   },
 ];
 
+const homeTitle = `${siteConfig.name} – Free Personal Finance Calculators`;
+
+export const metadata: Metadata = {
+  ...pageMetadata({ title: homeTitle, description: siteConfig.description, path: "/" }),
+  title: { absolute: homeTitle },
+};
+
 export default function Home() {
   const popular = getPopularCalculators(8);
 
   return (
     <div className="flex flex-col gap-14">
+      <JsonLd data={websiteSchema()} />
+      <JsonLd data={organizationSchema()} />
       <section className="flex flex-col items-center gap-5 py-6 text-center sm:py-10">
         <h1 className="max-w-2xl text-3xl font-bold tracking-tight text-balance sm:text-5xl">
           Free finance calculators you can trust

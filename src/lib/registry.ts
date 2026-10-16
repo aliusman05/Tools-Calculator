@@ -101,7 +101,12 @@ export const calculators: readonly CalculatorMeta[] = [
       "savings growth",
       "future value",
     ],
-    related: ["simple-interest-calculator", "savings-goal-calculator", "inflation-calculator"],
+    related: [
+      "simple-interest-calculator",
+      "savings-goal-calculator",
+      "inflation-calculator",
+      "roi-calculator",
+    ],
     component: () =>
       import("@/components/calculators/compound-interest/CompoundInterestCalculator"),
     contentPath: "compound-interest-calculator.mdx",
@@ -159,7 +164,7 @@ export const calculators: readonly CalculatorMeta[] = [
       "retirement savings",
       "4% rule",
     ],
-    related: ["compound-interest-calculator", "savings-goal-calculator"],
+    related: ["compound-interest-calculator", "savings-goal-calculator", "income-tax-calculator"],
     component: () => import("@/components/calculators/retirement/RetirementCalculator"),
     contentPath: "retirement-calculator.mdx",
     popular: true,

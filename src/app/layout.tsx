@@ -22,6 +22,8 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  applicationName: siteConfig.name,
+  openGraph: { siteName: siteConfig.name, locale: "en_US", type: "website" },
 };
 
 export const viewport: Viewport = {

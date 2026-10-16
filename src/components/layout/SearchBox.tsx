@@ -5,13 +5,7 @@ import { useRouter } from "next/navigation";
 import { useId, useMemo, useState, type FormEvent } from "react";
 import type { CalculatorSummary } from "@/lib/registry";
 import { cn } from "@/lib/cn";
-
-function matches(item: CalculatorSummary, query: string): boolean {
-  const q = query.trim().toLowerCase();
-  if (!q) return false;
-  const haystack = [item.shortTitle, item.description, ...item.keywords].join(" ").toLowerCase();
-  return q.split(/\s+/).every((word) => haystack.includes(word));
-}
+import { searchCalculators } from "@/lib/search";
 
 export function SearchBox({
   items,
@@ -25,16 +19,17 @@ export function SearchBox({
   const id = useId();
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const results = useMemo(() => items.filter((i) => matches(i, query)).slice(0, 6), [items, query]);
+  const results = useMemo(() => searchCalculators(items, query).slice(0, 6), [items, query]);
   const hasQuery = query.trim().length > 0;
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    const first = results[0];
-    if (first) {
-      router.push(`/${first.slug}`);
-      setQuery("");
-    }
+    const term = query.trim();
+    if (!term) return;
+    // A single match goes straight to the calculator; otherwise show the full results page.
+    const all = searchCalculators(items, term);
+    router.push(all.length === 1 ? `/${all[0]!.slug}` : `/search?q=${encodeURIComponent(term)}`);
+    setQuery("");
   }
 
   return (
