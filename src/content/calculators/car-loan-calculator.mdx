@@ -1,0 +1,78 @@
+export const faqs = [
+  {
+    question: "How is a car payment calculated?",
+    answer:
+      "First the amount financed is worked out: the vehicle price plus sales tax and fees, minus your down payment and trade-in. That amount is then repaid in equal monthly payments using the standard loan formula, based on the interest rate and the number of months.",
+  },
+  {
+    question: "Is sales tax charged on the full price or the price minus my trade-in?",
+    answer:
+      "It depends on where you live. Many states tax only the difference between the purchase price and your trade-in value, while others tax the full price. Use the dropdown to match your state's rule, since it can change the amount financed by hundreds of dollars.",
+  },
+  {
+    question: "What happens if I owe more on my trade-in than it is worth?",
+    answer:
+      "That shortfall, called negative equity, is usually added to your new loan. You then pay interest on money that did not buy anything in the new car. Enter the balance you still owe in the 'still owed' box to see how much it adds to your payment.",
+  },
+  {
+    question: "Is a longer car loan a good idea?",
+    answer:
+      "A longer term lowers the monthly payment but increases the total interest, and it raises the risk that you owe more than the car is worth for longer. Compare 48, 60 and 72 months with the same price and rate to see the real cost of the lower payment.",
+  },
+  {
+    question: "How much should I put down on a car?",
+    answer:
+      "A bigger down payment reduces what you borrow, lowers interest and helps you avoid owing more than the car is worth. There is no single right number, but many buyers aim for 10% to 20% of the price. Try a few amounts to see how the payment changes.",
+  },
+  {
+    question: "What fees should I include?",
+    answer:
+      "Include title, registration, documentation and any dealer fees you expect to pay. Optional add-ons such as extended warranties are also sometimes financed. Ask the dealer for an itemized out-the-door price so you can enter the real number.",
+  },
+];
+
+A car loan looks simple until taxes, fees, a trade-in and a down payment all enter the picture. This calculator works out the amount you will actually finance, your monthly payment, the total interest and the full cost of the car. Use it before you visit a dealership to set a budget, or afterward to check an offer.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter the **vehicle price** and your **down payment**.
+2. Add your **trade-in value**, and the amount you **still owe** on that car, if any.
+3. Enter your local **sales tax** and choose whether the trade-in is subtracted before tax is applied.
+4. Add **title, registration and other fees**.
+5. Enter the **interest rate** and **loan term** in months, then compare the payment with your monthly budget.
+
+## How it works
+
+The amount financed is:
+
+```
+Financed = Price + Sales tax + Fees − Down payment − Trade-in value + Amount owed on trade-in
+```
+
+Sales tax is the taxable amount times your rate. The taxable amount is the price, or the price minus the trade-in value if your state works that way. The monthly payment then comes from the standard loan formula:
+
+```
+M = P × r × (1 + r)^n / ((1 + r)^n − 1)
+```
+
+where **P** is the amount financed, **r** is the monthly interest rate and **n** is the number of months. At a 0% rate it is simply P ÷ n. The out-the-door price is the price plus tax plus fees, and the total cost of the car adds the interest you pay.
+
+## Worked example
+
+You buy a **$32,000** car with **$4,000** down and a **$3,000** trade-in. Sales tax is **7%** applied after the trade-in, fees are **$500**, and you finance at **6.5%** for **60 months**.
+
+- Sales tax: ($32,000 − $3,000) × 7% = **$2,030**.
+- Out-the-door price: **$34,530**.
+- Amount financed: $34,530 − $4,000 − $3,000 = **$27,530**.
+- Monthly payment: **$538.66**.
+- Total interest over five years: **$4,789.36**, so the car costs about **$39,319** in all.
+
+## Tips and common mistakes
+
+- **Negotiate the out-the-door price, not the payment.** A low payment can hide a long term or extra fees.
+- **Get pre-approved.** A rate from your bank or credit union gives you something to compare with the dealer's offer.
+- **Watch the term.** Terms of 72 months or more raise the interest cost and the chance of owing more than the car is worth.
+- **Do not forget insurance and fuel.** They are not part of the loan but they are part of the monthly cost of owning a car.
+- **Check your state's tax rule.** Local taxes can differ from the state rate, so use the total you expect to pay.

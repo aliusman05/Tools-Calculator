@@ -1,0 +1,78 @@
+export const faqs = [
+  {
+    question: "How much will my 401(k) be worth at retirement?",
+    answer:
+      "It depends mostly on how much you contribute, how long you invest, and the return you earn. Enter your age, current balance, salary and contribution percentage, and the calculator projects your balance year by year, including your employer's match and yearly pay raises. Treat the result as an estimate, since real returns vary every year.",
+  },
+  {
+    question: "How does an employer match work?",
+    answer:
+      "A common formula is a 50% match up to 6% of your salary. If you contribute 6% or more, your employer adds half of 6%, which is 3% of your salary. If you contribute only 3%, you receive half of 3%, which is 1.5%. Contributing less than the match limit means giving up free money, so most people aim to reach at least the full match.",
+  },
+  {
+    question: "What return should I assume?",
+    answer:
+      "Long-run stock-heavy portfolios have historically returned more than bonds, but with large swings and no guarantee. Many planners use a modest figure, often somewhere between 5% and 7% before inflation, to avoid overestimating. Try a lower and a higher rate to see the range of outcomes.",
+  },
+  {
+    question: "What does 'today's dollars' mean?",
+    answer:
+      "Prices rise over time, so a million dollars in 30 years will buy less than a million dollars does now. The today's-dollars figure divides your future balance by the cumulative inflation you entered, giving a sense of its purchasing power in current prices.",
+  },
+  {
+    question: "What is the 4% rule?",
+    answer:
+      "It is a rule of thumb that suggests withdrawing about 4% of your portfolio in the first year of retirement, then adjusting that amount for inflation, has historically lasted around 30 years. It is an illustration, not a guarantee or advice. Your own spending, taxes, other income and market conditions matter more.",
+  },
+  {
+    question: "Does this include taxes, Social Security or contribution limits?",
+    answer:
+      "No. The projection ignores taxes on withdrawals, Social Security, pensions and investment fees. Retirement accounts also have annual contribution limits set by the IRS that change over time, so check the current limits before planning large contributions.",
+  },
+];
+
+Saving for retirement is a long game, and small changes today compound into large differences decades from now. This calculator projects the value of your 401(k) or similar retirement account at your chosen retirement age, including your contributions, your employer's match and investment growth. It also shows what that balance might be worth in today's dollars and what a sample withdrawal rate could provide.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter your **current age** and the **age you plan to retire**.
+2. Add your **current retirement savings** and your **annual salary**.
+3. Set your **contribution** as a percentage of salary, then the **employer match** rate and the salary percentage it applies to.
+4. Review the **assumptions**: expected return, salary growth, inflation and withdrawal rate. The defaults are reasonable starting points, but try a pessimistic set too.
+5. Read the projected balance and the chart, then change one input at a time to see what moves the result most.
+
+## How it works
+
+The projection runs month by month. Each month your balance earns a share of the yearly return, and your contribution and your employer's match are added at the end of the month:
+
+```
+Balance(next) = Balance × (1 + monthly return) + your contribution + employer match
+```
+
+- Your contribution is your **salary ÷ 12 × your percentage**.
+- The match is your **salary ÷ 12 × the smaller of your percentage and the match limit × the match rate**.
+- Your salary increases once a year by the growth rate you enter.
+- The monthly return is the yearly return converted to its monthly equivalent, so twelve months compound to exactly the annual figure.
+
+To express the final balance in today's dollars, it is divided by (1 + inflation) raised to the number of years. The income illustration multiplies the balance by the withdrawal rate.
+
+## Worked example
+
+You are **35**, plan to retire at **65**, have **$50,000** saved and earn **$85,000**. You contribute **10%**, your employer matches **50% up to 6%**, your pay grows **3%** a year and your investments return **7%** a year with **2.5%** inflation.
+
+- You contribute about **$404,391** over 30 years and your employer adds about **$121,317**.
+- Investment growth adds about **$1,282,652**.
+- Your projected balance at 65 is about **$1,858,360**, which is roughly **$885,960** in today's dollars.
+- A 4% withdrawal would be about **$35,438** a year, or **$2,953** a month, in today's dollars.
+
+Notice how much of the final balance comes from growth rather than deposits, and how much inflation changes the picture.
+
+## Tips and common mistakes
+
+- **Capture the full match.** It is an immediate return on your contribution that is hard to beat anywhere else.
+- **Do not assume a high return.** An optimistic rate can hide a savings gap. Test 5% as well as 7%.
+- **Think in today's dollars.** A big future number can be misleading if prices will be much higher by then.
+- **Increase contributions with raises.** Putting part of each raise toward retirement is painless and powerful.
+- **Remember what is missing.** Taxes, fees, Social Security and healthcare costs will all affect your real retirement income.

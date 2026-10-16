@@ -1,0 +1,76 @@
+export const faqs = [
+  {
+    question: "How long will it take to pay off my credit card?",
+    answer:
+      "Enter your balance, APR and the amount you can pay each month. The calculator charges interest every month on what you still owe, applies your payment, and counts the months until the balance reaches zero. A larger payment shortens the time dramatically.",
+  },
+  {
+    question: "Why is paying only the minimum so costly?",
+    answer:
+      "Minimum payments are mostly interest at first, so the balance barely falls and interest keeps being charged on nearly the full amount. A small fixed payment can stretch a modest balance across many years and cost more in interest than the original purchase.",
+  },
+  {
+    question: "What does it mean if the calculator says my payment is too low?",
+    answer:
+      "If your payment is no larger than the interest charged each month, the balance never falls. Raising the payment above the monthly interest is the first step, and every extra dollar above that goes straight to reducing what you owe.",
+  },
+  {
+    question: "How is credit card interest calculated?",
+    answer:
+      "Most cards charge interest on the daily balance using a daily rate, which is the APR divided by 365. This calculator uses the common approximation of APR divided by 12 each month, which is very close for planning purposes.",
+  },
+  {
+    question: "Should I pay off a card or save money first?",
+    answer:
+      "Card interest rates are usually far higher than savings rates, so paying down a card is typically a better use of spare money once you have a small emergency cushion. The right balance depends on your situation, so treat this as general information rather than advice.",
+  },
+  {
+    question: "Does this include new purchases or fees?",
+    answer:
+      "No. It assumes you stop adding to the balance and that no late fees or annual fees are charged. If you keep spending on the card, the payoff will take longer than shown. Promotional 0% periods and balance transfer fees are also not modelled.",
+  },
+];
+
+Credit card debt can feel endless because the interest keeps arriving every month. This calculator shows exactly how long it will take to clear a card at your chosen payment, how much interest you will pay, and, in the other direction, what monthly payment you need to be debt-free by a particular date. It also warns you if a payment is too small to make progress.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Choose whether you want to know **how long it takes** at a payment, or **what to pay** to finish within a number of months.
+2. Enter your current **balance** and the card's **APR**.
+3. Enter your **monthly payment** or your **target number of months**.
+4. Read the payoff time, total interest and debt-free date.
+5. Try raising the payment a little to see how much time and interest you save.
+
+## How it works
+
+Each month the card adds interest equal to your balance times the monthly rate (APR ÷ 12 ÷ 100), and then your payment is taken off:
+
+```
+New balance = Balance × (1 + monthly rate) − Payment
+```
+
+This repeats until the balance reaches zero, and the last payment is whatever is left. The number of months can also be found directly:
+
+```
+n = −ln(1 − Balance × r / Payment) / ln(1 + r)
+```
+
+This only works when the payment is larger than **Balance × r**, which is the first month's interest. For a target date, the payment needed is **Balance × r / (1 − (1 + r)^−n)**.
+
+## Worked example
+
+You owe **$5,000** on a card with a **20%** APR, so the first month's interest is **$83.33**.
+
+- Paying **$200 a month** clears the card in **33 months** with **$1,522.10** of interest.
+- To be debt-free in **24 months**, you need to pay **$254.48** a month, and the interest falls to **$1,107.50**.
+- Paying only **$100 a month** takes **109 months**, over nine years, and costs **$5,840.10** in interest, more than the original balance.
+
+## Tips and common mistakes
+
+- **Pay more than the minimum.** Even a modest increase can cut years off the payoff.
+- **Stop adding new charges.** A balance that keeps growing cannot be cleared by a fixed payment.
+- **Target the highest APR first** if you have several cards. The debt payoff planner compares strategies for you.
+- **Check for a lower rate.** A balance transfer or a lower-rate personal loan can reduce interest, but watch the fees.
+- **Use windfalls.** A bonus or tax refund applied to the balance can shorten the payoff substantially.

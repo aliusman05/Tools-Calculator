@@ -1,0 +1,77 @@
+export const faqs = [
+  {
+    question: "What is the debt snowball method?",
+    answer:
+      "With the snowball, you make the minimum payment on every debt and put all extra money toward the smallest balance. When that debt is gone, its payment rolls onto the next smallest. The quick early wins keep many people motivated, even though it can cost somewhat more interest.",
+  },
+  {
+    question: "What is the debt avalanche method?",
+    answer:
+      "With the avalanche, extra money goes to the debt with the highest interest rate first, regardless of balance. Because it removes the most expensive debt first, it normally costs the least interest and is the cheapest approach mathematically.",
+  },
+  {
+    question: "Which method is better, snowball or avalanche?",
+    answer:
+      "The avalanche saves more money; the snowball can be easier to stick with. If the interest difference shown above is small, the snowball's motivation may be worth it. If it is large, the avalanche is the better financial choice. The best plan is the one you will actually follow.",
+  },
+  {
+    question: "What happens to the minimum payment of a debt I have paid off?",
+    answer:
+      "In both methods it rolls over to the next target debt, so your total monthly payment stays the same. That rollover is the main reason either method beats paying each debt's minimum on its own.",
+  },
+  {
+    question: "What if my minimum payments are too low?",
+    answer:
+      "If a minimum payment is less than the interest on that debt, the debt never shrinks on its own. The minimums-only comparison will say so. An extra payment, or a rollover from a paid-off debt, can still clear it, which is why the extra monthly amount matters.",
+  },
+  {
+    question: "Should I consolidate my debts instead?",
+    answer:
+      "Consolidation can help if the new loan has a lower rate than your current weighted average and you avoid new borrowing, but fees and a longer term can erase the savings. Compare the total interest of a consolidation loan with the plans shown here before deciding.",
+  },
+];
+
+When you owe money on several accounts, the order you pay them in changes how fast you become debt-free and how much interest you pay. This planner takes up to ten debts and your extra monthly payment, then compares the two best-known strategies, the debt snowball and the debt avalanche, against paying only the minimums.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter an **extra monthly payment** you can add on top of all your minimum payments. It can be zero.
+2. For each debt, enter the **name**, **balance**, **APR** and **minimum payment**. Use **Add a debt** for more.
+3. Compare the **snowball** and **avalanche** results: time to debt-free, total interest and payoff order.
+4. Look at the chart to see how the total balance falls under each plan.
+5. Change the extra amount to see how much faster you could finish.
+
+## How it works
+
+The calculator simulates your debts month by month:
+
+1. Interest is added to every balance (APR ÷ 12).
+2. Every debt receives at least its minimum payment.
+3. Your total monthly budget is the sum of all minimums plus the extra amount, and it stays the same every month. Whatever is left after the minimums goes to the target debt, then spills to the next one if the target is cleared.
+4. When a debt is paid off, its minimum is freed up and rolls into the budget for the rest.
+
+The **snowball** targets the smallest balance first. The **avalanche** targets the highest APR first. The **minimums-only** comparison pays each debt's minimum with no extra and no rollover.
+
+## Worked example
+
+You have three debts and can add **$150** a month:
+
+- **Credit card:** $4,500 at 24.9% APR, $120 minimum
+- **Car loan:** $9,000 at 7.5% APR, $260 minimum
+- **Store card:** $800 at 19.9% APR, $35 minimum
+
+- **Snowball:** debt-free in **30 months**, with **$2,369.04** of interest. Order: store card (month 5), credit card (month 22), car loan (month 30).
+- **Avalanche:** also **30 months**, with **$2,316.07** of interest, which is **$52.97** less. Order: credit card (month 21), store card (month 22), car loan (month 30).
+- **Minimums only:** **74 months** and **$5,684.95** of interest.
+
+Both methods save more than $3,300 and over three years compared with paying only the minimums. Here the difference between them is small, so the motivation of an early win from the snowball might be worth the extra $53.
+
+## Tips and common mistakes
+
+- **Keep paying the minimums on every debt.** Missing one triggers fees and can harm your credit.
+- **Do not add new debt** while you pay these down. Fresh borrowing resets the clock.
+- **Update the numbers regularly.** Balances and rates change, and re-running the plan keeps you on track.
+- **Direct windfalls to the target debt.** Raising the extra amount for a month or two can speed up the plan.
+- **Mind promotional rates.** If a 0% period is about to end, enter the rate that will apply afterward.
