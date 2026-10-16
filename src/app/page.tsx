@@ -1,69 +1,105 @@
-import Image from "next/image";
+import Link from "next/link";
+import { SearchBox } from "@/components/layout/SearchBox";
+import { Card } from "@/components/ui/Card";
+import {
+  categories,
+  getCalculatorsByCategory,
+  getPopularCalculators,
+  getSummaries,
+} from "@/lib/registry";
+import { siteConfig } from "@/lib/site-config";
+
+const trustPoints = [
+  {
+    title: "Private by design",
+    body: "Every calculation runs in your browser. The numbers you enter never leave your device.",
+  },
+  {
+    title: "Formulas you can check",
+    body: "Each calculator explains its formula and assumptions, and is tested against known reference values.",
+  },
+  {
+    title: "Clearly dated",
+    body: "Pages show when they were last reviewed, and rates and tax data are kept in one dated place.",
+  },
+];
 
 export default function Home() {
+  const popular = getPopularCalculators(8);
+
   return (
-    <div className="flex flex-1 flex-col items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex w-full max-w-3xl flex-1 flex-col items-center justify-between bg-white px-16 py-32 sm:items-start dark:bg-black">
-        <Image
-          className="h-5 w-[100px] dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl leading-10 font-semibold tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="bg-foreground text-background flex h-12 w-full items-center justify-center gap-2 rounded-full px-5 transition-colors hover:bg-[#383838] md:w-[158px] dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="h-[14px] w-4 dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="flex flex-col gap-14">
+      <section className="flex flex-col items-center gap-5 py-6 text-center sm:py-10">
+        <h1 className="max-w-2xl text-3xl font-bold tracking-tight text-balance sm:text-5xl">
+          Free finance calculators you can trust
+        </h1>
+        <p className="text-muted max-w-xl text-lg text-balance">{siteConfig.description}</p>
+        <SearchBox items={getSummaries()} size="lg" className="mt-2 w-full max-w-xl" />
+      </section>
+
+      <section aria-labelledby="categories-heading">
+        <h2 id="categories-heading" className="mb-4 text-2xl font-bold">
+          Browse by category
+        </h2>
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {categories.map((c) => {
+            const count = getCalculatorsByCategory(c.id).length;
+            return (
+              <li key={c.id}>
+                <Link
+                  href={`/category/${c.id}`}
+                  className="rounded-card border-border bg-surface hover:border-accent block h-full border p-5 transition-colors"
+                >
+                  <h3 className="text-lg font-semibold">{c.name}</h3>
+                  <p className="text-muted mt-1">{c.description}</p>
+                  <p className="text-accent mt-3 text-sm font-medium">
+                    {count} {count === 1 ? "calculator" : "calculators"}
+                  </p>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
+      <section aria-labelledby="popular-heading">
+        <h2 id="popular-heading" className="mb-4 text-2xl font-bold">
+          Popular calculators
+        </h2>
+        {popular.length > 0 ? (
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {popular.map((c) => (
+              <li key={c.slug}>
+                <Link
+                  href={`/${c.slug}`}
+                  className="rounded-card border-border bg-surface hover:border-accent block h-full border p-4 transition-colors"
+                >
+                  <h3 className="font-semibold">{c.shortTitle}</h3>
+                  <p className="text-muted mt-1 text-sm">{c.description}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Card className="text-muted">Our first calculators are on the way. Check back soon.</Card>
+        )}
+      </section>
+
+      <section aria-labelledby="trust-heading">
+        <h2 id="trust-heading" className="mb-4 text-2xl font-bold">
+          Why use {siteConfig.name}
+        </h2>
+        <ul className="grid gap-4 md:grid-cols-3">
+          {trustPoints.map((t) => (
+            <li key={t.title}>
+              <Card className="h-full">
+                <h3 className="font-semibold">{t.title}</h3>
+                <p className="text-muted mt-2">{t.body}</p>
+              </Card>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }
