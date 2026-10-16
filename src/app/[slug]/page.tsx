@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AdSlot } from "@/components/ads/AdSlot";
+import { AffiliateSlot } from "@/components/ads/AffiliateCard";
+import { ContentAd } from "@/components/ads/ContentAd";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { FAQ } from "@/components/seo/FAQ";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -63,10 +66,14 @@ export default async function CalculatorPage({ params }: PageProps<"/[slug]">) {
       />
       <h1 className="mb-2 text-3xl font-bold tracking-tight sm:text-4xl">{calc.title}</h1>
 
-      <Content components={{ Calculator }} />
+      <Content components={{ Calculator, ContentAd }} />
+
+      <AffiliateSlot context={calc.affiliateContext} />
 
       {faqs.length > 0 && <FAQ faqs={faqs} />}
       <RelatedTools slugs={calc.related} />
+
+      <AdSlot placement="pageEnd" minHeight={250} />
 
       <p className="text-muted border-border mt-12 border-t pt-4 text-sm">
         Last updated {formatIsoDate(calc.lastUpdated)}. Results are estimates for educational

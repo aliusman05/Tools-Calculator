@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AdSenseScript } from "@/components/ads/AdSenseScript";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { ConsentDefaults } from "@/components/consent/ConsentDefaults";
 import { Footer } from "@/components/layout/Footer";
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <ConsentBanner />
+        <AdSenseScript />
       </body>
     </html>
   );

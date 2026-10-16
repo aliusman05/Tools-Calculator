@@ -1,0 +1,4 @@
+# ads.txt: authorized digital sellers (IAB Tech Lab spec).
+# PLACEHOLDER: replace pub-0000000000000000 with your AdSense publisher ID (Account > Settings),
+# keeping the other fields. Google's certification authority ID f08c47fec0942fa0 is fixed.
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0

@@ -18,6 +18,8 @@ const rejectedConsent = JSON.stringify({
 
 export default defineConfig({
   testDir: "./e2e",
+  // The ads suite needs a build with ads enabled; it has its own config (playwright.ads.config.ts).
+  testIgnore: "**/ads/**",
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? "github" : "list",

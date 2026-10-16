@@ -1,11 +1,20 @@
 import type { ReactNode } from "react";
+import { AdSlot } from "@/components/ads/AdSlot";
 import { Card } from "@/components/ui/Card";
+import { adsConfig, adsOccupySpace } from "@/lib/ads-config";
 import { ResultDisclaimer } from "./ResultDisclaimer";
+
+/** Whether ad boxes (real or placeholder) take up room. When false nothing is rendered at all. */
+const showAds = adsOccupySpace(adsConfig);
 
 /**
  * Standard calculator layout: inputs on the left, results on the right (stacked on mobile).
- * `afterInputs` renders under the inputs on mobile; `sidebar` renders under the results on
- * desktop. Phase 6 places ad slots in these positions.
+ *
+ * Ad positions (see docs/ADS.md):
+ *  - mobile: one ad BELOW the results, never between the inputs and the results;
+ *  - desktop: one ad in the right column under the results.
+ * Each is separated from the calculator by the disclaimer text and generous margins, so it is
+ * never adjacent to an input or a button. Pass `sidebar` / `below` to override them.
  */
 export function CalculatorShell({
   title,
@@ -22,6 +31,16 @@ export function CalculatorShell({
   sidebar?: ReactNode;
   below?: ReactNode;
 }) {
+  const sidebarContent =
+    sidebar ?? (showAds ? <AdSlot placement="sidebar" minHeight={250} /> : null);
+  const belowContent =
+    below ??
+    (showAds ? (
+      <div className="lg:hidden">
+        <AdSlot placement="calculatorBelow" minHeight={280} />
+      </div>
+    ) : null);
+
   return (
     <div className="my-8 flex flex-col gap-6">
       <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
@@ -36,10 +55,10 @@ export function CalculatorShell({
             {results}
             <ResultDisclaimer />
           </section>
-          {sidebar && <div className="hidden lg:block">{sidebar}</div>}
+          {sidebarContent && <div className="hidden lg:block">{sidebarContent}</div>}
         </div>
       </div>
-      {below}
+      {belowContent}
     </div>
   );
 }

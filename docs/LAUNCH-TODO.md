@@ -42,10 +42,29 @@ denied until the visitor chooses. It is **not** a Google-certified CMP.
 - [ ] Rate limiting is not built in. If you see abuse, add the host's firewall/rate-limit rules
       (for example Vercel Firewall or Cloudflare) for `POST /api/contact`.
 
-## Affiliate links (Phase 6)
+## Ads and affiliate links (Phase 6)
 
-- [ ] Show `<AffiliateDisclosure />` (`src/components/legal/AffiliateDisclosure.tsx`) next to every
-      affiliate link or offer. The disclaimer page already has the matching `#affiliate` section.
+Details in [ADS.md](ADS.md). Ads are off until you do the following.
+
+- [ ] **Required.** Create a Google AdSense account and add the site. AdSense reviews the site
+      (content, legal pages, traffic), so launch the legal pages and calculators first.
+- [ ] **Required.** Put your publisher ID in `public/ads.txt` (replace `pub-0000000000000000`), then
+      confirm `https://yourdomain/ads.txt` loads. Delete the placeholder check in
+      `src/lib/__tests__/ads-files.test.ts` once the real ID is in.
+- [ ] **Required.** In AdSense, create four responsive display ad units and set
+      `NEXT_PUBLIC_ADSENSE_SLOT_BELOW`, `_SIDEBAR`, `_CONTENT` and `_END`.
+- [ ] **Required.** Set `NEXT_PUBLIC_ADSENSE_CLIENT` (`ca-pub-...`) and `NEXT_PUBLIC_ADS_ENABLED=true`
+      for **Production only**, then redeploy (these values are baked in at build time).
+- [ ] **Required.** Turn **Auto ads off** for the site in the AdSense console.
+- [ ] On Vercel, enable "Automatically expose System Environment Variables" so preview deployments are
+      recognized and never show ads.
+- [ ] Before the first live day, try a staging build with `NEXT_PUBLIC_ADS_TEST_MODE=true`.
+- [ ] A Google-certified CMP is still required for visitors in the EEA, UK and Switzerland (see
+      "Cookie consent" above). Until it is in place, serve ads only after the built-in banner consent,
+      as the code does now, and expect AdSense to flag the EEA/UK.
+- [ ] Affiliate offers: for each program you join, add the approved link to
+      `src/lib/data/affiliates.ts` and set `active: true`. Keep `<AffiliateDisclosure />` visible
+      (the card already includes it).
 
 ## Still open from earlier phases
 

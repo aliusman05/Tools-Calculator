@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "e2e:ads": "playwright test -c playwright.ads.config.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
