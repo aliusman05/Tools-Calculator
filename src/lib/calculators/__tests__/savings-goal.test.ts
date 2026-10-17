@@ -122,6 +122,10 @@ describe("time to goal", () => {
     expect(r.schedule).toEqual([]);
   });
 
+  it("is unreachable with no savings, no deposits and a positive rate (nothing to grow)", () => {
+    expect(monthsToGoal(5_000, 0, 0, 5)).toBeNull();
+  });
+
   it("is unreachable when it would take more than 100 years", () => {
     expect(monthsToGoal(1_000_000, 0, 1, 0)).toBeNull();
   });

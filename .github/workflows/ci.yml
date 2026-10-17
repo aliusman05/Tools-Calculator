@@ -2,22 +2,116 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
 
+# A new push to the same branch or PR cancels the run it supersedes.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+  # Canonical URLs, the sitemap and schema all read this at build time.
+  NEXT_PUBLIC_SITE_URL: https://example.com
+
 jobs:
+  # Fast feedback: static checks, unit and component tests with coverage, and a production build.
   check:
+    name: Lint, types, unit tests, build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+      - run: pnpm format:check
       - run: pnpm typecheck
-      - run: pnpm test
+      - run: pnpm test:coverage
       - run: pnpm build
-        env:
-          NEXT_PUBLIC_SITE_URL: https://example.com
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # The real site, in a real browser: smoke, accessibility, SEO, performance guards, legal and
+  # consent flows, plus the link checker and the JavaScript budget against the same build.
+  e2e:
+    name: End-to-end tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - name: Link check and JavaScript budget
+        run: |
+          pnpm exec next start -p 3300 &
+          server=$!
+          until curl -sf http://localhost:3300/sitemap.xml > /dev/null; do sleep 1; done
+          status=0
+          pnpm check-links --base http://localhost:3300 || status=1
+          pnpm bundle-report --base http://localhost:3300 --budget-js 200 || status=1
+          kill $server
+          exit $status
+      - run: pnpm e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  # A second build with ads enabled (fake IDs; the AdSense script is stubbed) to prove consent
+  # gating, placement, lazy loading and layout stability.
+  e2e-ads:
+    name: End-to-end tests (ads enabled)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm e2e:ads
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-ads
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

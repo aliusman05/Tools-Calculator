@@ -22,9 +22,13 @@ export default defineConfig({
   testIgnore: "**/ads/**",
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  reporter: process.env.CI ? "github" : "list",
+  reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
+  workers: process.env.CI ? 2 : undefined,
+  timeout: 30_000,
   use: {
     baseURL,
+    trace: "on-first-retry",
+    screenshot: "only-on-failure",
     storageState: {
       cookies: [],
       origins: [

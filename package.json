@@ -14,7 +14,11 @@
     "format": "prettier --write .",
     "e2e:ads": "playwright test -c playwright.ads.config.ts",
     "perf": "node scripts/lighthouse.mjs",
-    "bundle-report": "node scripts/bundle-report.mjs"
+    "bundle-report": "node scripts/bundle-report.mjs",
+    "test:coverage": "vitest run --coverage",
+    "format:check": "prettier --check .",
+    "check-links": "node scripts/check-links.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm build"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
@@ -36,6 +40,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^5.0.5",
     "chrome-launcher": "^1.2.2",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
@@ -46,7 +51,11 @@
     "schema-dts": "^2.1.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^5.0.5"
+    "vitest": "^5.0.5",
+    "yaml": "^2.9.1"
   },
-  "packageManager": "pnpm@10.34.5"
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=22"
+  }
 }

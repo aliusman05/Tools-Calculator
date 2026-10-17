@@ -34,3 +34,17 @@ export function serializeParams<T extends StateRecord>(values: T, defaults: T): 
   }
   return params.toString();
 }
+
+/**
+ * The query string to put in the address bar: the calculator's own parameters (only those that
+ * differ from the defaults) merged into whatever is already there, so unrelated parameters such as
+ * `utm_source` survive. Returns the string without a leading "?".
+ */
+export function applyParams<T extends StateRecord>(search: string, values: T, defaults: T): string {
+  const params = new URLSearchParams(search);
+  for (const key of Object.keys(defaults)) params.delete(key);
+  for (const [key, value] of new URLSearchParams(serializeParams(values, defaults))) {
+    params.set(key, value);
+  }
+  return params.toString();
+}
