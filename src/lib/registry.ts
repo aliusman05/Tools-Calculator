@@ -85,6 +85,7 @@ export const calculators: readonly CalculatorMeta[] = [
     related: [
       "mortgage-calculator",
       "refinance-calculator",
+      "student-loan-calculator",
       "car-loan-calculator",
       "savings-goal-calculator",
     ],
@@ -228,7 +229,7 @@ export const calculators: readonly CalculatorMeta[] = [
       "pay off multiple debts",
       "debt free",
     ],
-    related: ["credit-card-payoff-calculator", "loan-calculator"],
+    related: ["credit-card-payoff-calculator", "student-loan-calculator", "loan-calculator"],
     contentPath: "debt-payoff-planner.mdx",
     affiliateContext: "debt-consolidation",
     lastUpdated: "2026-10-16",
@@ -291,6 +292,25 @@ export const calculators: readonly CalculatorMeta[] = [
     contentPath: "roi-calculator.mdx",
     affiliateContext: "investing",
     lastUpdated: "2026-10-16",
+  },
+  {
+    slug: "student-loan-calculator",
+    title: "Student Loan Payoff Calculator",
+    shortTitle: "Student Loan Payoff Calculator",
+    description:
+      "See how extra monthly payments or a lump sum shorten your student loan. Get your payoff date, the interest you save and a month-by-month payment schedule.",
+    category: "loans",
+    keywords: [
+      "student loan calculator",
+      "student loan payoff calculator",
+      "pay off student loans faster",
+      "student loan extra payment",
+      "student loan interest",
+      "student loan lump sum",
+    ],
+    related: ["loan-calculator", "debt-payoff-planner", "savings-goal-calculator"],
+    contentPath: "student-loan-calculator.mdx",
+    lastUpdated: "2026-10-17",
   },
   {
     slug: "refinance-calculator",

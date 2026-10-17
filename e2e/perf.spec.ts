@@ -25,6 +25,7 @@ const MARKER: Record<string, string> = {
   "inflation-calculator": "Annual inflation rate",
   "roi-calculator": "How long you held it",
   "refinance-calculator": "Years you expect to keep the new loan",
+  "student-loan-calculator": "Paid with payment number",
 };
 
 /** Load a page and return the text of every JavaScript file it requested. */
@@ -187,6 +188,11 @@ test.describe("layout stability on first load", () => {
 });
 
 test.describe("responsiveness", () => {
+  // These are timing measurements on a deliberately slowed CPU, so they react to other work on the
+  // machine (for example a heavy accessibility run in another worker). Retries are reported as flaky,
+  // not hidden; a real regression fails every attempt.
+  test.describe.configure({ retries: 2 });
+
   test("typing into a calculator stays within the INP budget (200ms; 300ms on CI) with a 4x slower CPU", async ({
     page,
   }) => {
@@ -223,10 +229,15 @@ test.describe("responsiveness", () => {
     // regressions, which are far bigger) and the strict 200ms applies locally. Field INP from Search
     // Console is the real measure after launch.
     const budget = process.env.CI ? 300 : 200;
+    // INP is not the single worst interaction: it skips the slowest one for every 50 interactions, so
+    // one hiccup from the machine (a garbage collection, another process) does not decide the result.
+    // Use the same rule here.
+    const slowestFirst = [...events].sort((x, y) => y - x);
+    const inp = slowestFirst[Math.min(Math.floor(events.length / 50), events.length - 1)]!;
     expect(
-      Math.max(...events),
-      `slowest interaction: ${Math.max(...events)}ms of ${events.length} events (limit ${budget}ms)`,
-    ).toBeLessThan(budget);
+      inp,
+      `INP-style result ${inp}ms (worst ${slowestFirst[0]}ms) of ${events.length} events (limit ${budget}ms)`,
+    ).toBeLessThanOrEqual(budget); // 200ms or less is "good"
   });
 
   test("the mortgage result updates promptly after a keystroke on a slow CPU", async ({ page }) => {

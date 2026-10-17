@@ -1,0 +1,93 @@
+export const faqs = [
+  {
+    question: "How do I make sure extra payments reduce my principal?",
+    answer:
+      "Many servicers apply an extra payment to the next bill or to interest unless you tell them otherwise. Look for an option to apply the extra to principal when you pay, or ask your servicer how they handle it, and check the next statement to confirm the balance dropped by the amount you sent. This calculator assumes every extra dollar goes straight to principal.",
+  },
+  {
+    question: "Does interest keep building while I am in school or in deferment?",
+    answer:
+      "It can, depending on the type of loan and the plan you are on. When it does, the unpaid interest may be added to the balance when repayment starts, and you then pay interest on a larger amount. This calculator does not model that period. Enter the balance your servicer shows you owe at the start of repayment, which includes any interest already added.",
+  },
+  {
+    question: "Is it better to pay a lump sum now or smaller extra amounts every month?",
+    answer:
+      "Each extra dollar saves more interest the earlier it reaches the loan, because it stops interest from being charged on that dollar for longer. A lump sum in the first year does a lot of work, while the same money split across many months works more slowly. Try both in the boxes above with the same total and compare the interest saved.",
+  },
+  {
+    question: "What if I have several student loans with different rates?",
+    answer:
+      "Run each loan on its own with its own rate and term, then add the results. If you are deciding which loan should get your extra money, the debt payoff planner compares paying the highest rate first with other orders. Paying extra on the highest-rate loan usually saves the most interest, but check each loan's rules first.",
+  },
+  {
+    question: "Should I pay my student loan faster or put the money elsewhere?",
+    answer:
+      "Paying down a loan earns you the loan's interest rate with no risk, because every dollar you repay stops costing that rate. Investing may earn more or less, and it can lose money. Also keep an emergency cushion before sending extra to a loan, since you cannot get repaid principal back. This is a trade-off, not a rule with one right answer.",
+  },
+  {
+    question: "Does this cover income-driven repayment or loan forgiveness?",
+    answer:
+      "No. This calculator models a fixed rate, a fixed term and equal monthly payments. Federal loans have other repayment plans and forgiveness programs whose rules change over time, so check the official information at studentaid.gov for the current rules. If you may qualify for forgiveness, ask your servicer whether extra payments help you before you make them.",
+  },
+];
+
+Use this student loan calculator to see how fast you could be debt-free. Enter what you owe, the interest rate and the term, then add an extra amount each month or a one-time lump sum, such as a bonus or a tax refund. You will get your payoff date, the total interest you would pay, and exactly how much time and interest the extra money saves compared with paying only the scheduled amount.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter the **balance to repay**. Use the amount your servicer shows as owed, including any interest that has been added to it.
+2. Enter the **interest rate** and the **repayment term** left on the loan.
+3. Set the month of your **first payment** so the schedule shows real dates.
+4. Add an **extra monthly amount**, a **lump sum**, or both. For the lump sum, type the payment number it goes with: 1 is your first payment, 12 is your twelfth.
+5. Compare the results with and without your extras. The summary shows the interest saved and the months removed.
+
+## How it works
+
+The scheduled payment for a fixed-rate loan is the same every month:
+
+```
+M = P × r × (1 + r)^n / ((1 + r)^n − 1)
+```
+
+- **P** is the balance, **r** is the monthly rate (the annual rate divided by 12 and by 100) and **n** is the number of monthly payments.
+- Each month, interest is the current balance times r. The rest of the payment reduces the balance.
+- Extra money is added to principal in the month it is paid. A smaller balance means less interest next month, so each extra dollar keeps working for the rest of the loan.
+- A lump sum is applied once, in the payment you choose, and your scheduled payment stays the same afterward. The loan simply ends sooner.
+
+The comparison runs the same loan twice, once with only the scheduled payment and once with your extras, and shows the difference.
+
+<ContentAd />
+
+## Worked example
+
+You owe **$35,000** at **5.5%** with **10 years** to go.
+
+- The monthly payment is **$379.84**. In the first month, **$160.42** is interest and **$219.43** reduces the balance.
+- Over 120 payments you pay **$10,581.04** in interest, **$45,581.04** in total.
+
+Now add extra money:
+
+- **$150 extra every month:** done in 79 payments (6 years 7 months), with **$6,785.14** of interest. That saves **$3,795.89** and 41 months.
+- **A $5,000 lump sum with payment 12:** done in 100 payments (8 years 4 months), with **$7,750.27** of interest. That saves **$2,830.76** and 20 months.
+- **Both together:** done in 67 payments (5 years 7 months), with **$5,173.76** of interest. That saves **$5,407.28** and 53 months.
+
+Early payments send a large share to interest ($160.42 of the first $379.84), which is why a lump sum paid early saves so much: it removes principal while the balance is still large.
+
+## What this calculator does not cover
+
+- **Income-driven repayment, forgiveness and other federal programs.** These exist and can change what you pay, but they follow rules that change over time and depend on your loans and income. This calculator does not model them. For the current rules, see the official source at [studentaid.gov](https://studentaid.gov/).
+- **Deferment, forbearance and grace periods.** Interest may be added to your balance during these times. Enter the balance you owe when repayment starts, after any such interest is included, and the schedule from there is correct.
+- **Variable rates and rate changes.** The rate you enter is used for the whole loan. If your rate can change, run a higher rate as a test.
+- **Fees, taxes and credits.** Origination fees, interest rate discounts for automatic payments and any tax benefit are not included.
+
+For several loans at once, the [debt payoff planner](/debt-payoff-planner) compares different payoff orders. For a simple loan that is not a student loan, use the [loan calculator](/loan-calculator).
+
+## Tips and common mistakes
+
+- **Pay extra on purpose.** Tell your servicer to apply the extra to principal, and check the balance on your next statement.
+- **Start with the highest rate** if you have several loans, after you have covered every minimum payment.
+- **Keep a cushion.** Money paid to a loan cannot be taken back, so keep some savings for emergencies before you send extra.
+- **Re-run it when things change.** A raise, a bonus or a new rate is a good reason to try the numbers again.
+- **Check your servicer's balance.** The figure on your latest statement is the one to use, not the amount you originally borrowed.

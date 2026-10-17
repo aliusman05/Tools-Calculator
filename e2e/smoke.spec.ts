@@ -219,6 +219,7 @@ test.describe("answers are rendered on the server", () => {
     "inflation-calculator": "$1,806.11",
     "roi-calculator": "50.00%",
     "refinance-calculator": "1 year 1 month",
+    "student-loan-calculator": "$379.84",
   };
 
   for (const slug of CALCULATORS) {

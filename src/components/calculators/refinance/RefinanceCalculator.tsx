@@ -206,9 +206,9 @@ export default function RefinanceCalculator() {
     ];
     if (r.simpleBreakEvenMonths !== null) {
       secondary.push({
-        label: "Costs ÷ monthly saving",
-        value: formatDuration(Math.ceil(r.simpleBreakEvenMonths)),
-        note: "Cash-flow view, ignores the balance",
+        label: "Quick estimate (costs ÷ monthly saving)",
+        value: `about ${Math.max(1, Math.round(r.simpleBreakEvenMonths))} ${Math.round(r.simpleBreakEvenMonths) === 1 ? "month" : "months"}`,
+        note: "How lenders usually quote it. Looks only at the payment, not the balance you still owe.",
       });
     }
     secondary.push(

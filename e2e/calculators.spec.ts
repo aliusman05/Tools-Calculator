@@ -398,6 +398,64 @@ test.describe("refinance calculator", () => {
   });
 });
 
+test.describe("student loan calculator", () => {
+  const results = (page: import("@playwright/test").Page) =>
+    page.getByRole("region", { name: /results$/i });
+
+  test("shows the verified default scenario", async ({ page }) => {
+    await open(page, "/student-loan-calculator");
+    const r = results(page);
+    await expect(r.getByText("$379.84").first()).toBeVisible();
+    await expect(r.getByText("$10,581.04")).toBeVisible();
+    await expect(r.getByText("$45,581.04")).toBeVisible();
+    await expect(r.getByText("Interest saved")).toHaveCount(0);
+  });
+
+  test("extra monthly payments show the interest and time saved", async ({ page }) => {
+    await open(page, "/student-loan-calculator");
+    await page.locator("#sl-extra").fill("150");
+    const r = results(page);
+    await expect(r.getByText("$6,785.14")).toBeVisible();
+    await expect(r.getByText("$3,795.89")).toBeVisible();
+    await expect(r.getByText("3 years 5 months")).toBeVisible();
+  });
+
+  test("a lump sum and extra payments together", async ({ page }) => {
+    await open(page, "/student-loan-calculator");
+    await page.locator("#sl-extra").fill("150");
+    await page.locator("#sl-lump").fill("5000");
+    await page.locator("#sl-lump-month").fill("12");
+    const r = results(page);
+    await expect(r.getByText("$5,173.76")).toBeVisible();
+    await expect(r.getByText("$5,407.28")).toBeVisible();
+    await expect(r.getByText("5 years 7 months").first()).toBeVisible();
+  });
+
+  test("warns when the lump sum comes after the loan is paid off", async ({ page }) => {
+    await open(page, "/student-loan-calculator");
+    await page.locator("#sl-lump").fill("5000");
+    await page.locator("#sl-lump-month").fill("200");
+    await expect(results(page).getByRole("note")).toContainText("no effect");
+  });
+
+  test("asks for a payment number when there is a lump sum", async ({ page }) => {
+    await open(page, "/student-loan-calculator");
+    await page.locator("#sl-lump").fill("5000");
+    await page.locator("#sl-lump-month").fill("");
+    await expect(page.locator("#sl-lump-month-error")).toContainText("whole month number");
+    expect(await page.locator("body").innerText()).not.toMatch(/NaN|undefined|Infinity/);
+  });
+
+  test("links to the official source and states what it does not cover", async ({ page }) => {
+    await open(page, "/student-loan-calculator");
+    await expect(page.getByRole("link", { name: "studentaid.gov" })).toHaveAttribute(
+      "href",
+      "https://studentaid.gov/",
+    );
+    await expect(page.getByText("Income-driven repayment, forgiveness")).toBeVisible();
+  });
+});
+
 test("home page lists the new calculators and search finds them", async ({ page }) => {
   await open(page, "/");
   await page.waitForLoadState("networkidle");
