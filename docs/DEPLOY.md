@@ -4,6 +4,19 @@ Vercel is the tested path (Next.js is built by the same company, and the app rea
 variables to tell production from previews). Other hosts that run Next.js work too; the variables and the
 checks below still apply.
 
+## Hosting plan and commercial use
+
+Checked 2026-10-17 against Vercel's [fair use guidelines](https://vercel.com/docs/limits/fair-use-guidelines):
+the free Hobby plan is limited to non-commercial personal use, and commercial use (any deployment used for
+the financial gain of anyone involved in producing it, which includes advertising, affiliate links and
+payments) needs a Pro or Enterprise plan. An ad-supported calculator site is commercial.
+
+- Plan on **Pro** before AdSense or any affiliate link goes live.
+- Launching on Hobby while the site has no ads and no affiliate links is a gray area. Ask Vercel support if
+  you want certainty, or start on Pro.
+- Terms change. Re-read them before you turn ads on. Cloudflare Pages and Netlify are alternatives, but a
+  Next.js app needs extra setup there (an adapter), so test the build and the checks in this document first.
+
 ## 1. Before you deploy
 
 - [ ] Push the repository to GitHub and check that the CI workflow passes (see [TESTING.md](TESTING.md)).
