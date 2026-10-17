@@ -3,6 +3,7 @@ import { AdSlot } from "@/components/ads/AdSlot";
 import { Card } from "@/components/ui/Card";
 import { adsConfig, adsOccupySpace } from "@/lib/ads-config";
 import { ResultDisclaimer } from "./ResultDisclaimer";
+import { ShareLink } from "./ShareLink";
 
 /** Whether ad boxes (real or placeholder) take up room. When false nothing is rendered at all. */
 const showAds = adsOccupySpace(adsConfig);
@@ -53,6 +54,7 @@ export function CalculatorShell({
         <div className="flex flex-col gap-6">
           <section aria-label={`${title} results`} className="flex flex-col gap-6">
             {results}
+            <ShareLink />
             <ResultDisclaimer />
           </section>
           {sidebarContent && <div className="hidden lg:block">{sidebarContent}</div>}

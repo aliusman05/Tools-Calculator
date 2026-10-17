@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { applyParams, parseParams, serializeParams } from "@/lib/url-state";
+import {
+  buildShareUrl,
+  hasCalculatorParams,
+  MAX_SHARED_NUMBER,
+  parseParams,
+  serializeParams,
+  stripParams,
+} from "@/lib/url-state";
 
 const defaults = {
   price: 400_000 as number | null,
@@ -8,7 +15,7 @@ const defaults = {
   extra: null as number | null,
 };
 
-describe("url-state", () => {
+describe("parseParams", () => {
   it("returns defaults for an empty query", () => {
     expect(parseParams("", defaults)).toEqual(defaults);
   });
@@ -18,15 +25,30 @@ describe("url-state", () => {
     expect(parsed).toEqual({ price: 500_000, rate: 7.25, mode: "percent", extra: null });
   });
 
-  it("treats an empty number as null", () => {
+  it("treats an empty or blank number as null", () => {
     expect(parseParams("price=", defaults).price).toBeNull();
+    expect(parseParams("price=%20", defaults).price).toBeNull();
   });
 
   it("ignores non-numeric values and unknown keys", () => {
-    const parsed = parseParams("price=abc&unknown=1", defaults);
-    expect(parsed).toEqual(defaults);
+    expect(parseParams("price=abc&unknown=1", defaults)).toEqual(defaults);
+    expect(parseParams("price=Infinity&rate=NaN", defaults)).toEqual(defaults);
   });
 
+  it("clamps absurd numbers", () => {
+    const parsed = parseParams("price=1e30&rate=-1e30", defaults);
+    expect(parsed.price).toBe(MAX_SHARED_NUMBER);
+    expect(parsed.rate).toBe(-MAX_SHARED_NUMBER);
+  });
+
+  it("rejects text that is long or not plain", () => {
+    expect(parseParams(`mode=${"a".repeat(41)}`, defaults).mode).toBe("amount");
+    expect(parseParams("mode=%3Cscript%3E", defaults).mode).toBe("amount");
+    expect(parseParams("mode=years", defaults).mode).toBe("years");
+  });
+});
+
+describe("serializeParams", () => {
   it("only serializes values that differ from defaults", () => {
     expect(serializeParams(defaults, defaults)).toBe("");
     expect(serializeParams({ ...defaults, rate: 7 }, defaults)).toBe("rate=7");
@@ -43,28 +65,33 @@ describe("url-state", () => {
   });
 });
 
-describe("applyParams", () => {
-  it("adds the calculator's non-default values to an empty query", () => {
-    expect(applyParams("", { ...defaults, rate: 7 }, defaults)).toBe("rate=7");
+describe("hasCalculatorParams / stripParams", () => {
+  it("detects the calculator's own parameters only", () => {
+    expect(hasCalculatorParams("?utm_source=x", defaults)).toBe(false);
+    expect(hasCalculatorParams("?rate=7", defaults)).toBe(true);
+    expect(hasCalculatorParams("", defaults)).toBe(false);
   });
 
-  it("keeps unrelated parameters", () => {
-    expect(applyParams("?utm_source=news&ref=a", { ...defaults, rate: 7 }, defaults)).toBe(
-      "utm_source=news&ref=a&rate=7",
+  it("removes the calculator's parameters and keeps unrelated ones", () => {
+    expect(stripParams("?price=1&rate=7&utm_source=news", defaults)).toBe("utm_source=news");
+    expect(stripParams("?price=1", defaults)).toBe("");
+  });
+});
+
+describe("buildShareUrl", () => {
+  it("is just the page when nothing was changed", () => {
+    expect(buildShareUrl("https://x.test", "/calc", defaults, defaults)).toBe(
+      "https://x.test/calc",
     );
   });
 
-  it("replaces the calculator's old values rather than adding to them", () => {
-    expect(applyParams("?rate=3&price=1", { ...defaults, rate: 9 }, defaults)).toBe("rate=9");
-  });
-
-  it("removes values that went back to the default, keeping the rest", () => {
-    expect(applyParams("?rate=3&utm=x", defaults, defaults)).toBe("utm=x");
-    expect(applyParams("?rate=3", defaults, defaults)).toBe("");
-  });
-
-  it("encodes values that need it", () => {
-    const d = { name: "", n: 1 };
-    expect(applyParams("", { name: "a b&c", n: 1 }, d)).toBe("name=a+b%26c");
+  it("carries only the changed inputs, with no fragment or other parameters", () => {
+    const url = buildShareUrl(
+      "https://x.test",
+      "/calc",
+      { ...defaults, rate: 7, extra: 50 },
+      defaults,
+    );
+    expect(url).toBe("https://x.test/calc?rate=7&extra=50");
   });
 });

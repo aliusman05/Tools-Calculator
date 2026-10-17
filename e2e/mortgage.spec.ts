@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { captureClipboard, copiedLink } from "./support/clipboard";
 import { open } from "./support/open";
 
 const PATH = "/mortgage-calculator";
@@ -60,12 +61,24 @@ test("amortization schedule opens and ends at a zero balance", async ({ page }) 
   await expect(monthly.locator("tbody tr").last().locator("td").last()).toHaveText("$0.00");
 });
 
-test("syncs inputs to the URL and restores them on load", async ({ page }) => {
+test("keeps typed values out of the address and restores them from a copied link", async ({
+  page,
+}) => {
   await open(page, PATH);
   await page.getByLabel("Interest rate (APR)").fill("5.25");
-  await expect(page).toHaveURL(/annualRatePct=5\.25/);
-  await page.reload();
+  await page.waitForTimeout(700);
+  expect(new URL(page.url()).search).toBe("");
+  await open(page, PATH); // a fresh visit, waiting for hydration so typing is not lost
+  await expect(page.getByLabel("Interest rate (APR)")).not.toHaveValue("5.25"); // nothing was stored
+
+  await page.getByLabel("Interest rate (APR)").fill("5.25");
+  await captureClipboard(page);
+  await page.getByRole("button", { name: "Copy link" }).click();
+  const link = await copiedLink(page);
+  expect(link).toMatch(/annualRatePct=5\.25/);
+  await page.goto(link);
   await expect(page.getByLabel("Interest rate (APR)")).toHaveValue("5.25");
+  await expect(page).toHaveURL(/\/mortgage-calculator$/);
 });
 
 test("loads the lazy chart without shifting layout", async ({ page }) => {

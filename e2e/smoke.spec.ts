@@ -1,10 +1,11 @@
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import { captureClipboard, copiedLink } from "./support/clipboard";
 import { open } from "./support/open";
 
 /**
  * Smoke tests: the cheapest checks that catch a broken release. Every page loads cleanly; every
  * calculator reacts to input, survives empty and nonsense input without leaking NaN, restores its
- * state from a shared link, and renders its answer on the server (so it works before, or without,
+ * state from a copied share link, and renders its answer on the server (so it works before, or without,
  * JavaScript).
  */
 
@@ -176,7 +177,7 @@ test.describe("calculators survive empty and nonsense input", () => {
   }
 });
 
-test.describe("calculators restore their state from a shared link", () => {
+test.describe("calculators keep the address clean and restore their state from a copied link", () => {
   for (const slug of CALCULATORS) {
     test(slug, async ({ page }) => {
       await open(page, `/${slug}`);
@@ -186,7 +187,8 @@ test.describe("calculators restore their state from a shared link", () => {
         .first();
       const digits = Number((await field.inputValue()).replace(/[^\d.]/g, ""));
       await field.fill(String(digits + 3));
-      await expect.poll(() => page.url()).toContain("?");
+      await page.waitForTimeout(700); // longer than the old debounce: nothing may reach the address bar
+      expect(new URL(page.url()).search).toBe("");
       // Compare the figures only: the chart lazy-loads, so its axis labels differ between visits.
       const figures = (page: Page) =>
         page
@@ -194,13 +196,18 @@ test.describe("calculators restore their state from a shared link", () => {
           .locator("dl")
           .allInnerTexts();
       const changed = await figures(page);
-      const link = page.url();
+      await captureClipboard(page);
+      await page.getByRole("button", { name: "Copy link" }).click();
+      await expect(page.getByRole("status").filter({ hasText: "Link copied" })).toBeVisible();
+      const link = await copiedLink(page);
+      expect(new URL(link).search).not.toBe("");
 
       // A fresh visitor opening the shared link sees the same numbers.
       const fresh = await page.context().newPage();
       await fresh.goto(link);
       await fresh.waitForLoadState("networkidle");
       await expect.poll(() => figures(fresh)).toEqual(changed);
+      expect(new URL(fresh.url()).search).toBe(""); // the values were read once, then removed
       await fresh.close();
     });
   }

@@ -540,10 +540,11 @@ test.describe("Google Analytics privacy", () => {
       )
       .toBe(true);
 
-    // Type into a calculator so the address gains a query string full of financial figures...
+    // Typing into a calculator leaves the address clean...
     await page.locator("#mortgage-price").fill("612345");
-    await expect(page).toHaveURL(/homePrice=612345/);
-    // ...then navigate within the site.
+    await page.waitForTimeout(700);
+    expect(new URL(page.url()).search).toBe("");
+    // ...and the page views stay path-only as the visitor navigates within the site.
     await page
       .getByRole("link", { name: /Loan Calculator/ })
       .first()
@@ -566,6 +567,22 @@ test.describe("Google Analytics privacy", () => {
     );
   });
 
+  test("opening a shared link sends the path only, and the figures never reach analytics", async ({
+    page,
+  }) => {
+    await stubGtag(page);
+    await consentWith(page, true, false);
+    await page.goto(`${CALC}?homePrice=612345`);
+    await page.waitForLoadState("networkidle");
+    await expect
+      .poll(async () =>
+        (await dataLayer(page)).some((c) => c[0] === "event" && c[1] === "page_view"),
+      )
+      .toBe(true);
+    await expect.poll(() => new URL(page.url()).search).toBe("");
+    expect(JSON.stringify(await dataLayer(page))).not.toContain("612345");
+  });
+
   test("typing in a calculator does not send extra page views", async ({ page }) => {
     await stubGtag(page);
     await consentWith(page, true, false);
@@ -575,8 +592,8 @@ test.describe("Google Analytics privacy", () => {
       .toBe(1);
     await page.locator("#mortgage-price").fill("333333");
     await page.locator("#mortgage-rate").fill("5.5");
-    await expect(page).toHaveURL(/annualRatePct=5.5/);
     await page.waitForTimeout(800);
+    expect(new URL(page.url()).search).toBe("");
     expect((await dataLayer(page)).filter((c) => c[1] === "page_view")).toHaveLength(1);
   });
 });

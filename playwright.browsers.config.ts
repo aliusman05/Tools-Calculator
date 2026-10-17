@@ -29,6 +29,7 @@ export default defineConfig({
     "**/smoke.spec.ts",
     "**/layout.spec.ts",
     "**/mortgage.spec.ts",
+    "**/share-link.spec.ts",
     "**/calculators.spec.ts",
     "**/consent.spec.ts",
     "**/legal.spec.ts",
