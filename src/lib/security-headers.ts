@@ -20,7 +20,7 @@ export const securityHeaders: readonly Header[] = [
   // The site never needs these powers; switch them off for it and anything it embeds.
   {
     key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=()",
+    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=()",
   },
   // Browsers should only talk to the site over HTTPS (ignored over plain HTTP, so harmless locally).
   { key: "Strict-Transport-Security", value: "max-age=31536000" },
