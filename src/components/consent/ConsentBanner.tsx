@@ -12,11 +12,19 @@ type Choice = { analytics: boolean; ads: boolean };
  * panel with one switch per optional category. It is fixed to the bottom of the viewport, so it
  * never pushes page content around (no layout shift). Nothing optional loads until the visitor
  * chooses; see src/lib/consent.ts.
+ *
+ * It is rendered on the server, so a first-time visitor sees it with the very first paint instead of
+ * after the page has hydrated. (That also keeps it from becoming the page's "largest contentful
+ * paint", which would delay that metric until hydration.) Before hydration the server cannot know
+ * whether the visitor has already chosen, so the markup carries `data-ssr`, and the inline script in
+ * <head> sets `data-consent="decided"` on <html> for returning visitors; globals.css hides the banner
+ * in that case before anything is painted. Once hydrated, the real state takes over.
  */
 export function ConsentBanner() {
   const consent = useConsent();
-  const open = consent.status.status === "undecided" || consent.settingsOpen;
-  if (consent.status.status === "loading" || !open) return null;
+  const loading = consent.status.status === "loading";
+  const open = loading || consent.status.status === "undecided" || consent.settingsOpen;
+  if (!open) return null;
 
   const current: Choice =
     consent.status.status === "decided"
@@ -30,6 +38,7 @@ export function ConsentBanner() {
       initial={current}
       startCustomizing={consent.settingsOpen}
       canDismiss={consent.status.status === "decided"}
+      serverRendered={loading}
       onAcceptAll={consent.acceptAll}
       onRejectAll={consent.rejectAll}
       onSave={consent.save}
@@ -42,6 +51,7 @@ function Panel({
   initial,
   startCustomizing,
   canDismiss,
+  serverRendered,
   onAcceptAll,
   onRejectAll,
   onSave,
@@ -50,6 +60,8 @@ function Panel({
   initial: Choice;
   startCustomizing: boolean;
   canDismiss: boolean;
+  /** True until hydration finishes, while the server cannot know the visitor's stored choice. */
+  serverRendered: boolean;
   onAcceptAll: () => void;
   onRejectAll: () => void;
   onSave: (choice: Choice) => void;
@@ -80,7 +92,8 @@ function Panel({
       aria-modal="false"
       aria-labelledby="consent-title"
       aria-describedby="consent-text"
-      className="border-border bg-surface fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto border-t p-4 shadow-[0_-8px_30px_rgba(0,0,0,0.18)]"
+      data-ssr={serverRendered ? "true" : undefined}
+      className="consent-banner border-border bg-surface fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto border-t p-4 shadow-[0_-8px_30px_rgba(0,0,0,0.18)]"
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-3">
         <h2 id="consent-title" ref={headingRef} tabIndex={-1} className="text-lg font-semibold">

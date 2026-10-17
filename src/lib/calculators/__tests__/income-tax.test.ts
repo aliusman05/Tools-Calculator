@@ -235,3 +235,94 @@ describe("validateIncomeTax", () => {
     expect(calculateIncomeTax({ ...base, grossIncome: -5 }).ok).toBe(false);
   });
 });
+
+// -------------------------------------------------------------------------------------------------
+// Checked against the primary source, not our own arithmetic.
+//
+// IRS Rev. Proc. 2025-32 (Internal Revenue Bulletin 2025-45), section 4.01, Tables 1-4, publishes each
+// bracket as "$X plus R% of the excess over $T". The $X figures below are transcribed from that
+// document (read from the PDF's text on 2026-10-17). Our data file stores only thresholds and rates, so
+// the cumulative tax it produces at every threshold can only match the IRS's $X if every threshold and
+// every rate in the file is right.
+// -------------------------------------------------------------------------------------------------
+describe("matches the IRS published tax tables (Rev. Proc. 2025-32, section 4.01)", () => {
+  const published: Record<
+    FilingStatus,
+    Array<[threshold: number, taxAtThreshold: number, rateAbove: number]>
+  > = {
+    // Table 3, unmarried individuals
+    single: [
+      [0, 0, 10],
+      [12_400, 1_240, 12],
+      [50_400, 5_800, 22],
+      [105_700, 17_966, 24],
+      [201_775, 41_024, 32],
+      [256_225, 58_448, 35],
+      [640_600, 192_979.25, 37],
+    ],
+    // Table 1, married filing jointly and surviving spouses
+    mfj: [
+      [0, 0, 10],
+      [24_800, 2_480, 12],
+      [100_800, 11_600, 22],
+      [211_400, 35_932, 24],
+      [403_550, 82_048, 32],
+      [512_450, 116_896, 35],
+      [768_700, 206_583.5, 37],
+    ],
+    // Table 2, heads of households
+    hoh: [
+      [0, 0, 10],
+      [17_700, 1_770, 12],
+      [67_450, 7_740, 22],
+      [105_700, 16_155, 24],
+      [201_750, 39_207, 32],
+      [256_200, 56_631, 35],
+      [640_600, 191_171, 37],
+    ],
+    // Table 4, married filing separately
+    mfs: [
+      [0, 0, 10],
+      [12_400, 1_240, 12],
+      [50_400, 5_800, 22],
+      [105_700, 17_966, 24],
+      [201_775, 41_024, 32],
+      [256_225, 58_448, 35],
+      [384_350, 103_291.75, 37],
+    ],
+  };
+
+  for (const status of Object.keys(published) as FilingStatus[]) {
+    describe(status, () => {
+      const brackets = taxUs2026.brackets[status];
+
+      it("has exactly the published thresholds and rates", () => {
+        expect(brackets.map((b) => [b.over, b.rate])).toEqual(
+          published[status].map(([over, , rate]) => [over, rate]),
+        );
+      });
+
+      it.each(published[status])("tax at $%d is $%d (rate above: %d%%)", (threshold, expected) => {
+        const tax = applyBrackets(threshold, brackets).reduce((s, l) => s + l.tax, 0);
+        expect(tax).toBeCloseTo(expected, 2);
+      });
+
+      it("charges the published rate on the first dollar above each threshold", () => {
+        for (const [threshold, base, rate] of published[status]) {
+          const tax = applyBrackets(threshold + 1_000, brackets).reduce((s, l) => s + l.tax, 0);
+          expect(tax).toBeCloseTo(base + (1_000 * rate) / 100, 2);
+        }
+      });
+    });
+  }
+
+  it("uses the published standard deductions (section 4.14) and the age/blind additions", () => {
+    expect(taxUs2026.standardDeduction).toEqual({
+      mfj: 32_200,
+      hoh: 24_150,
+      single: 16_100,
+      mfs: 16_100,
+    });
+    expect(taxUs2026.additionalDeduction).toEqual({ married: 1_650, unmarried: 2_050 });
+  });
+});

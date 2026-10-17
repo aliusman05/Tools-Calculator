@@ -5,6 +5,11 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    // The launch-check script reports with `ok ? pass(...) : fail(...)`, which reads well there.
+    files: ["scripts/**/*.mjs"],
+    rules: { "@typescript-eslint/no-unused-expressions": ["warn", { allowTernary: true }] },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

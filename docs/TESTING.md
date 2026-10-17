@@ -46,7 +46,20 @@ Playwright starts the server itself. Specs:
 | `perf.spec.ts`                            | Code splitting, lazy chart, no web font, caching and compression headers, layout shift, interaction latency on a slowed CPU                                                                                                                                                                                                                            |
 | `legal.spec.ts`, `consent.spec.ts`        | Legal pages, disclaimers, contact form, cookie banner and Consent Mode signals                                                                                                                                                                                                                                                                         |
 | `ads-off.spec.ts`                         | Nothing ad-related appears while ads are off                                                                                                                                                                                                                                                                                                           |
+| `launch.spec.ts`                          | Security headers, icons, production is not `noindex`, no leftover boilerplate, no analytics without configuration, and the launch check's live-site checks                                                                                                                                                                                             |
 | `layout.spec.ts`                          | Responsive layout, 404, mobile menu, skip link                                                                                                                                                                                                                                                                                                         |
+
+### Other browsers and the launch check
+
+`pnpm e2e:browsers` runs the core specs (smoke, layout, mortgage, calculators, consent, legal, ads-off) in
+Firefox, WebKit (Safari's engine), an iPhone 14 and a Pixel 7. It writes
+`docs/launch/browser-results.json`, which the launch check reads. Run `pnpm exec playwright install`
+once for the extra engines. These are engine and device-size emulations; real phones are still a manual step.
+
+`pnpm launch-check [--base URL] [--site-url URL] [--expect production|preview] [--no-source] [--strict]`
+runs the pre-launch checklist as code and prints PASS, FAIL, WARN or MANUAL for each item. It exits 1 on
+a FAIL. See [LAUNCH-CHECKLIST.md](LAUNCH-CHECKLIST.md) for the latest results and [DEPLOY.md](DEPLOY.md)
+for running it against production.
 
 `e2e/ads/ads.spec.ts` needs a build with ads **enabled**, so `pnpm e2e:ads` builds its own copy into
 `.next-ads` with fake IDs and serves it on port 3200. The AdSense script is never fetched from Google.

@@ -207,8 +207,9 @@ test.describe("calculators restore their state from a shared link", () => {
 });
 
 test.describe("answers are rendered on the server", () => {
-  test.use({ javaScriptEnabled: false });
-
+  // This is a property of the HTML the server sends, so it is checked on the raw response. That is
+  // what a crawler, a reader mode or a browser with JavaScript off receives, and it behaves the same in
+  // every browser engine.
   const EXPECTED: Record<string, string> = {
     "mortgage-calculator": "$2,514.28",
     "loan-calculator": "$493.85",
@@ -225,19 +226,24 @@ test.describe("answers are rendered on the server", () => {
   };
 
   for (const slug of CALCULATORS) {
-    test(`${slug} shows its default answer without JavaScript`, async ({ page }) => {
-      await page.goto(`/${slug}`);
-      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-      await expect(page.getByRole("region", { name: /results$/i })).toContainText(EXPECTED[slug]!);
-      await expect(page.getByRole("heading", { name: "How it works" })).toBeVisible();
-      await expect(page.getByRole("heading", { name: "Frequently asked questions" })).toBeVisible();
+    test(`${slug} ships its default answer in the HTML`, async ({ request }) => {
+      const html = await (await request.get(`/${slug}`)).text();
+      const text = html
+        .replace(/<script[\s\S]*?<\/script>/g, " ")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&amp;/g, "&");
+      expect(text).toContain(EXPECTED[slug]!);
+      expect(html).toMatch(/<h1[\s>]/);
+      expect(text).toContain("How it works");
+      expect(text).toContain("Frequently asked questions");
     });
   }
 
-  test("content pages read fine without JavaScript", async ({ page }) => {
+  test("content pages ship their content in the HTML", async ({ request }) => {
     for (const path of ["/", "/about", "/privacy-policy", "/category/loans"]) {
-      await page.goto(path);
-      await expect(page.getByRole("heading", { level: 1 }), path).toBeVisible();
+      const html = await (await request.get(path)).text();
+      expect(html, path).toMatch(/<h1[\s>]/);
+      expect(html.length, path).toBeGreaterThan(5_000);
     }
   });
 });
@@ -261,12 +267,12 @@ test.describe("getting around", () => {
 
   test("the header search finds and opens a calculator", async ({ page }) => {
     await open(page, "/");
-    const box = page.getByRole("search", { name: "Site search" }).getByLabel("Search calculators");
-    await box.fill("inflation");
-    await page
-      .getByRole("search", { name: "Site search" })
-      .getByRole("link", { name: "Inflation Calculator" })
-      .click();
+    // On a phone the search is inside the menu; on a wider screen it sits in the header.
+    const small = (page.viewportSize()?.width ?? 1280) < 768;
+    if (small) await page.getByRole("button", { name: "Menu" }).click();
+    const search = page.getByRole("search", { name: small ? "Menu search" : "Site search" });
+    await search.getByLabel("Search calculators").fill("inflation");
+    await search.getByRole("link", { name: "Inflation Calculator" }).click();
     await expect(page).toHaveURL(/\/inflation-calculator$/);
   });
 

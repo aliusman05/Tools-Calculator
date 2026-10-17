@@ -72,6 +72,13 @@ body {
   overflow-x: hidden;
 }
 
+/* The cookie banner is in the server-rendered HTML. The inline script in <head> marks <html> when the
+   visitor has already chosen, so the banner is hidden before the first paint (no flash). The banner
+   drops its data-ssr attribute after hydration, so reopening it from "Cookie settings" is unaffected. */
+html[data-consent="decided"] .consent-banner[data-ssr] {
+  display: none;
+}
+
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;

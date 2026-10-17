@@ -7,12 +7,16 @@
  * Source: IRS Revenue Procedure 2025-32 (Internal Revenue Bulletin 2025-45, November 3, 2025):
  *   - Section 4.01  Tables 1-4, income tax rate schedules (brackets)
  *   - Section 4.14  basic standard deduction
- *   - Section 4.15  additional standard deduction for age 65+ or blind
+ *   - Section 4.14(3)  additional standard deduction for age 65+ or blind
  * https://www.irs.gov/irb/2025-45_IRB  and  https://www.irs.gov/pub/irs-drop/rp-25-32.pdf
  *
- * VERIFICATION STATUS: values were read from the IRS bulletin on 2026-10-16 but have NOT been
- * checked line by line by the site owner. Check every number against the PDF above before launch,
- * then set `ownerVerified` to true. Brackets/deductions can also change by later legislation.
+ * VERIFICATION STATUS: every figure was compared with the text of the Rev. Proc. 2025-32 PDF on
+ * 2026-10-17: the standard deductions (section 4.14), the age/blind additions (section 4.14(3)), and all
+ * four rate tables (section 4.01), the last by transcribing the IRS's published "tax at each threshold"
+ * amounts into src/lib/calculators/__tests__/income-tax.test.ts, which must match what this file produces.
+ * `ownerVerified` is separate: it is YOUR sign-off, which the launch check reminds you about. Laws can
+ * change after a revenue procedure is issued (Rev. Proc. 2025-32 says so itself), so re-check each
+ * autumn when the IRS publishes the next year's adjustments.
  */
 
 export type FilingStatus = "single" | "mfj" | "hoh" | "mfs";

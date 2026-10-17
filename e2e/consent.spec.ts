@@ -207,3 +207,68 @@ test("a blocked localStorage does not break the page", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+// ---------------------------------------------------------------------------------------------
+// The banner is part of the server-rendered HTML, so it paints with the first frame.
+// ---------------------------------------------------------------------------------------------
+test.describe("server-rendered banner", () => {
+  test("is in the HTML the server sends, with its buttons", async ({ request }) => {
+    const html = await (await request.get("/")).text();
+    expect(html).toContain('id="consent-title"');
+    expect(html).toContain('data-ssr="true"');
+    expect(html).toContain("Accept all");
+    expect(html).toContain("Reject all");
+  });
+
+  test("is hidden for people without JavaScript, who could never dismiss it", async ({
+    request,
+  }) => {
+    const html = await (await request.get("/")).text();
+    expect(html).toMatch(/<noscript><style>\.consent-banner\{display:none\}<\/style><\/noscript>/);
+  });
+
+  test("is visible before any script runs, for a first-time visitor", async ({ page }) => {
+    await page.route("**/_next/static/**/*.js", (route) => route.abort()); // no hydration
+    await page.goto("/");
+    const banner = page.locator(".consent-banner");
+    await expect(banner).toBeVisible();
+    await expect(page.locator("html")).not.toHaveAttribute("data-consent", "decided");
+  });
+
+  test.describe("returning visitor", () => {
+    test.use({
+      storageState: {
+        cookies: [],
+        origins: [
+          {
+            origin: "http://localhost:3100",
+            localStorage: [
+              {
+                name: "fincalc-consent",
+                value: JSON.stringify({ v: 1, analytics: false, ads: false, at: "t" }),
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    test("never sees the banner, even before the page hydrates", async ({ page }) => {
+      await page.route("**/_next/static/**/*.js", (route) => route.abort()); // no hydration
+      await page.goto("/");
+      await expect(page.locator("html")).toHaveAttribute("data-consent", "decided");
+      const banner = page.locator(".consent-banner");
+      expect(await banner.count()).toBe(1); // it is in the HTML...
+      await expect(banner).toBeHidden(); // ...but hidden before the first paint
+    });
+
+    test("is not shown after hydration either, yet Cookie settings still reopens it", async ({
+      page,
+    }) => {
+      await open(page, "/");
+      await expect(page.getByRole("dialog", { name: "Your privacy choices" })).toHaveCount(0);
+      await page.getByRole("button", { name: "Cookie settings" }).click();
+      await expect(page.getByRole("dialog", { name: "Your privacy choices" })).toBeVisible();
+    });
+  });
+});

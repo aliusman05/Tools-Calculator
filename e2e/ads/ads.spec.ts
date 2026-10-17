@@ -451,3 +451,132 @@ test("ads.txt is served by the ads build too", async ({ request }) => {
   expect(res.status()).toBe(200);
   expect(await res.text()).toMatch(/google\.com, pub-\d{16}, DIRECT, f08c47fec0942fa0/);
 });
+
+// ---------------------------------------------------------------------------------------------
+// Google Analytics (the ads build also has NEXT_PUBLIC_GA_ID=G-TEST123456; gtag.js is stubbed)
+// ---------------------------------------------------------------------------------------------
+const GTAG = /googletagmanager\.com\/gtag\/js/;
+
+async function stubGtag(page: Page) {
+  const requests: string[] = [];
+  await page.route(GTAG, (route) => {
+    requests.push(route.request().url());
+    return route.fulfill({ contentType: "application/javascript", body: "/* stub gtag.js */" });
+  });
+  return requests;
+}
+
+const consentWith = async (page: Page, analytics: boolean, ads: boolean) =>
+  page.addInitScript(
+    ([key, value]) => window.localStorage.setItem(key as string, value as string),
+    [CONSENT_KEY, JSON.stringify({ v: 1, analytics, ads, at: "2026-01-01T00:00:00.000Z" })],
+  );
+
+type GtagCall = unknown[];
+const dataLayer = (page: Page): Promise<GtagCall[]> =>
+  page.evaluate(() =>
+    ((window as unknown as { dataLayer?: ArrayLike<unknown>[] }).dataLayer ?? []).map((a) =>
+      Array.from(a),
+    ),
+  );
+
+test.describe("Google Analytics consent gating", () => {
+  test("loads nothing before the visitor chooses", async ({ page }) => {
+    const requests = await stubGtag(page);
+    await open(page, CALC);
+    await page.waitForTimeout(500);
+    expect(requests).toEqual([]);
+    expect((await dataLayer(page)).some((c) => c[0] === "config")).toBe(false);
+  });
+
+  test("loads nothing for a visitor who accepted only advertising", async ({ page }) => {
+    const requests = await stubGtag(page);
+    await stubAdSense(page);
+    await consentWith(page, false, true);
+    await open(page, CALC);
+    await page.waitForTimeout(500);
+    expect(requests).toEqual([]);
+  });
+
+  test("loads the library once after the visitor accepts analytics", async ({ page }) => {
+    const requests = await stubGtag(page);
+    await open(page, CALC);
+    await page.getByRole("button", { name: "Customize" }).click();
+    await page.getByRole("checkbox", { name: /Analytics/ }).check();
+    await page.getByRole("button", { name: "Save my choices" }).click();
+    await expect.poll(() => requests.length).toBe(1);
+    expect(requests[0]).toContain("id=G-TEST123456");
+    // ...and not the advertising library.
+    await expect(allSlots(page)).toHaveCount(0);
+  });
+
+  test("a returning visitor who accepted analytics is configured with page views turned off", async ({
+    page,
+  }) => {
+    const requests = await stubGtag(page);
+    await consentWith(page, true, false);
+    await open(page, CALC);
+    await expect.poll(() => requests.length).toBe(1);
+    const config = (await dataLayer(page)).find((c) => c[0] === "config");
+    expect(config?.[1]).toBe("G-TEST123456");
+    expect(config?.[2]).toMatchObject({
+      send_page_view: false,
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+    });
+  });
+});
+
+test.describe("Google Analytics privacy", () => {
+  test("page views carry the path only, never the numbers typed into a calculator", async ({
+    page,
+  }) => {
+    await stubGtag(page);
+    await consentWith(page, true, false);
+    await open(page, CALC);
+    await expect
+      .poll(async () =>
+        (await dataLayer(page)).some((c) => c[0] === "event" && c[1] === "page_view"),
+      )
+      .toBe(true);
+
+    // Type into a calculator so the address gains a query string full of financial figures...
+    await page.locator("#mortgage-price").fill("612345");
+    await expect(page).toHaveURL(/homePrice=612345/);
+    // ...then navigate within the site.
+    await page
+      .getByRole("link", { name: /Loan Calculator/ })
+      .first()
+      .click();
+    await expect(page).toHaveURL(/\/loan-calculator/);
+    await expect
+      .poll(async () => (await dataLayer(page)).filter((c) => c[1] === "page_view").length)
+      .toBeGreaterThanOrEqual(2);
+
+    const views = (await dataLayer(page)).filter((c) => c[0] === "event" && c[1] === "page_view");
+    for (const v of views) {
+      const params = v[2] as { page_location: string; page_path: string };
+      expect(params.page_location).not.toMatch(/[?#]/);
+      expect(params.page_location).not.toContain("612345");
+      expect(params.page_path).not.toMatch(/[?#]/);
+    }
+    expect(JSON.stringify(await dataLayer(page))).not.toContain("612345");
+    expect(views.map((v) => (v[2] as { page_path: string }).page_path)).toEqual(
+      expect.arrayContaining(["/mortgage-calculator", "/loan-calculator"]),
+    );
+  });
+
+  test("typing in a calculator does not send extra page views", async ({ page }) => {
+    await stubGtag(page);
+    await consentWith(page, true, false);
+    await open(page, CALC);
+    await expect
+      .poll(async () => (await dataLayer(page)).filter((c) => c[1] === "page_view").length)
+      .toBe(1);
+    await page.locator("#mortgage-price").fill("333333");
+    await page.locator("#mortgage-rate").fill("5.5");
+    await expect(page).toHaveURL(/annualRatePct=5.5/);
+    await page.waitForTimeout(800);
+    expect((await dataLayer(page)).filter((c) => c[1] === "page_view")).toHaveLength(1);
+  });
+});

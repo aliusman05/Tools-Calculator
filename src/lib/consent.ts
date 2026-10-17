@@ -103,6 +103,8 @@ try {
       ad_user_data: s.ads ? 'granted' : 'denied',
       ad_personalization: s.ads ? 'granted' : 'denied'
     });
+    // Tell the stylesheet this visitor has already chosen, so the server-rendered banner never flashes.
+    document.documentElement.setAttribute('data-consent', 'decided');
   }
 } catch (e) {}
 `.trim();

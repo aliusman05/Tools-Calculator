@@ -71,6 +71,7 @@ test("syncs inputs to the URL and restores them on load", async ({ page }) => {
 test("loads the lazy chart without shifting layout", async ({ page }) => {
   await open(page, PATH);
   const chart = page.getByRole("img", { name: /Remaining balance falls/ });
+  await chart.scrollIntoViewIfNeeded(); // the chart library loads once the chart is near the screen
   const before = await chart.boundingBox();
   await expect(chart.locator('svg[role="application"]')).toBeVisible();
   const after = await chart.boundingBox();

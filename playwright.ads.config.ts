@@ -17,6 +17,8 @@ const adsEnv = {
   NEXT_PUBLIC_ADSENSE_SLOT_CONTENT: "3333333333",
   NEXT_PUBLIC_ADSENSE_SLOT_END: "4444444444",
   NEXT_PUBLIC_ADS_TEST_MODE: "true",
+  // Analytics is built in too, so the same suite can prove consent gating and query-string privacy.
+  NEXT_PUBLIC_GA_ID: "G-TEST123456",
 };
 
 export default defineConfig({

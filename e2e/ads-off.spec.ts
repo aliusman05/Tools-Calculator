@@ -85,6 +85,7 @@ test.describe("with ads switched off", () => {
           (el) =>
             el.children.length === 0 &&
             el.textContent === "" &&
+            !el.closest("figure") && // a chart's loading placeholder is an intentional empty box
             (el as HTMLElement).offsetHeight > 20,
         ).length,
     );

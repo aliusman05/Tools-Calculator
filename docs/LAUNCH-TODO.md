@@ -1,6 +1,8 @@
 # Launch to-do: things only the site owner can do
 
 Items marked **Required** block launch or AdSense approval. Everything here is outside the code.
+Deployment steps are in [DEPLOY.md](DEPLOY.md); the latest checklist results are in
+[LAUNCH-CHECKLIST.md](LAUNCH-CHECKLIST.md). Run `pnpm launch-check` any time to see what is left.
 
 ## Legal pages (Phase 5)
 
@@ -70,6 +72,10 @@ Details in [ADS.md](ADS.md). Ads are off until you do the following.
 
 - [ ] Replace the "FinCalc" placeholder brand in `src/lib/site-config.ts`.
 - [ ] Set `NEXT_PUBLIC_SITE_URL` to the production domain at build time.
-- [ ] Confirm the 2026 tax figures in `src/lib/data/tax-us-2026.ts` against IRS Rev. Proc. 2025-32
-      and set `ownerVerified: true`.
+- [ ] Sign off the 2026 tax figures in `src/lib/data/tax-us-2026.ts` and set `ownerVerified: true`.
+      They were compared line by line with IRS Rev. Proc. 2025-32 on 2026-10-17 and the tests check
+      the engine against the IRS published base-tax amounts, but the sign-off is yours.
+- [ ] Test on a real iPhone and a real Android phone (emulation is covered by `pnpm e2e:browsers`).
+- [ ] Install a Google-certified consent platform before serving ads to the EEA, UK or Switzerland.
+- [ ] Run the live-site check on production: `pnpm launch-check --base https://your-domain --site-url https://your-domain --no-source`.
 - [ ] Run Google's Rich Results Test on the deployed site.

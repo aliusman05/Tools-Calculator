@@ -71,8 +71,20 @@ describe("stored consent", () => {
 });
 
 /** Run the inline init script in a sandbox where `window` is the global object, as in a browser. */
+const marked: string[] = [];
+
 function sandbox(storage: { getItem: (k: string) => string | null }) {
-  const ctx: Record<string, unknown> = { localStorage: storage, Array, JSON };
+  marked.length = 0;
+  const ctx: Record<string, unknown> = {
+    localStorage: storage,
+    Array,
+    JSON,
+    document: {
+      documentElement: {
+        setAttribute: (name: string, value: string) => marked.push(`${name}=${value}`),
+      },
+    },
+  };
   ctx.window = ctx;
   runInNewContext(consentInitScript(), ctx);
   // `dataLayer` entries are `arguments` objects; normalise to arrays.
@@ -116,6 +128,16 @@ describe("consentInitScript", () => {
       ad_user_data: "denied",
       ad_personalization: "denied",
     });
+  });
+
+  it("marks the page as decided for a returning visitor, so the server-rendered banner is hidden before paint", () => {
+    runInit(serializeConsent({ analytics: false, ads: false }, "x"));
+    expect(marked).toEqual(["data-consent=decided"]);
+  });
+
+  it("does not mark the page for a first-time visitor", () => {
+    runInit();
+    expect(marked).toEqual([]);
   });
 
   it("ignores a corrupt or outdated saved choice", () => {

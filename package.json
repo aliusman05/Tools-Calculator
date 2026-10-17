@@ -18,7 +18,9 @@
     "test:coverage": "vitest run --coverage",
     "format:check": "prettier --check .",
     "check-links": "node scripts/check-links.mjs",
-    "check": "pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm build"
+    "check": "pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm build",
+    "launch-check": "node scripts/launch-check.mjs",
+    "e2e:browsers": "playwright test -c playwright.browsers.config.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

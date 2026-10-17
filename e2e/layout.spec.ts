@@ -36,8 +36,22 @@ test("mobile menu opens, is keyboard operable and closes with Escape", async ({ 
   await expect(page.getByRole("button", { name: "Menu" })).toBeFocused();
 });
 
-test("skip link is the first focusable element", async ({ page }) => {
+test("skip link is the first focusable element", async ({ page, browserName }) => {
   await page.goto("/");
+  const skip = page.getByRole("link", { name: "Skip to main content" });
+  if (browserName === "webkit") {
+    // Safari's default is to skip links when tabbing (a user setting, not a site property), so Tab
+    // never lands on a link. Check what the site controls instead: the skip link is the first link in
+    // the document, it is revealed when focused, and it moves focus to the main content.
+    const firstLink = await page.evaluate(() => document.querySelector("a")?.textContent?.trim());
+    expect(firstLink).toBe("Skip to main content");
+    await skip.focus();
+    await expect(skip).toBeFocused();
+    await expect(skip).toBeInViewport();
+    await skip.press("Enter");
+    await expect(page).toHaveURL(/#main/);
+    return;
+  }
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("link", { name: "Skip to main content" })).toBeFocused();
+  await expect(skip).toBeFocused();
 });

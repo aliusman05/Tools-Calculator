@@ -1,20 +1,32 @@
 # Performance and accessibility
 
-Phase 7 results, how to measure, and what to watch for.
+Phase 7 results (updated in Phase 9), how to measure, and what to watch for.
 
 ## Targets and results
 
 | Target                                 | Result                                                                 |
 | -------------------------------------- | ---------------------------------------------------------------------- |
-| Lighthouse Performance 95+             | Desktop **100** on every page tested. Mobile **94-99** (see below).    |
+| Lighthouse Performance 95+             | Desktop **97-100**, mobile **95-99** on all 24 pages (see below).      |
 | Lighthouse Accessibility 100           | **100** on every page, mobile and desktop.                             |
 | Lighthouse SEO 100, Best Practices 100 | **100** on every page.                                                 |
-| LCP under 2.5s                         | Mobile lab **1.6-2.3s**; desktop **0.5-0.6s**.                         |
+| LCP under 2.5s                         | Mobile lab **1.6-2.2s**; desktop **0.5-0.6s**.                         |
 | CLS under 0.1                          | **0** on every page.                                                   |
 | INP under 200ms                        | Lab proxy passes (see "Responsiveness"). Field INP needs real traffic. |
 
 "Mobile" is Lighthouse's default simulated phone: Moto G Power class CPU (4x slowdown) on slow 4G.
-Scores are the median of 3 runs (desktop: 2).
+Scores are the median of 3 runs (desktop: 2). The final pass in Phase 9 covered all 24 pages; the two
+pages that sat near the line (the home page and /terms) were re-measured with 7 runs each and the saved
+results are in `docs/perf/final-lighthouse-mobile.json` and `-desktop.json`.
+
+### Phase 9 finding: the cookie banner was the home page's LCP
+
+On the home page the largest contentful paint was the banner's paragraph, not the page content. The
+banner only appeared after hydration, so LCP waited for JavaScript (median 94, LCP about 2.4s). The banner
+is now rendered on the server, so it paints with the first frame. For returning visitors the inline script
+in `<head>` sets `data-consent="decided"` on `<html>` and a CSS rule hides the banner before paint, so
+nothing flashes. Result: home median **96**, LCP **1.6s**. Without JavaScript the banner is hidden (it
+could never be dismissed, and nothing optional loads anyway). Tests: `e2e/consent.spec.ts` (server-rendered
+banner) and `src/lib/__tests__/consent.test.ts`.
 
 ### Before and after (mobile, median of 3 runs)
 
