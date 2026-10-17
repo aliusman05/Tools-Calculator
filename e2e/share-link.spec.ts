@@ -1,25 +1,13 @@
 import { expect, test } from "@playwright/test";
 import { captureClipboard, copiedLink } from "./support/clipboard";
 import { open } from "./support/open";
+import { CALCULATOR_SLUGS } from "./support/calculators";
 
 /**
  * Typed values stay out of the address bar. They travel only in a link the visitor copies on purpose,
  * and the canonical URL, sitemap and structured data never carry a query string.
  */
-const CALCULATORS = [
-  "mortgage-calculator",
-  "loan-calculator",
-  "compound-interest-calculator",
-  "simple-interest-calculator",
-  "savings-goal-calculator",
-  "retirement-calculator",
-  "car-loan-calculator",
-  "credit-card-payoff-calculator",
-  "debt-payoff-planner",
-  "income-tax-calculator",
-  "inflation-calculator",
-  "roi-calculator",
-];
+const CALCULATORS = CALCULATOR_SLUGS;
 
 test.describe("canonical URLs ignore query parameters", () => {
   for (const slug of CALCULATORS) {

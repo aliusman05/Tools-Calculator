@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { CALCULATOR_SLUGS } from "../support/calculators";
 
 /**
  * Runs against a build with ads ENABLED (fake publisher and slot IDs). The AdSense script is
@@ -399,20 +400,7 @@ test.describe("pages that must stay ad-free", () => {
 });
 
 test.describe("every calculator", () => {
-  const slugs = [
-    "mortgage-calculator",
-    "loan-calculator",
-    "compound-interest-calculator",
-    "simple-interest-calculator",
-    "savings-goal-calculator",
-    "retirement-calculator",
-    "car-loan-calculator",
-    "credit-card-payoff-calculator",
-    "debt-payoff-planner",
-    "income-tax-calculator",
-    "inflation-calculator",
-    "roi-calculator",
-  ];
+  const slugs = CALCULATOR_SLUGS;
 
   for (const slug of slugs) {
     test(`${slug}: three ads on desktop, in the right order, calculator still works`, async ({

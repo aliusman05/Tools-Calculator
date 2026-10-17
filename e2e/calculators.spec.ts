@@ -1,20 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { open } from "./support/open";
+import { CALCULATOR_SLUGS } from "./support/calculators";
 
-const SLUGS = [
-  "mortgage-calculator",
-  "loan-calculator",
-  "compound-interest-calculator",
-  "simple-interest-calculator",
-  "savings-goal-calculator",
-  "retirement-calculator",
-  "car-loan-calculator",
-  "credit-card-payoff-calculator",
-  "debt-payoff-planner",
-  "income-tax-calculator",
-  "inflation-calculator",
-  "roi-calculator",
-];
+const SLUGS = CALCULATOR_SLUGS;
 
 for (const slug of SLUGS) {
   test.describe(slug, () => {
@@ -356,6 +344,57 @@ test.describe("ROI and CAGR calculator", () => {
     await page.locator("#roi-unit").selectOption("months");
     await page.locator("#roi-time").fill("6");
     await expect(page.getByText("21.00%").first()).toBeVisible();
+  });
+});
+
+test.describe("refinance calculator", () => {
+  const results = (page: import("@playwright/test").Page) =>
+    page.getByRole("region", { name: /results$/i });
+
+  test("shows the verified default scenario", async ({ page }) => {
+    await open(page, "/refinance-calculator");
+    const r = results(page);
+    await expect(r.getByText("1 year 1 month").first()).toBeVisible();
+    await expect(r.getByText("$2,120.34")).toBeVisible();
+    await expect(r.getByText("$1,842.26")).toBeVisible();
+    await expect(r.getByText("$278.08")).toBeVisible();
+    await expect(r.getByText("Ahead by $26,607")).toBeVisible();
+    await expect(r.getByText("Ahead by $78,923")).toBeVisible();
+  });
+
+  test("a worse rate never breaks even", async ({ page }) => {
+    await open(page, "/refinance-calculator");
+    await page.locator("#refi-new-rate").fill("7.5");
+    await expect(results(page).getByText("No break-even")).toBeVisible();
+    await expect(results(page).getByText("Monthly increase")).toBeVisible();
+  });
+
+  test("rolling the costs into the loan changes the cash due and the loan amount", async ({
+    page,
+  }) => {
+    await open(page, "/refinance-calculator");
+    await page.locator("#refi-costs-paid").selectOption("rolled");
+    const r = results(page);
+    await expect(r.getByText("$304,500")).toBeVisible();
+    await expect(
+      r.getByText("Cash due at closing").locator("xpath=following-sibling::dd[1]"),
+    ).toHaveText("$0");
+  });
+
+  test("an empty balance shows a message, not NaN", async ({ page }) => {
+    await open(page, "/refinance-calculator");
+    await page.locator("#refi-balance").fill("");
+    await expect(page.locator("#refi-balance-error")).toHaveText(/Enter the balance you still owe/);
+    expect(await page.locator("body").innerText()).not.toMatch(/NaN|undefined|Infinity/);
+  });
+
+  test("terms can be entered in months", async ({ page }) => {
+    await open(page, "/refinance-calculator");
+    await page.locator("#refi-current-term-unit").selectOption("months");
+    await page.locator("#refi-current-term").fill("300");
+    await page.locator("#refi-new-term-unit").selectOption("months");
+    await page.locator("#refi-new-term").fill("300");
+    await expect(results(page).getByText("1 year 1 month").first()).toBeVisible();
   });
 });
 

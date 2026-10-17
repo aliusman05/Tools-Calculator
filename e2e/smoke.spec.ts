@@ -1,5 +1,6 @@
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 import { captureClipboard, copiedLink } from "./support/clipboard";
+import { CALCULATOR_SLUGS } from "./support/calculators";
 import { open } from "./support/open";
 
 /**
@@ -9,20 +10,7 @@ import { open } from "./support/open";
  * JavaScript).
  */
 
-const CALCULATORS = [
-  "mortgage-calculator",
-  "loan-calculator",
-  "compound-interest-calculator",
-  "simple-interest-calculator",
-  "savings-goal-calculator",
-  "retirement-calculator",
-  "car-loan-calculator",
-  "credit-card-payoff-calculator",
-  "debt-payoff-planner",
-  "income-tax-calculator",
-  "inflation-calculator",
-  "roi-calculator",
-] as const;
+const CALCULATORS = CALCULATOR_SLUGS;
 
 async function sitemapPaths(request: APIRequestContext): Promise<string[]> {
   const res = await request.get("/sitemap.xml");
@@ -230,6 +218,7 @@ test.describe("answers are rendered on the server", () => {
     "income-tax-calculator": "$9,870.00",
     "inflation-calculator": "$1,806.11",
     "roi-calculator": "50.00%",
+    "refinance-calculator": "1 year 1 month",
   };
 
   for (const slug of CALCULATORS) {

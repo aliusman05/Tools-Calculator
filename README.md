@@ -1,6 +1,6 @@
 # Personal finance calculators
 
-A fast, privacy-friendly website of free personal finance calculators (mortgage, loan, car loan, compound
+A fast, privacy-friendly website of free personal finance calculators (mortgage, refinance break-even, loan, car loan, compound
 and simple interest, savings goal, retirement, credit card payoff, debt payoff planner, US federal income
 tax, inflation, ROI/CAGR). Everything is calculated in the visitor's browser; no financial data is sent to a
 server. Built with Next.js (App Router), TypeScript, Tailwind CSS and MDX, and statically generated.

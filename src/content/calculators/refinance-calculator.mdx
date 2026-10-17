@@ -1,0 +1,82 @@
+export const faqs = [
+  {
+    question: "What is the break-even point on a refinance?",
+    answer:
+      "It is the month when the new loan has cost you less in total than keeping the old one would have. Until then the closing costs put you behind. This calculator counts both what you have paid and what you still owe, so a lower payment bought with a longer loan does not look better than it is.",
+  },
+  {
+    question: "Why does my break-even differ from closing costs divided by the monthly saving?",
+    answer:
+      "The shortcut only looks at the change in your payment. But a lower rate also means less of each payment goes to interest, and a lower payment means less goes to principal, so the two views can disagree. The break-even above counts the balance you still owe; the shortcut is shown next to it when your costs are paid in cash, so you can compare.",
+  },
+  {
+    question: "Should I roll closing costs into the new loan?",
+    answer:
+      "Rolling them in means no cash at closing, but you borrow them and pay interest on them for the whole term. Paying in cash keeps the new loan smaller. Switch the setting to see both. If you can afford the cash and plan to stay for years, paying them up front usually costs less overall.",
+  },
+  {
+    question: "Is a lower payment always a good reason to refinance?",
+    answer:
+      "No. A lower payment is easy to get by stretching the loan out again, for example from 20 years remaining to a fresh 30. The calculator's 'over the full terms' line shows what that does to the total. A lower payment can be the right goal if you need breathing room, as long as you know what it costs.",
+  },
+  {
+    question: "What should I count as closing costs?",
+    answer:
+      "Add the fees you will pay to get the new loan: origination or lender fees, appraisal, title and settlement charges, recording fees and any discount points. Do not include property tax or insurance that you would pay anyway. Your lender's loan estimate lists these, and the totals are worth comparing between lenders.",
+  },
+  {
+    question: "What does this calculator leave out?",
+    answer:
+      "It does not model taxes, escrow, mortgage insurance changes, a cash-out amount, prepayment penalties or a variable rate. It also assumes you make the scheduled payments and nothing extra on either loan. Use it to judge whether an offer is worth a closer look, then check the exact figures on a lender's loan estimate.",
+  },
+];
+
+Use this refinance calculator to find out whether a new loan is worth what it costs to get. Enter the loan you have now, the offer you are considering and the closing costs, and you will see the break-even point: the month when refinancing starts to put money back in your pocket. It works for mortgages and for other fixed-rate loans such as car or personal loans.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter the **balance you still owe** and your **current rate**, and how much time is **left** on the loan. The current payment is worked out from these, so check that it matches your statement.
+2. Enter the **new rate** and the **new term**. Use the term the lender is offering, not the time you have left.
+3. Add the **closing costs**, including any discount points, and choose whether you pay them in cash or add them to the loan.
+4. Set how many **years you expect to keep** the new loan. This drives the "if you keep it" figure. If you might sell or refinance again soon, use a smaller number.
+
+## How it works
+
+Both loans are run month by month as ordinary fixed-rate loans. For each month the calculator adds up what you have paid and what you still owe, for the old loan and for the new one, and subtracts the closing costs you paid in cash:
+
+```
+net benefit = (paid + owed on current loan) − (paid + owed on new loan + cash costs)
+```
+
+The **break-even point** is the first month the net benefit is zero or more. Counting the balance you still owe is what keeps the comparison honest. If you refinance into a longer loan, your payment drops and your cash flow improves, but you also owe more later, and the net benefit shows both.
+
+When the closing costs are paid in cash and your payment falls, the calculator also shows the simpler **costs ÷ monthly saving** figure. The two can differ because a lower rate cuts interest by more than it cuts the payment, since a smaller payment also pays down less principal.
+
+<ContentAd />
+
+## Worked example
+
+You owe **$300,000** at **7%** with **25 years** left, and you are offered **5.5%** for **25 years** with **$4,500** in closing costs paid in cash.
+
+- Your payment drops from **$2,120.34** to **$1,842.26**, a saving of **$278.08** a month.
+- Dividing the costs by that saving gives **16.2 months**.
+- Counting the balance you still owe, the break-even is **month 13**, because in the first month interest falls by $375 ($1,750 to $1,375) while the payment falls by $278.
+- If you keep the loan for 7 years you come out about **$26,607** ahead. Over the full 25 years the gap is about **$78,923**, with interest of **$252,679** on the new loan against **$336,101** left on the old one.
+
+Now change the offer. You owe **$250,000** at **6.5%** with **20 years** left, and a lender offers **5.75%** over a fresh **30 years**, with **$6,000** of costs added to the loan.
+
+- The payment falls from **$1,863.93** to **$1,493.95**, which is **$369.99** a month.
+- But the loan is bigger and 10 years longer. Interest rises from **$197,344** to **$281,821**.
+- There is **no break-even**, and over the full terms you finish about **$90,477** behind.
+
+A lower payment and a better deal are not the same thing, which is why the calculator reports both.
+
+## Tips and common mistakes
+
+- **Compare the same horizon.** The longer you keep the new loan, the more a lower rate pays off. If you expect to move in two or three years, test that number.
+- **Watch the term.** Restarting a 30-year clock after ten years of payments can erase the saving. Try a new term close to the time you have left.
+- **Include every fee.** A "no cost" refinance often has a higher rate instead. Enter that rate and zero costs to compare it with an offer that has costs.
+- **Check your current balance.** Use the payoff figure from your lender, not the original loan amount.
+- **Get the loan estimate in writing.** Rates and fees change by lender and by day. Treat this as a first pass, not a quote.

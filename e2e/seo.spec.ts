@@ -1,5 +1,6 @@
 import { expect, test, type APIRequestContext } from "@playwright/test";
 import { open } from "./support/open";
+import { CALCULATOR_SLUGS } from "./support/calculators";
 
 /** Internal links allowed to return a non-200 status. Empty now that every footer page exists. */
 const PENDING_PAGES: string[] = [];
@@ -23,7 +24,7 @@ test.describe("sitemap and robots", () => {
     expect(paths).toContain("/mortgage-calculator");
     expect(paths).toContain("/category/loans");
     expect(paths.some((p) => p.startsWith("/search"))).toBe(false);
-    expect(paths.length).toBe(24); // home + 5 info pages + 6 categories + 12 calculators
+    expect(paths.length).toBe(12 + CALCULATOR_SLUGS.length); // home + 5 info pages + 6 categories + calculators
     expect(new Set(paths).size).toBe(paths.length);
   });
 

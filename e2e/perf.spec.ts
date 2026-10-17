@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { open } from "./support/open";
+import { CALCULATOR_SLUGS } from "./support/calculators";
 
 /**
  * Regression guards for the performance work in docs/PERFORMANCE.md. These check the *causes* of
@@ -7,20 +8,7 @@ import { open } from "./support/open";
  * swing by several points with machine load.
  */
 
-const SLUGS = [
-  "mortgage-calculator",
-  "loan-calculator",
-  "compound-interest-calculator",
-  "simple-interest-calculator",
-  "savings-goal-calculator",
-  "retirement-calculator",
-  "car-loan-calculator",
-  "credit-card-payoff-calculator",
-  "debt-payoff-planner",
-  "income-tax-calculator",
-  "inflation-calculator",
-  "roi-calculator",
-];
+const SLUGS = CALCULATOR_SLUGS;
 
 /** A phrase that appears in exactly one calculator's UI code. */
 const MARKER: Record<string, string> = {
@@ -36,6 +24,7 @@ const MARKER: Record<string, string> = {
   "income-tax-calculator": "People who are 65 or older or blind",
   "inflation-calculator": "Annual inflation rate",
   "roi-calculator": "How long you held it",
+  "refinance-calculator": "Years you expect to keep the new loan",
 };
 
 /** Load a page and return the text of every JavaScript file it requested. */

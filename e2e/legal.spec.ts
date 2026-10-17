@@ -1,20 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { open } from "./support/open";
+import { CALCULATOR_SLUGS } from "./support/calculators";
 
-const SLUGS = [
-  "mortgage-calculator",
-  "loan-calculator",
-  "compound-interest-calculator",
-  "simple-interest-calculator",
-  "savings-goal-calculator",
-  "retirement-calculator",
-  "car-loan-calculator",
-  "credit-card-payoff-calculator",
-  "debt-payoff-planner",
-  "income-tax-calculator",
-  "inflation-calculator",
-  "roi-calculator",
-];
+const SLUGS = CALCULATOR_SLUGS;
 
 test.describe("legal and trust pages", () => {
   for (const [path, heading] of [

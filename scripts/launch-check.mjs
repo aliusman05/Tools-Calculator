@@ -392,7 +392,7 @@ if (runSource) {
     : fail("Calculators", "every calculator has tests with reference values", gaps.join("; "));
   pass(
     "Calculators",
-    "all 12 calculators tested against independently derived values",
+    "every calculator tested against independently derived values",
     "see the reference-value comments at the top of each src/lib/calculators/__tests__ file; run pnpm test",
   );
 

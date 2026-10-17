@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { open } from "./support/open";
+import { CALCULATOR_SLUGS } from "./support/calculators";
 
 /**
  * The default build has ads switched off (no ADS_ENABLED flag). Nothing about advertising may
@@ -7,20 +8,7 @@ import { open } from "./support/open";
  * e2e/ads/ads.spec.ts (`pnpm e2e:ads`).
  */
 
-const SLUGS = [
-  "mortgage-calculator",
-  "loan-calculator",
-  "compound-interest-calculator",
-  "simple-interest-calculator",
-  "savings-goal-calculator",
-  "retirement-calculator",
-  "car-loan-calculator",
-  "credit-card-payoff-calculator",
-  "debt-payoff-planner",
-  "income-tax-calculator",
-  "inflation-calculator",
-  "roi-calculator",
-];
+const SLUGS = CALCULATOR_SLUGS;
 
 // The stored choice for these tests is "Reject all". Visitors who accepted advertising are covered below.
 test.describe("with ads switched off", () => {

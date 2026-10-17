@@ -48,6 +48,9 @@ export const calculatorComponents = {
     () => import("@/components/calculators/inflation/InflationCalculator"),
   ),
   "roi-calculator": dynamic(() => import("@/components/calculators/roi/RoiCalculator")),
+  "refinance-calculator": dynamic(
+    () => import("@/components/calculators/refinance/RefinanceCalculator"),
+  ),
 } satisfies Record<string, ComponentType>;
 
 export function CalculatorLoader({ slug }: { slug: string }) {
