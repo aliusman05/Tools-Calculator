@@ -289,11 +289,21 @@ export default function RentVsBuyCalculator() {
     results = (
       <>
         <ResultCard
-          label={`After ${years} ${years === 1 ? "year" : "years"}, ${buyingAhead ? "buying" : "renting"} comes out ahead by`}
+          label={`Under these assumptions, after ${years} ${years === 1 ? "year" : "years"}, ${buyingAhead ? "buying" : "renting"} comes out ahead by`}
           value={money0(Math.abs(r.advantage))}
           note="A difference in net worth. It depends on every assumption on the left."
           secondary={secondary}
         />
+
+        <Card className="text-muted flex flex-col gap-2 text-sm" role="note">
+          <p className="text-foreground font-semibold">What this leaves out</p>
+          <p>
+            Income tax effects (mortgage interest and property tax deductions, tax on a home sale,
+            tax on investment gains), mortgage insurance, refinancing, moving costs, changes in your
+            income or family, and the value many people place on owning or on flexibility. Rates and
+            prices stay the same for the whole comparison.
+          </p>
+        </Card>
 
         <Card className="flex flex-col gap-3">
           <h2 className="text-lg font-semibold">How sensitive is this answer?</h2>
@@ -341,16 +351,6 @@ export default function RentVsBuyCalculator() {
           xLabel="Years"
           series={[{ key: "advantage", label: "Buyer minus renter", color: "var(--accent)" }]}
         />
-
-        <Card className="text-muted flex flex-col gap-2 text-sm" role="note">
-          <p className="text-foreground font-semibold">What this leaves out</p>
-          <p>
-            Income tax effects (mortgage interest and property tax deductions, tax on a home sale,
-            tax on investment gains), mortgage insurance, refinancing, moving costs, changes in your
-            income or family, and the value many people place on owning or on flexibility. Rates and
-            prices stay the same for the whole comparison.
-          </p>
-        </Card>
       </>
     );
   }

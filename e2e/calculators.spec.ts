@@ -463,7 +463,9 @@ test.describe("rent vs buy calculator", () => {
   test("shows the verified default scenario", async ({ page }) => {
     await open(page, "/rent-vs-buy-calculator");
     const r = results(page);
-    await expect(r.getByText("renting comes out ahead by")).toBeVisible();
+    await expect(
+      r.getByText("Under these assumptions, after 7 years, renting comes out ahead by"),
+    ).toBeVisible();
     await expect(r.getByText("$7,783").first()).toBeVisible();
     await expect(r.getByText("$173,101")).toBeVisible();
     await expect(r.getByText("$180,884")).toBeVisible();
@@ -535,6 +537,10 @@ test.describe("rent vs buy calculator", () => {
   }) => {
     await open(page, "/rent-vs-buy-calculator");
     await expect(page.getByText("What this leaves out")).toBeVisible();
+    // The limitations sit right under the result, above the what-if table and the chart.
+    const note = await page.getByText("What this leaves out").boundingBox();
+    const table = await page.getByText("How sensitive is this answer?").boundingBox();
+    expect(note!.y).toBeLessThan(table!.y);
     await page.locator("#rvb-price").fill("");
     await expect(page.locator("#rvb-price-error")).toContainText("Enter a home price");
     expect(await page.locator("body").innerText()).not.toMatch(/NaN|undefined|Infinity/);
