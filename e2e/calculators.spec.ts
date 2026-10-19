@@ -456,6 +456,96 @@ test.describe("student loan calculator", () => {
   });
 });
 
+test.describe("take-home pay calculator", () => {
+  const results = (page: import("@playwright/test").Page) =>
+    page.getByRole("region", { name: /results$/i });
+
+  test("shows the verified default scenario", async ({ page }) => {
+    await open(page, "/take-home-pay-calculator");
+    const r = results(page);
+    await expect(r.getByText("$2,150.92").first()).toBeVisible();
+    await expect(r.getByText("$55,923.85").first()).toBeVisible();
+    await expect(r.getByText("$5,987.00")).toBeVisible();
+    await expect(r.getByText("$4,408.20")).toBeVisible();
+    await expect(r.getByText("$1,030.95")).toBeVisible();
+    await expect(r.getByText("An estimate, not your paycheck")).toBeVisible();
+  });
+
+  test("a high earner sees the capped 401(k), Social Security stop and Additional Medicare", async ({
+    page,
+  }) => {
+    await open(page, "/take-home-pay-calculator");
+    await page.locator("#thp-gross").fill("250000");
+    await page.locator("#thp-frequency").selectOption("monthly");
+    await page.locator("#thp-401k").fill("10");
+    await page.locator("#thp-benefits").fill("0");
+    const r = results(page);
+    await expect(r.getByText("$13,876.83").first()).toBeVisible();
+    await expect(r.getByText("Paycheck 9")).toBeVisible();
+    await expect(r.getByText(/Average take-home pay per paycheck over the year/)).toBeVisible();
+    await expect(r.getByText("$13,538.42")).toBeVisible();
+    await expect(r.getByText("$14,830.08")).toBeVisible();
+    await expect(r.getByText("Paychecks 1 to 8")).toBeVisible();
+    await expect(r.getByText("Paychecks 10 to 12")).toBeVisible();
+    await expect(
+      r.getByText(/employers also begin withholding the 0.9% Additional Medicare tax/i),
+    ).toBeVisible();
+    await expect(r.getByText("$450.00").first()).toBeVisible();
+    await expect(r.getByText("$43,464.00").first()).toBeVisible();
+    await expect(r.getByText(/reduced to the limit/)).toBeVisible();
+  });
+
+  test("married filing jointly uses the joint thresholds", async ({ page }) => {
+    await open(page, "/take-home-pay-calculator");
+    await page.locator("#thp-gross").fill("320000");
+    await page.locator("#thp-frequency").selectOption("semimonthly");
+    await page.locator("#thp-status").selectOption("mfj");
+    await page.locator("#thp-401k").fill("0");
+    await page.locator("#thp-benefits").fill("0");
+    const r = results(page);
+    await expect(r.getByText("$10,375.96").first()).toBeVisible();
+    await expect(r.getByText("$54,268.00").first()).toBeVisible();
+    await expect(r.getByText("$630.00").first()).toBeVisible();
+  });
+
+  test("a Roth-style after-tax deduction lowers pay but not taxes", async ({ page }) => {
+    await open(page, "/take-home-pay-calculator");
+    await page.locator("#thp-gross").fill("90000");
+    await page.locator("#thp-401k").fill("0");
+    await page.locator("#thp-benefits").fill("0");
+    await page.locator("#thp-after-tax").fill("100");
+    const r = results(page);
+    await expect(r.getByText("$10,970.00").first()).toBeVisible();
+    await expect(r.getByText("$69,545.00").first()).toBeVisible();
+  });
+
+  test("every input is labelled, and states what it leaves out", async ({ page }) => {
+    await open(page, "/take-home-pay-calculator");
+    for (const label of [
+      "Yearly pay before anything is taken out",
+      "How often you are paid",
+      "Tax filing status",
+      "Traditional 401(k) contribution",
+      "Age, for the 401(k) limit",
+      "Health insurance, HSA and FSA per paycheck",
+      "Roth 401(k), union dues and similar per paycheck",
+    ]) {
+      await expect(page.getByLabel(label, { exact: true }), label).toBeVisible();
+    }
+    await expect(page.getByText("State and local income tax. Not included")).toBeVisible();
+  });
+
+  test("an empty pay or deductions larger than pay shows a message, not NaN", async ({ page }) => {
+    await open(page, "/take-home-pay-calculator");
+    await page.locator("#thp-gross").fill("");
+    await expect(page.locator("#thp-gross-error")).toContainText("Enter a yearly pay");
+    await page.locator("#thp-gross").fill("20000");
+    await page.locator("#thp-after-tax").fill("2000");
+    await expect(page.locator("#thp-after-tax-error")).toContainText("more than your pay");
+    expect(await page.locator("body").innerText()).not.toMatch(/NaN|undefined|Infinity/);
+  });
+});
+
 test.describe("rent vs buy calculator", () => {
   const results = (page: import("@playwright/test").Page) =>
     page.getByRole("region", { name: /results$/i });

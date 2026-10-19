@@ -37,7 +37,10 @@ export default defineConfig({
   webServer: {
     command: `pnpm exec next build && pnpm exec next start -p ${port}`,
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    // Never reuse a server already on this port: this suite must test its own ads-enabled build, and a
+    // leftover server from an earlier run would silently test something else (or die mid-run).
+    // If the port is busy, Playwright now stops with a clear error instead.
+    reuseExistingServer: false,
     timeout: 300_000,
     env: adsEnv,
   },

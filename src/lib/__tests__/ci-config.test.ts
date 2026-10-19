@@ -216,9 +216,11 @@ describe("repository settings the workflow relies on", () => {
   });
 
   it("the CI runner does not reuse a stale server: Playwright only reuses one outside CI", () => {
-    for (const file of ["playwright.config.ts", "playwright.ads.config.ts"]) {
-      expect(read(file), file).toMatch(/reuseExistingServer: !process\.env\.CI/);
-    }
+    expect(read("playwright.config.ts")).toMatch(/reuseExistingServer: !process\.env\.CI/);
+  });
+
+  it("the ads suite never reuses a server: it must test its own ads-enabled build", () => {
+    expect(read("playwright.ads.config.ts")).toMatch(/reuseExistingServer: false/);
   });
 
   it("the single `check` script runs the same gates CI does", () => {

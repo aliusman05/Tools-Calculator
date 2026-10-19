@@ -419,6 +419,32 @@ if (runSource) {
         "Glance over src/lib/data/tax-us-2026.ts against the IRS PDF, then set ownerVerified to true.",
       );
 
+  // Payroll data (take-home pay calculator)
+  const payroll = read("src", "lib", "data", "payroll-us-2026.ts");
+  const payrollChecked = payroll.match(/lastChecked:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
+  const payrollAgeDays = payrollChecked
+    ? (Date.now() - new Date(payrollChecked).getTime()) / 86_400_000
+    : Infinity;
+  if (!payrollChecked || payrollAgeDays > 400)
+    fail(
+      "Data",
+      "payroll tax and 401(k) data is dated and recent",
+      `lastChecked ${payrollChecked}`,
+    );
+  else
+    pass(
+      "Data",
+      "payroll tax and 401(k) data is dated and sourced",
+      `2026 figures checked ${payrollChecked} against SSA and IRS pages (listed in payroll-us-2026.ts)`,
+    );
+  /ownerVerified:\s*true/.test(payroll)
+    ? pass("Data", "owner has signed off the payroll tax and 401(k) figures")
+    : warn(
+        "Data",
+        "you have signed off the payroll tax and 401(k) figures",
+        "Check the Social Security wage base, Medicare thresholds and 401(k) limits in src/lib/data/payroll-us-2026.ts against the sources listed there, then set ownerVerified to true.",
+      );
+
   // Placeholders
   const site = read("src", "lib", "site-config.ts");
   const placeholder = [];

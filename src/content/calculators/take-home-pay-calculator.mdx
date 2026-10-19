@@ -1,0 +1,99 @@
+export const faqs = [
+  {
+    question: "Why is my real paycheck different from this estimate?",
+    answer:
+      "This calculator works out the federal tax for the year and spreads it evenly over your paychecks. Your employer instead withholds tax using the Form W-4 you filled in, which can be more or less than the tax you will owe. State and local taxes, tax credits, a second job, bonuses and employer-specific deductions also change the number. Treat the result as a close estimate, then compare it with a recent pay stub.",
+  },
+  {
+    question: "Does a 401(k) reduce Social Security and Medicare tax?",
+    answer:
+      "A traditional 401(k) lowers the pay that income tax is figured on, but not the pay that Social Security and Medicare tax apply to. Health insurance, HSA and FSA amounts taken through your employer's payroll before tax lower both. That is why the calculator has separate boxes for them. A Roth 401(k) does not lower any tax now, so enter it as an after-tax deduction.",
+  },
+  {
+    question: "Why do my paychecks get bigger late in the year?",
+    answer:
+      "Social Security tax stops once your pay for the year passes a yearly limit, which is $184,500 for 2026. If your pay is above that, the calculator shows which paycheck it stops in and what the paychecks before and after look like. The headline number is then the average over the year, and the paychecks after the stop are larger because that 6.2% is no longer taken out. Income tax and Medicare tax continue all year.",
+  },
+  {
+    question: "What is the Additional Medicare tax?",
+    answer:
+      "It is an extra 0.9% on pay above a threshold: $200,000 for single filers and heads of household, $250,000 for married couples filing jointly, and $125,000 for married people filing separately. Employers begin withholding it once your pay passes $200,000 whatever your filing status, so a married couple's paychecks can differ from the tax they finally owe. The calculator uses the threshold for your filing status.",
+  },
+  {
+    question: "Should I choose a traditional or a Roth 401(k) in this calculator?",
+    answer:
+      "Use the traditional 401(k) box for contributions that come out before tax. They shrink your paycheck by less than the contribution, because they also lower your income tax. For a Roth 401(k), use the after-tax box, which lowers your paycheck by the full amount. Which one is better for you depends on your tax rate now and in retirement, and this calculator only shows the effect on today's paycheck.",
+  },
+  {
+    question: "Does this include state income tax?",
+    answer:
+      "No. It covers federal income tax, Social Security and Medicare only. State and local taxes vary widely, and some states have none, so your real take-home pay will usually be lower than this estimate by your state's share. We may add states one at a time later, each checked against its own official source.",
+  },
+];
+
+Use this take-home pay calculator to see how much of your salary reaches your bank account. Enter your yearly pay and how often you are paid, then add what comes out before tax, such as a traditional 401(k) and health insurance, and what comes out after tax. You will see your estimated paycheck, the federal income tax, Social Security and Medicare you pay, and where every dollar of pay goes. It covers US federal taxes for one salaried job and does not include state taxes.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter your **yearly pay** before anything is taken out, and choose how often you are **paid**.
+2. Choose your **filing status**. It sets your standard deduction, your tax brackets and the Additional Medicare threshold.
+3. Enter the **percent of your pay** that goes to a traditional 401(k), and pick your age group, which sets the yearly limit on what you may contribute.
+4. Enter the **health insurance, HSA and FSA** amount taken from each paycheck before tax.
+5. Enter anything taken **after tax** each paycheck, such as a Roth 401(k) or union dues.
+
+## How it works
+
+Each paycheck is built from the same steps:
+
+- **Pre-tax benefits** such as health insurance, HSA and FSA come out first, when they are taken through your employer's payroll. They lower the pay used for income tax and for Social Security and Medicare tax. (An HSA you fund yourself, outside payroll, does not lower Social Security or Medicare tax.)
+- **Traditional 401(k)** comes out next. It lowers the pay that income tax is figured on, but Social Security and Medicare tax still apply to it. The contribution is capped at the yearly limit for your age group.
+- **Federal income tax** is the 2026 tax on what is left after your standard deduction, using the same brackets as the [income tax estimator](/income-tax-calculator).
+- **Social Security tax** is 6.2% of your pay, up to a yearly limit.
+- **Medicare tax** is 1.45% of your pay with no limit, plus 0.9% more on pay above a threshold that depends on your filing status.
+- **After-tax deductions** come out last and do not change your taxes.
+
+The headline is the year's take-home pay divided evenly across your paychecks, so it is an average. If your pay passes the Social Security limit, the calculator also shows what the early and later paychecks look like, because they are not all the same.
+
+### Figures used for 2026
+
+These come from official pages and are kept in one dated file, which was checked on 2026-10-19:
+
+- Social Security: 6.2% on pay up to **$184,500** ([Social Security Administration](https://www.ssa.gov/oact/cola/cbb.html), [IRS Topic 751](https://www.irs.gov/taxtopics/tc751)).
+- Medicare: 1.45% on all pay, plus **0.9%** on pay above $200,000 (single or head of household), $250,000 (married filing jointly) or $125,000 (married filing separately) ([IRS Topic 560](https://www.irs.gov/taxtopics/tc560)).
+- 401(k) limit: **$24,500**, plus **$8,000** from age 50, or **$11,250** instead at ages 60 to 63 ([IRS announcement](https://www.irs.gov/newsroom/401k-limit-increases-to-24500-for-2026-ira-limit-increases-to-7500)).
+- Income tax brackets and standard deductions: [IRS Revenue Procedure 2025-32](https://www.irs.gov/irb/2025-45_IRB).
+
+Limits change every year, and new ones are normally announced in the autumn.
+
+<ContentAd />
+
+## Worked example
+
+You are single, earn **$75,000** a year, are paid every two weeks (26 paychecks), put **5%** into a traditional 401(k), and pay **$150** a paycheck for health insurance before tax.
+
+- Health insurance comes to **$3,900** a year, so your pay for payroll tax is **$71,100**.
+- Your 401(k) is **$3,750**. After the **$16,100** standard deduction, your taxable income is **$51,250**.
+- Federal income tax is **$5,987.00**: $5,800 on the first $50,400, plus 22% of the remaining $850.
+- Social Security is **$4,408.20** and Medicare is **$1,030.95**.
+- Your take-home pay is **$55,923.85** a year, which is **$2,150.92** a paycheck from a gross of $2,884.62.
+
+Now suppose you are single, earn **$250,000**, are paid monthly and want to put 10% into a 401(k). That would be $25,000, but the limit is **$24,500**, so the calculator caps it. Your income tax is **$43,464.00**, Social Security stops after paycheck **9** because your pay passes the yearly limit, and you pay **$450.00** of Additional Medicare tax. Your take-home pay averages **$13,876.83** a month, but the paychecks are not equal: the first eight are about **$13,538.42**, and the last three, after Social Security tax has stopped, are about **$14,830.08**. Those last three are a little overstated: employers also start withholding the 0.9% Additional Medicare tax once your pay for the year passes $200,000, which happens in paycheck 10 here. That tax comes out of paycheck 10 and the two after it instead of being spread across the year, so the last two paychecks are about **$150** smaller than shown.
+
+## What this calculator does not cover
+
+- **State and local income tax.** Not included. Your real take-home pay will usually be lower.
+- **Tax credits, such as the child tax credit.** Not included.
+- **A second job, bonuses or other income.** Only one steady salary is modelled.
+- **Your actual withholding.** Your employer follows your Form W-4, which can withhold more or less than the tax you owe.
+- **Itemized deductions, the extra deduction for age 65 or blind, and other adjustments.** The standard deduction is used.
+- **Plan rules for catch-up contributions.** Some plans require higher earners' catch-up amounts to be Roth, which do not lower income tax. This calculator treats every contribution as pre-tax.
+
+## Tips and common mistakes
+
+- **Compare with a pay stub.** Use one stub to check the benefit and deduction amounts, then adjust the boxes until the gross and deductions match.
+- **Enter benefits per paycheck, not per month**, unless you are paid monthly.
+- **Check your plan's contribution rules.** A percent entered above the yearly limit is reduced to it.
+- **Try a raise.** Change your yearly pay to see how much of an extra $5,000 you keep after tax.
+- **Check your withholding.** If your refund or bill is large each spring, review your W-4 with your employer or the IRS withholding estimator.

@@ -72,6 +72,9 @@ Details in [ADS.md](ADS.md). Ads are off until you do the following.
 
 - [ ] Replace the "FinCalc" placeholder brand in `src/lib/site-config.ts`.
 - [ ] Set `NEXT_PUBLIC_SITE_URL` to the production domain at build time.
+- [ ] Sign off the 2026 payroll figures in `src/lib/data/payroll-us-2026.ts` (Social Security wage base $184,500,
+      Medicare thresholds, 401(k) limits) against the SSA and IRS pages listed in that file, then set `ownerVerified: true`.
+      I read each figure on its official page on 2026-10-19; the sign-off is yours.
 - [ ] Sign off the 2026 tax figures in `src/lib/data/tax-us-2026.ts` and set `ownerVerified: true`.
       They were compared line by line with IRS Rev. Proc. 2025-32 on 2026-10-17 and the tests check
       the engine against the IRS published base-tax amounts, but the sign-off is yours.

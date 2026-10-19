@@ -128,13 +128,14 @@ export function marginalRate(taxableIncome: number, brackets: readonly Bracket[]
   return rate;
 }
 
-export function calculateIncomeTax(
+/**
+ * The estimate for input that has ALREADY passed `validateIncomeTax`. Other calculators that build their
+ * input from validated numbers call this directly; everything else should use `calculateIncomeTax`.
+ */
+export function computeIncomeTax(
   input: IncomeTaxInput,
   data: TaxYearData = CURRENT_TAX_YEAR,
-): IncomeTaxOutcome {
-  const errors = validateIncomeTax(input);
-  if (Object.keys(errors).length > 0) return { ok: false, errors };
-
+): IncomeTaxResult {
   const agi = input.grossIncome - input.adjustments;
   const extraPerPerson =
     input.status === "single" || input.status === "hoh"
@@ -152,20 +153,26 @@ export function calculateIncomeTax(
   const totalTax = taxBeforeCredits - creditsApplied;
 
   return {
-    ok: true,
-    result: {
-      year: data.year,
-      adjustedGrossIncome: agi,
-      deduction,
-      deductionKind: useItemized ? "itemized" : "standard",
-      taxableIncome,
-      taxBeforeCredits,
-      creditsApplied,
-      totalTax,
-      effectiveRatePct: input.grossIncome > 0 ? (totalTax / input.grossIncome) * 100 : 0,
-      marginalRatePct: marginalRate(taxableIncome, brackets),
-      refundOrOwed: input.withheld - totalTax,
-      breakdown,
-    },
+    year: data.year,
+    adjustedGrossIncome: agi,
+    deduction,
+    deductionKind: useItemized ? "itemized" : "standard",
+    taxableIncome,
+    taxBeforeCredits,
+    creditsApplied,
+    totalTax,
+    effectiveRatePct: input.grossIncome > 0 ? (totalTax / input.grossIncome) * 100 : 0,
+    marginalRatePct: marginalRate(taxableIncome, brackets),
+    refundOrOwed: input.withheld - totalTax,
+    breakdown,
   };
+}
+
+export function calculateIncomeTax(
+  input: IncomeTaxInput,
+  data: TaxYearData = CURRENT_TAX_YEAR,
+): IncomeTaxOutcome {
+  const errors = validateIncomeTax(input);
+  if (Object.keys(errors).length > 0) return { ok: false, errors };
+  return { ok: true, result: computeIncomeTax(input, data) };
 }

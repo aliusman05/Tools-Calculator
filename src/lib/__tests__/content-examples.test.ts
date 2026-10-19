@@ -4,6 +4,8 @@ import { describe, expect, it } from "vitest";
 import { calculateRefinance } from "@/lib/calculators/refinance";
 import { calculateRentVsBuy } from "@/lib/calculators/rent-vs-buy";
 import { calculateStudentLoan } from "@/lib/calculators/student-loan";
+import { calculateTakeHome } from "@/lib/calculators/take-home-pay";
+import { payrollUs2026 } from "@/lib/data/payroll-us-2026";
 import { formatCurrency, formatDuration } from "@/lib/format";
 
 /**
@@ -191,5 +193,92 @@ describe("rent vs buy page examples match the calculator", () => {
 
   it("one extra point of yearly growth is worth 'tens of thousands' on this home", () => {
     expect(run({ appreciationPct: 4 }).advantage - run({}).advantage).toBeGreaterThan(10_000);
+  });
+});
+
+describe("take-home pay page examples match the calculator", () => {
+  const text = page("take-home-pay-calculator");
+  const run = (overrides: Record<string, unknown>) => {
+    const out = calculateTakeHome({
+      annualGross: 75_000,
+      frequency: "biweekly",
+      status: "single",
+      retirementPct: 5,
+      ageGroup: "under50",
+      preTaxBenefitsPerPaycheck: 150,
+      afterTaxDeductionsPerPaycheck: 0,
+      ...overrides,
+    });
+    if (!out.ok) throw new Error(JSON.stringify(out.errors));
+    return out.result;
+  };
+
+  it("the salaried example", () => {
+    const r = run({});
+    for (const figure of [
+      usd(r.preTaxBenefits.annual, 0),
+      usd(r.payrollTaxWages, 0),
+      usd(r.retirement.annual, 0),
+      usd(r.federalIncomeTax.annual),
+      usd(r.socialSecurity.annual),
+      usd(r.medicare.annual),
+      usd(r.takeHome.annual),
+      usd(r.takeHome.perPaycheck),
+      usd(r.gross.perPaycheck),
+    ]) {
+      expect(text, figure).toContain(figure);
+    }
+    expect(text).toContain("**$51,250**"); // taxable income quoted in the example
+    expect(r.federalIncomeTax.annual).toBeCloseTo(5_800 + 0.22 * 850, 9);
+  });
+
+  it("the high earner example", () => {
+    const r = run({
+      annualGross: 250_000,
+      frequency: "monthly",
+      retirementPct: 10,
+      preTaxBenefitsPerPaycheck: 0,
+    });
+    expect(r.retirement.annual).toBe(24_500);
+    for (const figure of [
+      usd(r.federalIncomeTax.annual),
+      usd(r.additionalMedicare.annual),
+      usd(r.takeHome.perPaycheck),
+    ]) {
+      expect(text, figure).toContain(figure);
+    }
+    expect(text).toContain(`paycheck **${r.socialSecurityStopsAtPaycheck}**`);
+    expect(text).toContain(usd(r.earlyPaycheckTakeHome!));
+    expect(text).toContain(usd(r.latePaycheckTakeHome!));
+  });
+
+  it("the Additional Medicare withholding timing quoted for the high earner", () => {
+    // Independent arithmetic: monthly pay 250,000 / 12; employers withhold 0.9% only on pay above
+    // 200,000 for the year, from the paycheck where the running total passes it.
+    const monthly = 250_000 / 12;
+    const withheld = [10, 11, 12].map(
+      (n) => 0.009 * (Math.min(n * monthly, 250_000) - Math.max(200_000, (n - 1) * monthly)),
+    );
+    expect(Math.floor(200_000 / monthly) + 1).toBe(10); // pay passes 200,000 in paycheck 10
+    expect(withheld[0]).toBeCloseTo(75, 9);
+    expect(withheld[1]).toBeCloseTo(187.5, 9);
+    expect(withheld[2]).toBeCloseTo(187.5, 9);
+    expect(withheld.reduce((a, b) => a + b, 0)).toBeCloseTo(450, 9);
+    // The calculator's late paycheck already includes one twelfth of the 450; the real last two are smaller.
+    expect(187.5 - 450 / 12).toBeCloseTo(150, 9);
+    expect(text).toContain("paycheck 10");
+    expect(text).toContain("**$150**");
+  });
+
+  it("the 2026 figures quoted on the page are the ones in the data file", () => {
+    const d = payrollUs2026;
+    expect(text).toContain(usd(d.socialSecurity.wageBase, 0));
+    expect(text).toContain(usd(d.retirement401k.deferralLimit, 0));
+    expect(text).toContain(usd(d.retirement401k.catchUp50, 0));
+    expect(text).toContain(usd(d.retirement401k.catchUp60to63, 0));
+    expect(text).toContain(usd(d.medicare.additional.threshold.single, 0));
+    expect(text).toContain(usd(d.medicare.additional.threshold.mfj, 0));
+    expect(text).toContain(usd(d.medicare.additional.threshold.mfs, 0));
+    expect(text).toContain(d.lastChecked);
   });
 });

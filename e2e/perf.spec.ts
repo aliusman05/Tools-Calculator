@@ -27,6 +27,7 @@ const MARKER: Record<string, string> = {
   "refinance-calculator": "Years you expect to keep the new loan",
   "student-loan-calculator": "Paid with payment number",
   "rent-vs-buy-calculator": "HOA and other monthly costs",
+  "take-home-pay-calculator": "Roth 401(k), union dues and similar per paycheck",
 };
 
 /** Load a page and return the text of every JavaScript file it requested. */

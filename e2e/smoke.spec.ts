@@ -239,6 +239,7 @@ test.describe("answers are rendered on the server", () => {
     "refinance-calculator": "1 year 1 month",
     "student-loan-calculator": "$379.84",
     "rent-vs-buy-calculator": "$7,783",
+    "take-home-pay-calculator": "$2,150.92",
   };
 
   for (const slug of CALCULATORS) {

@@ -3,6 +3,7 @@ import { taxUs2026, type FilingStatus } from "@/lib/data/tax-us-2026";
 import {
   applyBrackets,
   calculateIncomeTax,
+  computeIncomeTax,
   marginalRate,
   validateIncomeTax,
   type IncomeTaxInput,
@@ -32,6 +33,24 @@ function run(overrides: Partial<IncomeTaxInput> = {}) {
   if (!out.ok) throw new Error(JSON.stringify(out.errors));
   return out.result;
 }
+
+describe("computeIncomeTax (input already validated)", () => {
+  it("gives the same result as calculateIncomeTax for valid input", () => {
+    const input = {
+      status: "single" as const,
+      grossIncome: 80_000,
+      adjustments: 5_000,
+      deductionType: "standard" as const,
+      itemizedDeductions: 0,
+      age65OrBlindCount: 0,
+      credits: 0,
+      withheld: 0,
+    };
+    const checked = calculateIncomeTax(input);
+    if (!checked.ok) throw new Error("expected valid input");
+    expect(computeIncomeTax(input)).toEqual(checked.result);
+  });
+});
 
 describe("tax data file", () => {
   const statuses = Object.keys(taxUs2026.brackets) as FilingStatus[];
