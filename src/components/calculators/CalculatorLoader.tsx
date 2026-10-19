@@ -48,6 +48,9 @@ export const calculatorComponents = {
     () => import("@/components/calculators/inflation/InflationCalculator"),
   ),
   "roi-calculator": dynamic(() => import("@/components/calculators/roi/RoiCalculator")),
+  "rent-vs-buy-calculator": dynamic(
+    () => import("@/components/calculators/rent-vs-buy/RentVsBuyCalculator"),
+  ),
   "student-loan-calculator": dynamic(
     () => import("@/components/calculators/student-loan/StudentLoanCalculator"),
   ),

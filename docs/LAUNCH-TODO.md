@@ -78,4 +78,7 @@ Details in [ADS.md](ADS.md). Ads are off until you do the following.
 - [ ] Test on a real iPhone and a real Android phone (emulation is covered by `pnpm e2e:browsers`).
 - [ ] Install a Google-certified consent platform before serving ads to the EEA, UK or Switzerland.
 - [ ] Run the live-site check on production: `pnpm launch-check --base https://your-domain --site-url https://your-domain --no-source`.
+- [ ] Re-measure mobile Lighthouse on the deployed site with PageSpeed Insights (the local numbers from 2026-10-19
+      were taken on a loaded machine; see `docs/PERFORMANCE.md`), then re-record `docs/perf/final-lighthouse-mobile.json`
+      with `pnpm perf` on a quiet computer so `pnpm launch-check` reflects it.
 - [ ] Run Google's Rich Results Test on the deployed site.

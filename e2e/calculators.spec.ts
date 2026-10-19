@@ -456,6 +456,91 @@ test.describe("student loan calculator", () => {
   });
 });
 
+test.describe("rent vs buy calculator", () => {
+  const results = (page: import("@playwright/test").Page) =>
+    page.getByRole("region", { name: /results$/i });
+
+  test("shows the verified default scenario", async ({ page }) => {
+    await open(page, "/rent-vs-buy-calculator");
+    const r = results(page);
+    await expect(r.getByText("renting comes out ahead by")).toBeVisible();
+    await expect(r.getByText("$7,783").first()).toBeVisible();
+    await expect(r.getByText("$173,101")).toBeVisible();
+    await expect(r.getByText("$180,884")).toBeVisible();
+    await expect(r.getByText("$92,000")).toBeVisible();
+    await expect(r.getByText("8 years 3 months")).toBeVisible();
+  });
+
+  test("every assumption is an editable, labelled field", async ({ page }) => {
+    await open(page, "/rent-vs-buy-calculator");
+    for (const label of [
+      "Home price",
+      "Down payment",
+      "Mortgage rate",
+      "Mortgage term",
+      "Closing and buying costs",
+      "Property tax",
+      "Homeowners insurance per year",
+      "Maintenance and repairs",
+      "HOA and other monthly costs",
+      "Selling costs",
+      "Monthly rent",
+      "Rent increase per year",
+      "Renters insurance per year",
+      "How long you compare",
+      "Home value change per year",
+      "Investment return per year",
+      "Insurance and fixed costs rise per year",
+    ]) {
+      await expect(page.getByLabel(label, { exact: true }), label).toBeVisible();
+    }
+  });
+
+  test("a higher rent and a longer stay flips the answer to buying", async ({ page }) => {
+    await open(page, "/rent-vs-buy-calculator");
+    await page.locator("#rvb-rent").fill("2800");
+    await page.locator("#rvb-rent-growth").fill("5");
+    await page.locator("#rvb-years").fill("15");
+    const r = results(page);
+    await expect(r.getByText("buying comes out ahead by")).toBeVisible();
+    await expect(r.getByText("$386,885").first()).toBeVisible();
+    await expect(r.getByText("3 years 1 month")).toBeVisible();
+  });
+
+  test("low appreciation and a high rate never break even", async ({ page }) => {
+    await open(page, "/rent-vs-buy-calculator");
+    await page.locator("#rvb-appreciation").fill("1");
+    await page.locator("#rvb-rate").fill("7.5");
+    await page.locator("#rvb-rent").fill("1800");
+    await page.locator("#rvb-years").fill("5");
+    const r = results(page);
+    await expect(r.getByText("$103,648").first()).toBeVisible();
+    await expect(r.getByText("Not within 30 years")).toBeVisible();
+  });
+
+  test("the what-if table shows nine outcomes and its middle cell matches the result", async ({
+    page,
+  }) => {
+    await open(page, "/rent-vs-buy-calculator");
+    const table = page.getByRole("region", { name: /Net worth difference by home value change/ });
+    await expect(table.locator("tbody tr")).toHaveCount(3);
+    await expect(table.locator("tbody td")).toHaveCount(9);
+    await expect(table.locator("tbody tr").nth(1).locator("td").nth(1)).toHaveText(
+      "Renting +$7,783",
+    );
+  });
+
+  test("states what it leaves out, and an empty price shows a message instead of NaN", async ({
+    page,
+  }) => {
+    await open(page, "/rent-vs-buy-calculator");
+    await expect(page.getByText("What this leaves out")).toBeVisible();
+    await page.locator("#rvb-price").fill("");
+    await expect(page.locator("#rvb-price-error")).toContainText("Enter a home price");
+    expect(await page.locator("body").innerText()).not.toMatch(/NaN|undefined|Infinity/);
+  });
+});
+
 test("home page lists the new calculators and search finds them", async ({ page }) => {
   await open(page, "/");
   await page.waitForLoadState("networkidle");

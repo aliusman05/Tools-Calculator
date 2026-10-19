@@ -1,0 +1,93 @@
+export const faqs = [
+  {
+    question: "Is buying a home always better than renting?",
+    answer:
+      "No, and it is not always worse either. The answer depends on how long you stay, how fast prices and rents change, what a mortgage costs you, and what your savings would earn if you invested them instead. With the example numbers on this page, renting comes out slightly ahead after 7 years and buying pulls ahead later. Change the assumptions and that flips, which is the point of the table of what-ifs.",
+  },
+  {
+    question: "What does 'invest the difference' mean?",
+    answer:
+      "For a fair comparison, both choices get the same monthly budget. If owning costs more than renting in a month, the renter invests the gap. If renting costs more, the owner invests the gap. The renter also invests the down payment and buying costs that the buyer spends at closing. Counting this is what stops the comparison from ignoring the cost of tying up a large sum in a house.",
+  },
+  {
+    question: "How much does the home's price growth matter?",
+    answer:
+      "A great deal, and it is the hardest number to know. On a $400,000 home, one extra point of yearly growth is worth tens of thousands of dollars after several years. That is why the results include a table showing the outcome with growth and investment returns two points lower and higher. If your conclusion only holds at one guess, treat it as uncertain.",
+  },
+  {
+    question: "Why are maintenance and selling costs included?",
+    answer:
+      "They are real money that renters do not spend. Upkeep comes every year, and selling usually costs several percent of the price, which a short stay may not outgrow. Leaving them out makes buying look better than it is. Set them to your own estimates, or to zero if you want to see what they are worth.",
+  },
+  {
+    question: "What time period should I compare?",
+    answer:
+      "Use the number of years you realistically expect to stay in the home, not the length of the mortgage. Buying costs are paid up front and recovered slowly, so a short stay and a long stay can give opposite answers. The chart shows who is ahead in every year, so you can see how sensitive the answer is to moving earlier or later than planned.",
+  },
+  {
+    question: "Which taxes does this calculator ignore?",
+    answer:
+      "All income taxes. It does not apply the mortgage interest or property tax deductions, any tax on the gain when you sell a home, or tax on returns from investments. These can move the result in either direction depending on your situation, so check them with a tax professional or your own return before making a decision. Property tax itself is included as a cost of owning.",
+  },
+];
+
+Use this rent vs buy calculator to compare what you would end up with if you bought a home against what you would end up with if you kept renting and invested the money instead. Every assumption is a box you can change: the price, the mortgage, the cost of owning, the rent and how fast it rises, how much a home gains in value, and what your savings could earn. Then you will see who comes out ahead, when, and how much that answer depends on guesses nobody can make with certainty.
+
+<Calculator />
+
+## How to use this calculator
+
+1. Enter the **home price**, the **down payment** and the **mortgage** you would get.
+2. Fill in the yearly **owning costs**: property tax, insurance, maintenance, and anything monthly such as HOA dues or mortgage insurance.
+3. Enter the **monthly rent** you would pay for a comparable place and how much it rises each year.
+4. Set the **number of years** you expect to stay. The home is assumed to be sold at the end.
+5. Choose the **home value change** and **investment return** you want to test, then read the what-if table to see how much the answer depends on them.
+
+The numbers that are filled in are examples, not facts about your area. Replace each one with your own figure, especially the property tax rate, insurance, rent and appreciation.
+
+## How it works
+
+Buying and renting are simulated month by month with the same budget for both:
+
+- **Owner's cost** each month is the mortgage payment plus property tax, insurance, maintenance and any other monthly costs. Tax and upkeep are a percentage of the home's current value, so they grow as the home does.
+- **Renter's cost** each month is the rent plus renters insurance. Rent and insurance step up once a year.
+- **Whoever spends less invests the difference.** The renter also starts with the down payment and buying costs invested, because the buyer spends that money at closing.
+- **At the end the home is sold.** The buyer's net worth is the sale price, minus selling costs and the loan still owed, plus anything the buyer invested.
+- **The result** is the buyer's net worth minus the renter's. Positive means buying is ahead.
+
+The investment return is a yearly figure compounded monthly. It is a single steady rate, which real markets never deliver, so treat it as a planning number.
+
+<ContentAd />
+
+## Worked example
+
+You are choosing between a **$400,000 home** with **20% down** and a **6.5% 30-year mortgage**, and renting a similar home for **$2,200 a month**. Property tax is 1.1% of the value, insurance $1,500 a year, upkeep 1% of the value, buying costs 3%, selling costs 6%. Rent rises 3% a year, the home gains 3% a year, and your investments earn 5%.
+
+- You need **$92,000** in cash to buy: $80,000 down plus $12,000 of costs.
+- The mortgage payment is **$2,022.62**. With tax, insurance and upkeep, owning costs **$2,847.62** in the first month against **$2,220.00** for renting.
+- After **7 years** the home is worth **$491,950**, you still owe **$289,332**, and after selling costs the buyer's net worth is **$173,101**.
+- The renter, who invested the $92,000 and the monthly difference, has **$180,884**.
+- **Renting is ahead by $7,783.** Buying stays ahead from about **8 years 3 months** on.
+
+Change the story and the answer changes:
+
+- Raise the rent to **$2,800** growing **5% a year** and compare **15 years**: buying comes out ahead by about **$386,885**, and stays ahead from month 37.
+- Keep the first example but lower home growth to **1%**, use a **7.5%** mortgage, **$1,800** rent and **5 years**: renting is ahead by about **$103,648**, and buying does not catch up within 30 years.
+
+## What this calculator does not cover
+
+- **Income taxes.** Mortgage interest and property tax deductions, taxes on selling a home, and taxes on investment returns are not included. Whether they matter depends on your return and the rules at the time, so check them yourself or with a tax professional.
+- **Mortgage insurance.** If your down payment is small, add its monthly cost to "HOA and other monthly costs".
+- **Steady rates.** Prices, rents, mortgage rates and returns are assumed to move at one fixed pace. Real years vary a lot.
+- **Refinancing, moving and life changes.** A job move, a bigger family or a refinance would change the picture.
+- **Things money cannot measure.** Stability, freedom to move and the pleasure of owning or renting matter to many people and are not in the numbers.
+
+This calculator is for comparing scenarios, not for predicting your future. The result is only as good as the assumptions you give it.
+
+## Tips and common mistakes
+
+- **Test the assumptions that scare you.** If the result flips when home growth is 1% lower, you know how much of the answer is a bet.
+- **Use your own property tax and insurance.** They vary widely by place and are easy to look up.
+- **Count maintenance.** Many first-time buyers leave it out and then find it in the first year.
+- **Compare equal homes.** The rent should be for a place of similar size and location to the one you would buy.
+- **Think about how long you will really stay.** Plans change, and selling after a short stay usually costs more than people expect.

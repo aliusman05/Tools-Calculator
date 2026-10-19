@@ -19,6 +19,20 @@ async function sitemapPaths(request: APIRequestContext): Promise<string[]> {
   return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]!).pathname);
 }
 
+/**
+ * Next.js prefetches linked pages in the background (requests with `?_rsc=`). When the test moves on to
+ * the next page while a prefetch is still in flight, the browser cancels it, and WebKit reports that as
+ * a failed request or a "due to access control checks" page error. That is the cancellation, not a
+ * problem with the site, so exactly that combination is ignored. Any other failure, including a
+ * failed or 4xx/5xx request for a real page, is still reported.
+ */
+function isCancelledPrefetch(message: string): boolean {
+  return (
+    message.includes("_rsc=") &&
+    (message.includes("Load request cancelled") || message.includes("due to access control checks"))
+  );
+}
+
 /** Collect everything that should never happen in a healthy page. */
 function watchForProblems(page: Page) {
   const problems: string[] = [];
@@ -26,10 +40,13 @@ function watchForProblems(page: Page) {
     if (m.type() === "error" || m.type() === "warning")
       problems.push(`console.${m.type()}: ${m.text()}`);
   });
-  page.on("pageerror", (e) => problems.push(`pageerror: ${e.message}`));
-  page.on("requestfailed", (r) =>
-    problems.push(`request failed: ${r.url()} (${r.failure()?.errorText})`),
-  );
+  page.on("pageerror", (e) => {
+    if (!isCancelledPrefetch(e.message)) problems.push(`pageerror: ${e.message}`);
+  });
+  page.on("requestfailed", (r) => {
+    const message = `request failed: ${r.url()} (${r.failure()?.errorText})`;
+    if (!isCancelledPrefetch(message)) problems.push(message);
+  });
   page.on("response", (r) => {
     if (r.status() >= 400) problems.push(`HTTP ${r.status()}: ${r.url()}`);
   });
@@ -195,7 +212,8 @@ test.describe("calculators keep the address clean and restore their state from a
       await fresh.goto(link);
       await fresh.waitForLoadState("networkidle");
       await expect.poll(() => figures(fresh)).toEqual(changed);
-      expect(new URL(fresh.url()).search).toBe(""); // the values were read once, then removed
+      // The values were read once, then removed. Polled because WebKit reports a replaceState change late.
+      await expect.poll(() => new URL(fresh.url()).search).toBe("");
       await fresh.close();
     });
   }
@@ -220,6 +238,7 @@ test.describe("answers are rendered on the server", () => {
     "roi-calculator": "50.00%",
     "refinance-calculator": "1 year 1 month",
     "student-loan-calculator": "$379.84",
+    "rent-vs-buy-calculator": "$7,783",
   };
 
   for (const slug of CALCULATORS) {

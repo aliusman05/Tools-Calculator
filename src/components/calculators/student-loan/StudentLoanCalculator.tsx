@@ -70,7 +70,7 @@ export default function StudentLoanCalculator() {
           label="Interest rate"
           value={values.annualRatePct}
           onChange={(v) => setValue("annualRatePct", v)}
-          hint="If you have several loans, enter one at a time or use the weighted average."
+          hint="If you have several loans, run each one separately."
           error={errors.annualRatePct}
         />
         <div className="grid grid-cols-[1fr_auto] items-start gap-3">

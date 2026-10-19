@@ -4,14 +4,14 @@ Phase 7 results (updated in Phase 9), how to measure, and what to watch for.
 
 ## Targets and results
 
-| Target                                 | Result                                                                 |
-| -------------------------------------- | ---------------------------------------------------------------------- |
-| Lighthouse Performance 95+             | Desktop **97-100**, mobile **95-99** on all 24 pages (see below).      |
-| Lighthouse Accessibility 100           | **100** on every page, mobile and desktop.                             |
-| Lighthouse SEO 100, Best Practices 100 | **100** on every page.                                                 |
-| LCP under 2.5s                         | Mobile lab **1.6-2.2s**; desktop **0.5-0.6s**.                         |
-| CLS under 0.1                          | **0** on every page.                                                   |
-| INP under 200ms                        | Lab proxy passes (see "Responsiveness"). Field INP needs real traffic. |
+| Target                                 | Result                                                                    |
+| -------------------------------------- | ------------------------------------------------------------------------- |
+| Lighthouse Performance 95+             | Desktop **96-100** on all 27 pages. Mobile: see the Phase 10 note below.  |
+| Lighthouse Accessibility 100           | **100** on every page, mobile and desktop.                                |
+| Lighthouse SEO 100, Best Practices 100 | **100** on every page.                                                    |
+| LCP under 2.5s                         | Mobile lab **1.6-2.7s** (varies with machine load); desktop **0.5-0.7s**. |
+| CLS under 0.1                          | **0** on every page.                                                      |
+| INP under 200ms                        | Lab proxy passes (see "Responsiveness"). Field INP needs real traffic.    |
 
 "Mobile" is Lighthouse's default simulated phone: Moto G Power class CPU (4x slowdown) on slow 4G.
 Scores are the median of 3 runs (desktop: 2). The final pass in Phase 9 covered all 24 pages; the two
@@ -27,6 +27,30 @@ in `<head>` sets `data-consent="decided"` on `<html>` and a CSS rule hides the b
 nothing flashes. Result: home median **96**, LCP **1.6s**. Without JavaScript the banner is hidden (it
 could never be dismissed, and nothing optional loads anyway). Tests: `e2e/consent.spec.ts` (server-rendered
 banner) and `src/lib/__tests__/consent.test.ts`.
+
+### Phase 10 re-measurement: 27 pages on a loaded machine
+
+After the first three new calculators (refinance, student loan, rent vs buy) all 27 pages were measured
+again, mobile (3 runs) and desktop (2 runs). Pages below 95 were re-measured with 5 runs each. Results
+are in `docs/perf/final-lighthouse-*.json`.
+
+- **Desktop:** every page 96-100.
+- **Mobile:** 11 of 27 pages scored 95 or more and 16 scored lower (lowest 81). Accessibility, SEO and
+  Best Practices were 100 and CLS was 0 on every page.
+- **Why this is most likely machine noise, not a regression:** the development machine's own CPU was
+  45-75% busy with other programs during the runs. The same page swung widely between passes (`/terms`:
+  97, 92, 96, 86; single runs of one page ranged from 85 to 99), and pages whose code did not change
+  moved as much as the new ones.
+- **Evidence that nothing regressed:** an alternating A/B run, 5 runs each on the same machine at the
+  same time, of the commit before this batch against the current build: home 96 vs 98, `/terms` 92 vs
+  96, mortgage calculator 94 vs 95, ROI calculator 96 vs 96, page weight within 0-3 KB. The current
+  build matched or beat the old one on every page tested. The new calculator pages weigh 207-209 KB,
+  the same as existing ones.
+- **What this does not show:** that every mobile page reaches 95 under quiet conditions. The last clean
+  measurement (24 pages, before this batch) was 95-99; this batch has not been shown to reach it. The
+  numbers that matter are the ones on the deployed site: run PageSpeed Insights there (see "Measurement
+  noise is large" below) and re-record. Until then `pnpm launch-check` reports the saved mobile file as
+  below target, which is accurate for what was recorded.
 
 ### Before and after (mobile, median of 3 runs)
 
@@ -117,8 +141,15 @@ to be better than the lab number on a CDN and INP to need watching on low-end ph
   compressed;
 - every calculator loads with a layout shift under 0.02 on desktop and mobile, with and without the
   cookie banner;
-- typing into a calculator on a 4x slower CPU keeps every interaction under 200ms (the INP "good"
-  threshold), and a result updates promptly on a 6x slower CPU.
+- typing into a calculator on a 4x slower CPU keeps the INP-style result at 200ms or less (the "good"
+  threshold; 300ms on CI), and a result updates promptly on a 6x slower CPU.
+
+These timing tests are tagged `@timing` and run in their own Playwright project after every other test has
+finished (see `playwright.config.ts`), because a timing measurement is only meaningful when nothing else
+is using the machine. The INP-style number follows the real definition: it skips the single slowest
+interaction per 50. A retry is allowed (two, reported as "flaky", never hidden), and a real slowdown
+cannot hide behind it: it fails every attempt. One test proves this by injecting a 450ms input handler
+and checking that the guard sees the slowdown on every run.
 
 `pnpm bundle-report --budget-js 200` is the JavaScript budget (current worst case: 191 KB). Wire it
 into CI in Phase 8.

@@ -36,7 +36,19 @@ export default defineConfig({
       ],
     },
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    // Everything except the timing measurements, run in parallel as usual.
+    { name: "chromium", use: { ...devices["Desktop Chrome"] }, grepInvert: /@timing/ },
+    // Timing measurements (a deliberately slowed CPU) are only meaningful when nothing else is
+    // running, so they get their own project that starts after the rest has finished.
+    {
+      name: "timing",
+      use: { ...devices["Desktop Chrome"] },
+      grep: /@timing/,
+      dependencies: ["chromium"],
+      workers: 1,
+    },
+  ],
   webServer: {
     command: `pnpm exec next start -p ${port}`,
     url: baseURL,

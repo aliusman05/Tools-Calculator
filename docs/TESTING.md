@@ -50,6 +50,22 @@ Playwright starts the server itself. Specs:
 | `launch.spec.ts`                          | Security headers, icons, production is not `noindex`, no leftover boilerplate, no analytics without configuration, and the launch check's live-site checks                                                                                                                                                                                             |
 | `layout.spec.ts`                          | Responsive layout, 404, mobile menu, skip link                                                                                                                                                                                                                                                                                                         |
 
+### Notes on the e2e suite
+
+- **Calculator list.** The shared specs read the calculator list from the registry
+  (`e2e/support/calculators.ts`), so a new calculator is covered automatically. Two per-calculator
+  expectations still need an entry when you add one: the default answer in `smoke.spec.ts` and a unique
+  text marker in `perf.spec.ts`. A missing entry fails the test rather than skipping it.
+- **Hydration.** `open()` in `e2e/support/open.ts` waits until React has hydrated the first form control, not
+  just for the network to go quiet. Typing before hydration is lost, and the slow engines (WebKit, phone
+  profiles) exposed that.
+- **Timing tests** (tagged `@timing`) run in their own project after everything else; see
+  [PERFORMANCE.md](PERFORMANCE.md).
+- **Page examples.** `src/lib/__tests__/content-examples.test.ts` runs the worked examples quoted on the
+  refinance, student loan and rent vs buy pages through the engines, so the text cannot drift from the maths.
+- **Do not run two suites at once.** They share ports and the CPU; a second run killed the first one's server
+  and produced misleading failures. Run them one after another.
+
 ### Other browsers and the launch check
 
 `pnpm e2e:browsers` runs the core specs (smoke, layout, mortgage, calculators, consent, legal, ads-off) in

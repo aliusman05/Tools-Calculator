@@ -26,6 +26,7 @@ const MARKER: Record<string, string> = {
   "roi-calculator": "How long you held it",
   "refinance-calculator": "Years you expect to keep the new loan",
   "student-loan-calculator": "Paid with payment number",
+  "rent-vs-buy-calculator": "HOA and other monthly costs",
 };
 
 /** Load a page and return the text of every JavaScript file it requested. */
@@ -187,57 +188,98 @@ test.describe("layout stability on first load", () => {
   });
 });
 
-test.describe("responsiveness", () => {
+/**
+ * Types into the debt payoff planner on a CPU slowed 4x and returns an INP-style figure in ms.
+ *
+ * INP is not the single worst interaction: it skips the slowest one for every 50 interactions, so one
+ * hiccup from the machine (a garbage collection, another process) does not decide the result. The same
+ * rule is used here. `blockMs` makes every input event handler busy for that long, which is how the
+ * guard is shown to catch a genuine slowdown (see the last test in this group).
+ */
+async function typingInp(
+  page: Page,
+  blockMs = 0,
+): Promise<{ inp: number; worst: number; count: number }> {
+  if (blockMs > 0) {
+    await page.addInitScript((ms) => {
+      document.addEventListener(
+        "input",
+        () => {
+          const t = performance.now();
+          while (performance.now() - t < ms) {
+            /* simulate slow handler code */
+          }
+        },
+        true,
+      );
+    }, blockMs);
+  }
+  await open(page, "/debt-payoff-planner");
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send("Emulation.setCPUThrottlingRate", { rate: 4 });
+  await page.evaluate(() => {
+    (window as unknown as { __events: number[] }).__events = [];
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries())
+        (window as unknown as { __events: number[] }).__events.push(e.duration);
+    }).observe({
+      type: "event",
+      durationThreshold: 16,
+      buffered: false,
+    } as PerformanceObserverInit);
+  });
+
+  const field = page.locator("#dp-balance-0");
+  await field.click();
+  await field.press("ControlOrMeta+a");
+  await field.pressSequentially("987654", { delay: 60 });
+  await page.locator("#dp-extra").fill("275");
+  await page.getByRole("button", { name: "Add a debt" }).click();
+  await page.waitForTimeout(400);
+
+  const events = await page.evaluate(() => (window as unknown as { __events: number[] }).__events);
+  expect(events.length).toBeGreaterThan(0);
+  const slowestFirst = [...events].sort((x, y) => y - x);
+  return {
+    inp: slowestFirst[Math.min(Math.floor(events.length / 50), events.length - 1)]!,
+    worst: slowestFirst[0]!,
+    count: events.length,
+  };
+}
+
+/** Event Timing durations are rounded to 8ms; the INP "good" threshold is 200ms or less. */
+const INP_BUDGET_MS = process.env.CI ? 300 : 200;
+
+test.describe("responsiveness @timing", () => {
   // These are timing measurements on a deliberately slowed CPU, so they react to other work on the
-  // machine (for example a heavy accessibility run in another worker). Retries are reported as flaky,
-  // not hidden; a real regression fails every attempt.
+  // machine. The "@timing" tag runs them in their own Playwright project after everything else has
+  // finished (see playwright.config.ts). Retries are still allowed and are reported as flaky, not
+  // hidden. They cannot hide a real regression: that fails on every attempt, and the second test
+  // in this group proves it by injecting a slowdown and checking that the guard sees it.
   test.describe.configure({ retries: 2 });
 
   test("typing into a calculator stays within the INP budget (200ms; 300ms on CI) with a 4x slower CPU", async ({
     page,
   }) => {
     test.setTimeout(90_000);
-    await open(page, "/debt-payoff-planner");
-    const cdp = await page.context().newCDPSession(page);
-    await cdp.send("Emulation.setCPUThrottlingRate", { rate: 4 });
-    await page.evaluate(() => {
-      (window as unknown as { __events: number[] }).__events = [];
-      new PerformanceObserver((list) => {
-        for (const e of list.getEntries())
-          (window as unknown as { __events: number[] }).__events.push(e.duration);
-      }).observe({
-        type: "event",
-        durationThreshold: 16,
-        buffered: false,
-      } as PerformanceObserverInit);
-    });
-
-    const field = page.locator("#dp-balance-0");
-    await field.click();
-    await field.press("ControlOrMeta+a");
-    await field.pressSequentially("987654", { delay: 60 });
-    await page.locator("#dp-extra").fill("275");
-    await page.getByRole("button", { name: "Add a debt" }).click();
-    await page.waitForTimeout(400);
-
-    const events = await page.evaluate(
-      () => (window as unknown as { __events: number[] }).__events,
-    );
-    expect(events.length).toBeGreaterThan(0);
-    // Event Timing durations are rounded to 8ms; the INP "good" threshold is 200ms. Shared CI machines
-    // are noisier than a developer's computer, so CI gets a looser limit (it still catches real
-    // regressions, which are far bigger) and the strict 200ms applies locally. Field INP from Search
-    // Console is the real measure after launch.
-    const budget = process.env.CI ? 300 : 200;
-    // INP is not the single worst interaction: it skips the slowest one for every 50 interactions, so
-    // one hiccup from the machine (a garbage collection, another process) does not decide the result.
-    // Use the same rule here.
-    const slowestFirst = [...events].sort((x, y) => y - x);
-    const inp = slowestFirst[Math.min(Math.floor(events.length / 50), events.length - 1)]!;
+    // Shared CI machines are noisier than a developer's computer, so CI gets a looser limit and the
+    // strict 200ms applies locally. Field INP from Search Console is the real measure after launch.
+    const { inp, worst, count } = await typingInp(page);
     expect(
       inp,
-      `INP-style result ${inp}ms (worst ${slowestFirst[0]}ms) of ${events.length} events (limit ${budget}ms)`,
-    ).toBeLessThanOrEqual(budget); // 200ms or less is "good"
+      `INP-style result ${inp}ms (worst ${worst}ms) of ${count} events (limit ${INP_BUDGET_MS}ms)`,
+    ).toBeLessThanOrEqual(INP_BUDGET_MS);
+  });
+
+  test("the guard itself works: a deliberately slow input handler is caught on every run", async ({
+    page,
+  }) => {
+    test.setTimeout(120_000);
+    // 450ms per input event is above even the looser CI limit, so this holds on every machine.
+    const { inp, worst } = await typingInp(page, 450);
+    expect(inp, `injected slowdown: INP-style ${inp}ms (worst ${worst}ms)`).toBeGreaterThan(
+      INP_BUDGET_MS,
+    );
   });
 
   test("the mortgage result updates promptly after a keystroke on a slow CPU", async ({ page }) => {
